@@ -2738,6 +2738,11 @@
         "info": "Only appears when \"Text Color\" is set to \"Light\""
       },
       {
+        "type": "text",
+        "id": "home-featured-collection-1-intro-text",
+        "label": "Intro text"
+      },
+      {
         "type": "select",
         "id": "home-featured-collection-1-text-color",
         "label": "Text Color",
@@ -2766,6 +2771,11 @@
         "id": "home-featured-collection-2-text-shadow",
         "label": "Text Shadow",
         "info": "Only appears when \"Text Color\" is set to \"Light\""
+      },
+      {
+        "type": "text",
+        "id": "home-featured-collection-2-intro-text",
+        "label": "Intro text"
       },
       {
         "type": "select",
@@ -2798,6 +2808,11 @@
         "info": "Only appears when \"Text Color\" is set to \"Light\""
       },
       {
+        "type": "text",
+        "id": "home-featured-collection-3-intro-text",
+        "label": "Intro text"
+      },
+      {
         "type": "select",
         "id": "home-featured-collection-3-text-color",
         "label": "Text Color",
@@ -2826,6 +2841,11 @@
         "id": "home-featured-collection-4-text-shadow",
         "label": "Text Shadow",
         "info": "Only appears when \"Text Color\" is set to \"Light\""
+      },
+      {
+        "type": "text",
+        "id": "home-featured-collection-4-intro-text",
+        "label": "Intro text"
       },
       {
         "type": "select",
