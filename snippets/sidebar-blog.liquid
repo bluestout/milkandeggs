@@ -1,0 +1,74 @@
+{% if template == 'search.blog' %}
+    {% assign blog = blogs.food-health-and-eating %}
+{% endif %}
+
+<div class="sidebar-blog">
+    <div class="row">
+        <h4>{{ 'blogs.sidebar.search' | t }}</h4>
+        <form action="/search">
+            <input type="hidden" name="view" value="blog" />
+            <input type="hidden" name="type" value="article" />
+            <input name="q" type="text" class="snize-exclude-input" placeholder="{{ 'general.search.submit' | t }}" />
+            <input class="button" type="submit" name="submit" value="Search" />
+        </form>
+    </div>
+    <div class="row">
+        <h4>{{ 'blogs.sidebar.newsletter' | t }}</h4>
+
+        <form id="blog_signup" class=" klaviyo_bare_embed_QmjhZv" action="//manage.kmail-lists.com/subscriptions/subscribe" data-ajax-submit="//manage.kmail-lists.com/ajax/subscriptions/subscribe" method="GET" target="_blank" novalidate="novalidate">
+            <input type="hidden" name="g" value="QmjhZv">
+            <div class="klaviyo_field_group">
+                <label for="k_id_email" style="display:none">Newsletter Sign Up</label>
+                <input type="email" value="" name="email" id="k_id_email" placeholder="Enter Email Address" />
+            </div>
+            <div class="klaviyo_messages">
+                <div class="success_message" style="display:none;"></div>
+                <div class="error_message" style="display:none;"></div>
+            </div>
+            <div class="klaviyo_form_actions">
+                <button type="submit" class="klaviyo_submit_button button">Sign Up</button>
+            </div>
+        </form>
+
+        <script type="text/javascript" src="//www.klaviyo.com/media/js/public/klaviyo_subscribe.js"></script>
+        <script type="text/javascript">
+        KlaviyoSubscribe.attachToForms('#blog_signup', {
+            hide_form_on_success: true
+        });
+        </script>
+
+    </div>
+    <div class="row top-posts">
+        <h4>{{ 'blogs.sidebar.top_posts' | t }}</h4>
+        <ul>
+            {% assign top_posts = blogs[blog.handle].articles | sort: 'comments_count' %}
+            {% for article in top_posts limit: 5 %}
+                <li>{{ article.title | link_to: article.url }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    {% unless settings.blog-top-categories == blank %}
+        <div class="row top-categories">
+            <h4>{{ 'blogs.sidebar.top_categories' | t }}</h4>
+
+            {% assign top_categories = settings.blog-top-categories | split: ',' %}
+            {% for category in top_categories %}
+                {% assign category_url = blog.url | append: '/tagged/' | append: category %}
+                <div>
+                    <a href="{{ category_url }}">
+                        {% for article in blogs[blog.handle].articles %}
+                            {% if article.tags contains category  %}
+                                {% if article.image %}
+                                    {{ article | img_url: '470x470', crop: 'center' | img_tag }}
+                                    {% break %}
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        <span>{{ category }}</span>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% endunless %}
+</div>

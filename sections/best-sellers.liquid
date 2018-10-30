@@ -1,0 +1,167 @@
+{% if section.settings.enable-best-sellers %}
+  <hr />
+  {% if collections[section.settings.home-featured-products2].products.size > 0 %}
+    <div class="home-module home-featured-products rows-of-{{ section.settings.home-featured-products-per-row2 }}">
+      <div class="home-module-content">
+
+        {% if section.settings.home-featured-products-title2 != blank %}
+          <h4 class="section-title">{{ section.settings.home-featured-products-title2 }}</h4>
+        {% endif %}
+
+        <div class="home-featured-products-list collection-products uniform-layout {{section.settings.collection-product-text-style2}}-style">
+          {% for product in collections[section.settings.home-featured-products2].products limit: section.settings.home-featured-products-max2 %}
+          {% include 'bold-product' with product, hide_action: 'skip' %}
+            {% include 'product-list-item' %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <div class="home-module home-featured-products rows-of-3">
+      <div class="home-module-content">
+
+        <h4 class="section-title">{{ 'onboarding.featured_products.title' | t }}</h4>
+
+        <div class="home-featured-products-list collection-products uniform-layout {{section.settings.collection-product-text-style2}}-style">
+
+          {% for i in (1..3) %}
+            <div class="product-list-item">
+              <figure class="product-list-item-thumbnail">
+                <a href="/admin/themes/{{ theme.id }}/settings">
+                  <img width="640"  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPYvufQfwAHmAM12jbOLQAAAABJRU5ErkJggg==" alt="">
+                </a>
+              </figure>
+              <div class="product-list-item-details">
+                {% assign vendor_handle = item.vendor | handleize %}
+                {% if collections[vendor_handle].products.size > 0 %}
+                  <p class="product-list-item-vendor vendor meta">{{ collections[vendor_handle].title | link_to: collections[vendor_handle].url }}</p>
+                {% else %}
+                  <p class="product-list-item-vendor vendor meta">{{ 'onboarding.featured_products.product_vendor' | t }}</p>
+                {% endif %}
+
+                <h3 class="product-list-item-title"><a href="/admin/themes/{{ theme.id }}/settings">{{ 'onboarding.featured_products.product_title' | t }}</a></h3>
+                <p class="product-list-item-price">{{ 'onboarding.featured_products.product_price' | t }}</p>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endif %}
+
+{% schema %}
+  {
+    "name": "Best Sellers",
+    "settings": [
+      {
+        "id": "enable-best-sellers",
+        "type": "checkbox",
+        "label": "Show Best Selling Products?",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "home-featured-products-title2",
+        "label": "Title",
+        "default": "Best Sellers"
+      },
+      {
+        "type": "select",
+        "id": "home-featured-products-max2",
+        "label": "Products Maximum",
+        "options": [
+          {
+            "value": "2",
+            "label": "2"
+          },
+          {
+            "value": "3",
+            "label": "3"
+          },
+          {
+            "value": "4",
+            "label": "4"
+          },
+          {
+            "value": "6",
+            "label": "6"
+          },
+          {
+            "value": "8",
+            "label": "8"
+          },
+          {
+            "value": "9",
+            "label": "9"
+          },
+          {
+            "value": "10",
+            "label": "10"
+          },
+          {
+            "value": "12",
+            "label": "12"
+          },
+          {
+            "value": "14",
+            "label": "14"
+          },
+          {
+            "value": "15",
+            "label": "15"
+          },
+          {
+            "value": "16",
+            "label": "16"
+          },
+          {
+            "value": "18",
+            "label": "18"
+          },
+          {
+            "value": "20",
+            "label": "20"
+          },
+          {
+            "value": "30",
+            "label": "30"
+          },
+          {
+            "value": "40",
+            "label": "40"
+          },
+          {
+            "value": "50",
+            "label": "50"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "home-featured-products-per-row2",
+        "label": "Products Per Row",
+        "options": [
+          {
+            "value": "2",
+            "label": "2"
+          },
+          {
+            "value": "3",
+            "label": "3"
+          },
+          {
+            "value": "4",
+            "label": "4"
+          }
+        ]
+      },
+      {
+        "type": "collection",
+        "id": "home-featured-products2",
+        "label": "Collection",
+        "info": "Products will be pulled from this collection"
+      }
+    ]
+  }
+{% endschema %}

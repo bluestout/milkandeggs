@@ -1,0 +1,17 @@
+<div class="collections-list showing-3-per-row">
+	
+  {% if linklists[page.handle].links.size > 0 %}
+  	{% for link in linklists[page.handle].links %}
+  		{% if link.type == 'collection_link' %}
+  			{% include 'collection-list-item' with 'linklist' %}
+  		{% endif %}
+  	{% endfor %}
+  {% endif %}
+  
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+  	$("body").addClass('template-list-collections');
+  });
+</script>

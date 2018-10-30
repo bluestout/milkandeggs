@@ -1,0 +1,294 @@
+<!-- BOLD CSS -->
+<style>.bold_properties_div {margin-left: 28% !important; font-size: smaller;}</style>
+{% if cart.item_count > 0 %}
+<form action="/cart" method="post">
+	<table class="cart-items clean {% if settings.disable-ajax or settings.enable-currency-switcher %}no-ajax{% endif %}">
+    	<thead>
+            <tr>
+                <th class="first">{{ 'general.general.product' | t }}</th>
+                <th>{{ 'general.general.price' | t }}</th>
+                <th>{{ 'general.general.quantity' | t }}</th>
+                <th class="last">{{ 'general.general.total' | t }}</th>
+            </tr>
+      	</thead>
+      	<tbody>
+        	<script>mixed_cart = false;</script>
+        	{% assign show_paypal = true %} 
+        	{% for item in cart.items %}
+        		{% assign prod_index = forloop.index0 %} 
+          		<input type="hidden" name="product_id[{{ forloop.index0 }}]" value="{{ item.product.id }}">
+          		<input type="hidden" name="variant_id[{{ forloop.index0 }}]" value="{{ item.variant.id }}">
+          		<input type="hidden" name="quantity[{{ forloop.index0 }}]" value="{{ item.quantity }}">
+
+          		<tr class="cart-item variant-{{ item.variant.id }}" data-variant="{{ item.variant.id }}" data-title="{{ item.product.title }}" data-url="{{ item.product.url }}">
+            		<td class="cart-item-product first">
+              			<a class="cart-item-image" href="{{ item.product.url }}"><img alt="{{ item.image.alt | escape }}" src="{{ item | img_url: 'medium' }}"></a>
+              			<span class="cart-item-vendor vendor">{{ item.vendor | link_to_vendor }}</span>
+              			<span class="cart-item-title">{{ item.product.title | link_to: item.product.url }}</span>
+              			{% for option in item.variant.options %}
+                			{% unless option == 'Default Title' %}
+                  				<span class="cart-item-option">{{ option }}</span>
+                			{% endunless %}
+              			{% endfor %}
+   						<div class="bold_properties_div">           
+                       		<!-- bold-ro-liquid -->
+							{% for p in item.properties %}
+  								{% if p.first == "frequency_num" %}
+    								<script>mixed_cart = true;</script>
+    								<span class="bold_ro_every">Every</span>
+    								<input type="hidden" name="{{ prod_index }}[number]" value={{p.last}} />
+  								{% endif %}
+                                {% if p.first == "frequency_type" %}
+                                  	<input type="hidden" name="{{ prod_index }}[type_id]" value={{p.last}} />
+                                {% endif %}
+
+  								{% if p.first == "frequency_num" or p.first == "frequency_type_text" %}
+              						{{ p.last }}               
+  								{% endif %}
+  								{% if p.first == "group_id" %}
+  									{% assign show_paypal = false %}
+   	 								<input type="hidden" name="{{ prod_index }}[group_id]" value={{p.last}} />
+                          		{% endif %}
+  								{% if p.first == "discounted_price" %}
+    								<!-- <br><span class="bold_ro_discounted_price">Discounted Price</span>
+    								<span class="discounted_price_in_cart">{{ p.last | money }} </span> <span class="bold_ro_each">each</span>-->
+  								{% endif %}
+     							{% if p.first == "frequency_type_text" %}
+                     			     <a href="{{ item.product.url }}">(Modify Subscription)</a>
+  								{% endif %}
+                          
+							{% endfor %}
+                          
+							<!-- bold-ro-liquid -->
+              			</div>
+                      
+						{% comment %}
+                        {% if item.properties %}
+                        	<div class="cart-line-item-properties">
+                            	{% for property in item.properties %}
+                                	{% if property.last != blank %}
+                                    	<span class="cart-item-property">
+                                            <strong>{{ property.first }}</strong>:
+                                            {% if property.last contains "/uploads/" %}
+                                                <span class="cart-item-property-value cart-item-upload" data-file="{{ property.last }}">{{ property.last | split: '/' | last }}</span>
+                                            {% else %}
+                                                <span class="cart-item-property-value">{{ property.last }}</span>
+                                            {% endif %}
+                                    	</span>
+                                  	{% endif %}
+                                {% endfor %}
+                          	</div>
+						{% endif %}
+                      	{% endcomment %}
+
+              			{% if settings.disable-ajax or settings.enable-currency-switcher %}
+                			<a class="cart-item-remove bold-ro-remove" href="/cart/change?line={{ forloop.index }}&amp;quantity=0">&#57360;</a>
+              			{% endif %}
+            		</td>
+            		<!-- FIX RO ITEM PRICES -->
+                    {% if item.properties.discounted_price != blank %}
+                      	{% assign ro_price = item.properties.discounted_price %}
+                      	{% assign ro_item_price = ro_price %}
+                      	{% assign ro_line_item_price = ro_item_price | times: item.quantity %}
+                    {% else %}
+                      	{% assign ro_item_price = item.price %}
+                      	{% assign ro_line_item_price = item.line_price %}    
+                    {% endif %}
+                    <!-- END RO ITEM PRICES -->
+                  
+            		<td class="cart-item-price">
+                      <span class="money">{{ ro_item_price | money }}</span>
+                  	  {% if item.product.tags contains 'with-weight' %}
+                       / {{item.variant.weight_in_unit}} {{item.variant.weight_unit}}
+                      {% endif %}
+                  	</td>
+                  
+            		<td class="cart-item-quantity" {% unless item.variant.inventory_management == blank or item.variant.inventory_policy == 'continue' %}data-max="{{ item.variant.inventory_quantity }}"{% endunless %}>
+              			<input class="cart-item-quantity-display" type="text" name="updates[]" value="{{ item.quantity }}" size="1">
+              			<span class="cart-item-decrease">&#57365;</span><span class="cart-item-increase">&#57366;</span>
+            		</td>
+            		<td class="cart-item-total last"><span class="money">{{ item.quantity | times: ro_item_price | money }}</span></td>
+                </tr>
+        	{% endfor %}
+      	</tbody>
+	</table>
+
+	{% if settings.cart-special-instructions or settings.shipping-calculator %}
+      	<div class="cart-tools">
+			{% if settings.cart-special-instructions %}
+          		<div class="cart-instructions">
+                    <!-- Local Delivery App -->
+                    <!-- {% include 'snippet-local-delivery-cart' %} -->
+                  	{% include 'xoob_ld' %}
+            		<p>{{ 'cart.special_instructions' | t }}</p>
+            		<textarea name="note" rows="4">{{ cart.note }}</textarea>
+          		</div>
+        	{% endif %}
+
+        	{% if settings.cart-shipping-calculator and cart.requires_shipping %}
+          		{% include 'shipping-calculator' %}
+        	{% endif %}
+      	</div>
+    {% endif %}
+        
+    <input name="shopify_customer_id" type="hidden" value="{{ customer.id }}" > 
+    <input name="email" type="hidden" value="{{ customer.email }}" > 
+    <input name="address1" type="hidden" value="{{ customer.default_address.address1 }}" > 
+    <input name="address2" type="hidden" value="{{ customer.default_address.address2 }}" > 
+    <input name="city" type="hidden" value="{{ customer.default_address.city }}" > 
+    <input name="company" type="hidden" value="{{ customer.default_address.company }}" > 
+    <input name="country" type="hidden" value="{{ customer.default_address.country }}" > 
+    <input name="first_name" type="hidden" value="{{ customer.default_address.first_name }}" > 
+    <input name="last_name" type="hidden" value="{{ customer.default_address.last_name }}" > 
+    <input name="phone" type="hidden" value="{{ customer.default_address.phone }}" > 
+    <input name="province" type="hidden" value="{{ customer.default_address.province }}" > 
+    <input name="zip" type="hidden" value="{{ customer.default_address.zip }}" >
+
+	<div class="cart-checkout">
+      	<p class="cart-price">
+        	{% include 'bold-ro-price-fix' %}
+        	<span class="money">{{ ro_cart_total | money }}</span>
+      	</p>
+      	<p class="cart-message"><em>{{ 'cart.tax_and_shipping' | t }}</em></p>
+      	{% include 'bold-ro-cart' %}
+      	{% if settings.disable-ajax or settings.enable-currency-switcher %}
+        	<!-- <input type="submit" name="update" value="{{ 'cart.update' | t }}" class="secondary"> -->
+        	<input type="submit" name="checkout" value="{{ 'cart.submit' | t }}">
+      	{% else %}
+        	<a class="cart-checkout-button button" href="/checkout">{{ 'cart.submit' | t }}</a>
+      	{% endif %}
+
+      	{% if additional_checkout_buttons and show_paypal %}
+        	<div class="cart-additional-buttons">{{ content_for_additional_checkout_buttons }}</div>
+      	{% endif %}
+    </div>
+</form>
+{% else %}
+  <p class="cart-empty-message">{{ 'cart.empty' | t }}</p>
+{% endif %}
+
+
+<script>
+$(document).on("click","[name='recurring_radio_btn']", function() {
+    if($('.recurring_div').hasClass('bold_active')){
+        $('.cart-additional-buttons').hide();
+    }else{
+        $('.cart-additional-buttons').show();
+    }
+});
+  
+$(window).load(function(){
+  	$("#address_province option[value='California']").attr('selected','selected');
+  	$("#address_province option:not(:selected)").css('display','none');
+});
+  
+$(document).ready(function() {
+	
+  /* $("input[name=checkout]").attr('disabled','disabled').val('Select Delivery Date before checkout'); 
+  (function(){
+   		var db = $("#datepicker").val();
+    if(db != ""){
+    	$("input[name=checkout]").removeAttr("disabled").val('Checkout');
+    }else{
+    	 $("input[name=checkout]").attr('disabled','disabled').val('Select Delivery Date before checkout'); 
+    }
+    setTimeout(arguments.callee, 1000);
+    })(); */
+  	
+  $('.cart-item-quantity-display').on('keyup',function(e){
+  	
+    var this_item = $(this).closest('.cart-item'), 
+    qty = parseInt(this_item.find('.cart-item-quantity-display').val()),
+    variant_id = this_item.attr('data-variant'),
+    this_item_total = this_item.find('.cart-item-total .money'),
+    subtotal = $('.cart-checkout .cart-price .money');
+
+    $.ajax({
+        type: 'POST',
+        url: '/cart/change.js',
+        dataType: 'json',
+        data: {
+            quantity: qty,
+            id: variant_id
+        },
+        success: function(cart) {
+            if ( qty == 0 ) {
+                this_item.remove();
+            } else {
+                $.each(cart.items,function(index,row) {
+                    if ( variant_id == row.variant_id ) this_item_total.html( '$ ' + parseFloat(row.line_price / 100).toFixed(2) );
+                });
+            }
+            subtotal.html( '$' + parseFloat(cart.total_price / 100).toFixed(2) );
+        },
+        error: function(response) {
+            alert(response);
+        }
+    });
+    
+  });
+  
+  	$('.cart-item-increase').click(function() {
+   			var this_item = $(this).closest('.cart-item'), 
+            qty = parseInt(this_item.find('.cart-item-quantity-display').val()) + 1,
+            variant_id = this_item.attr('data-variant'),
+            this_item_total = this_item.find('.cart-item-total .money'),
+            subtotal = $('.cart-checkout .cart-price .money');
+      	
+        $.ajax({
+          	type: 'POST',
+          	url: '/cart/change.js',
+          	dataType: 'json',
+          	data: {
+            	quantity: qty,
+            	id: variant_id
+          	},
+          	success: function(cart) {
+            	if ( qty == 0 ) {
+              		this_item.remove();
+            	} else {
+              		$.each(cart.items,function(index,row) {
+                		if ( variant_id == row.variant_id ) this_item_total.html( '$ ' + parseFloat(row.line_price / 100).toFixed(2) );
+              		});
+            	}
+            	subtotal.html( '$' + parseFloat(cart.total_price / 100).toFixed(2) );
+          	},
+          	error: function(response) {
+            	alert(response);
+          	}
+        });
+    });
+  
+  	$('.cart-item-decrease').click(function(){	
+    	var this_item = $(this).closest('.cart-item'), 
+            qty = parseInt(this_item.find('.cart-item-quantity-display').val()) - 1,
+            variant_id = this_item.attr('data-variant'),
+            this_item_total = this_item.find('.cart-item-total .money'),
+            subtotal = $('.cart-checkout .cart-price .money');
+      	
+        $.ajax({
+          	type: 'POST',
+          	url: '/cart/change.js',
+          	dataType: 'json',
+          	data: {
+            	quantity: qty,
+            	id: variant_id
+          	},
+          	success: function(cart) {
+            	if ( qty == 0 ) {
+              		this_item.remove();
+            	} else {
+              		$.each(cart.items,function(index,row) {
+                		if ( variant_id == row.variant_id ) this_item_total.html( '$ ' + parseFloat(row.line_price / 100).toFixed(2) );
+              		});
+            	}
+            	subtotal.html( '$' + parseFloat(cart.total_price / 100).toFixed(2) );
+          	},
+          	error: function(response) {
+            	alert(response);
+          	}
+        });
+    });
+  
+});
+</script>

@@ -1,0 +1,88 @@
+{% unless section.settings.title == blank %}
+    <h2>{{ section.settings.title }}</h2>
+{% endunless %}
+
+<div>
+  {% for block in section.blocks %}
+      <div class="driver">
+          {% unless block.settings.image == blank %}
+              {{ block.settings.image | img_url: '514x514', crop: 'center' | img_tag: block.settings.image.alt }}
+          {% endunless %}
+
+          <div>
+              {% unless block.settings.title == blank %}
+                  <h3>{{ block.settings.title }}</h3>
+              {% endunless %}
+
+              {% unless block.settings.text == blank %}
+                  {{ block.settings.text }}
+              {% endunless %}
+          </div>
+      </div>
+  {% endfor %}
+</div>
+
+{% schema %}
+{
+  "name": "Drivers",
+  "class": "drivers-section",
+  "settings": [
+    {
+      "id": "title",
+      "type": "text",
+      "label": "Title"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "driver",
+      "name": "Driver",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "514px by 514px .jpg recommended"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Name"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Description"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+.page-drivers .page-title { margin: 20px 0 !important; }
+.drivers-section { padding: 30px 0 53px; }
+.drivers-section h2 { text-align: center; }
+.drivers-section .driver { margin: 20px 0 12px; font-size: 0; }
+.drivers-section .driver:not(:first-of-type) { padding-top: 40px; border-top: 1px solid #ececec; }
+.drivers-section .driver img { width: 20%; display: inline-block; margin-right: 5%; border-radius: 50%; vertical-align: top; }
+.drivers-section .driver img + div { width: 75%; display: inline-block; font-size: 16px; vertical-align: top; }
+.drivers-section .driver h3 { margin-top: 0; }
+.drivers-section .driver h3 + p { margin-top: 13px; }
+
+@media only screen and (max-width: 768px) {
+  .drivers-section { padding: 30px 0 23px; }
+}
+
+@media only screen and (max-width: 479px) {
+  .drivers-section { padding-top: 20px; }
+  .drivers-section h2 { font-size: 18px; }
+  .drivers-section .driver { margin: 30px 0 12px; }
+  .drivers-section .driver:not(:first-of-type) { padding-top: 40px; }
+  .drivers-section .driver img,
+  .drivers-section .driver img + div { width: 100%; display: block; margin-right: 0; }
+  .drivers-section .driver img { max-width: 130px; margin: 0 auto 12px; }
+  .drivers-section .driver h3 { text-align: center; }
+}
+{% endstylesheet %}

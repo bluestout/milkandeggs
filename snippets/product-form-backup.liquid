@@ -1,0 +1,97 @@
+<div class="product-form">
+  <meta itemprop="name" content="{{ product.title }}">
+  <meta itemprop="brand" content="{{ product.vendor }}">
+  <meta itemprop="url" content="{{ shop.url }}{{ product.url }}">
+  <meta itemprop="image" content="{{ product | img_url: 'grande' }}">
+
+  <form id="product-form" action="/cart/add" method="post" enctype="multipart/form-data" data-product-id="{{ product.id }}">
+
+    <div class="product-options">
+      <select name="id" id="product-variants">
+        {% for variant in product.variants %}
+          <option data-price="{{ variant.price | money_without_currency | remove: ',' }}" {% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %} value="{{ variant.id }}" data-sku="{{ variant.sku }}">{{ variant.title }} - {{ variant.price | money }}</option>
+        {% endfor %}
+      </select>
+
+      {% comment %}
+      <div class="input-wrapper">
+        <label>Text Example</label>
+        <input type="text" name="properties[Name]">
+      </div>
+
+      <div class="input-wrapper">
+        <label>File Example</label>
+        <input type="file" name="properties[File]">
+      </div>
+      {% endcomment %}
+    </div>
+
+    {% if settings.enable-product-quantity %}
+      <div class="product-quantity">
+        <div class="input-wrapper">
+          <label for="quantity">{{ 'general.general.quantity' | t }}</label>
+          <input type="text" name="quantity" id="quantity" value="1" />
+        </div>
+      </div>
+    {% endif %}
+    
+
+    <input name="shopify_customer_id" type="hidden" value="{{ customer.id }}" > 
+    <input name="email" type="hidden" value="{{ customer.email }}" > 
+    <input name="address1" type="hidden" value="{{ customer.default_address.address1 }}" > 
+    <input name="address2" type="hidden" value="{{ customer.default_address.address2 }}" > 
+    <input name="city" type="hidden" value="{{ customer.default_address.city }}" > 
+    <input name="company" type="hidden" value="{{ customer.default_address.company }}" > 
+    <input name="country" type="hidden" value="{{ customer.default_address.country }}" > 
+    <input name="first_name" type="hidden" value="{{ customer.default_address.first_name }}" > 
+    <input name="last_name" type="hidden" value="{{ customer.default_address.last_name }}" > 
+    <input name="phone" type="hidden" value="{{ customer.default_address.phone }}" > 
+    <input name="province" type="hidden" value="{{ customer.default_address.province }}" > 
+    <input name="zip" type="hidden" value="{{ customer.default_address.zip }}" >
+
+    <div class="product-submit" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+
+      <span class="product-price">
+        <span class="product-price-minimum money" itemprop="price">
+          {{ variant.price | money }}
+        </span>
+		<span class="product-price-compare money">
+          {% if variant.compare_at_price_min > variant.price_min %}
+            {{ variant.compare_at_price_min | money }}
+          {% endif %}
+        </span> 
+        
+        {% if product.tags contains 'with-weight' %}
+        	{% for variant in product.variants %}
+              {% assign my_variable = variant.weight | weight_with_unit %}
+              {% if my_variable contains '0.0' %}
+                  / {{my_variable | remove: "0.0" }}
+              {% else %}
+                  / {{my_variable}}
+              {% endif %}
+        	{% endfor %}
+        {% endif %}
+      </span>
+
+ {% include 'bold-ro' with product %}
+          
+      {% if variant.available %}
+        
+      	<input class="add-to-cart addtocart" type="submit" value="{{ 'products.product.add_to_cart' | t }}" />
+        <link itemprop="availability" href="http://schema.org/InStock">
+      {% else %}
+        <input type="button" class="add-to-cart disabled" disabled="disabled" value="{{ 'products.product.sold_out' | t }}" />
+        <link itemprop="availability" href="http://schema.org/OutOfStock">
+      {% endif %}
+      
+      <!-- bold-ro-liquid --> <div class="bold_add_to_orders" style="display: inline-block;"> </div> <!-- bold-ro-liquid -->
+      
+    </div>
+
+  </form>
+</div>
+<script>
+  $(window).load(function(){
+	$('.recurring_div').trigger('click');
+  });
+</script>

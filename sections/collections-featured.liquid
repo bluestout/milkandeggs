@@ -1,0 +1,56 @@
+{% if section.settings.enable-departments %}
+  <hr />
+  <h4>{{ section.settings.sub-title}}</h4>
+
+  {% assign using-linklist = false %}
+  {% if linklists[section.settings.collections-link-list] and linklists[section.settings.collections-link-list].links.size > 0 %}
+    {% assign using-linklist = true %}
+  {% endif %}
+
+  {% paginate collections by {{settings.collections-per-page}} %}
+    <div class="collections-list showing-{{settings.collections-per-row}}-per-row">
+      {% if using-linklist %}
+        {% for link in linklists[section.settings.collections-link-list].links %}
+
+          {% include 'collection-list-item' with 'linklist' %}
+        {% endfor %}
+      {% else %}
+        {% for collection in collections %}
+          {% include 'collection-list-item' %}
+        {% endfor %}
+      {% endif %}
+    </div>
+
+    {% if paginate.previous or paginate.next and using-linklist == false %}
+      {% include 'pagination' %}
+    {% endif %}
+  {% endpaginate %}
+{% endif %}
+
+{% schema %}
+  {
+    "name": "Departments",
+    "settings": [
+      {
+        "id": "enable-departments",
+        "type": "checkbox",
+        "label": "Show Featured Departments?",
+        "default": true
+      },
+      {
+        "id": "sub-title",
+        "type": "text",
+        "label": "Title",
+        "default": "Check Out Our Departments"
+      },
+      {
+        "id": "collections-link-list",
+        "type": "link_list",
+        "label": "Specific Link List"
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}

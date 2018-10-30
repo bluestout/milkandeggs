@@ -1,0 +1,65 @@
+{% if settings.product-tags and product.tags %}
+  {% assign tag_count = 0 %}
+  {% assign tag_displayed = '' %}
+  {% assign tag_total = product.tags.size %}
+
+  <div class="product-tags meta">
+    {% unless settings.product-tag-colors == empty %}
+      {% assign tag_order = settings.product-tag-colors | split: ',' %}
+      {% assign product_tags = product.tags | handleize %}
+
+      {% for tag in tag_order %}
+        {% comment %}
+        LIMIT TAGS TO 4 ON COLLECTION PAGE
+        {% endcomment %}
+        {% if tag_count == 4 and template contains 'collection' %}
+          {% break %}
+        {% endif %}
+
+        {% assign tag_clean = tag | split: ':' | first | strip %}
+        {% assign tag_handle = tag_clean | handleize %}
+
+        {% if product_tags contains tag_handle %}
+          {% unless settings.product-tag-exclusion contains tag_clean %}
+            <a class="{{ tag_clean | handleize }}" href="/collections/{{ collection.handle | default: 'all' }}/{{ tag_clean | handleize }}">{{ tag_clean }}</a>
+            {% capture tag_displayed %}{{ tag_displayed }},{{ tag_handle }}{% endcapture %}
+            {% assign tag_count = tag_count | plus: 1 %}
+          {% endunless %}
+        {% endif %}
+      {% endfor %}
+    {% endunless %}
+
+    {% comment %}
+    LIMIT TAGS TO 4 ON COLLECTION PAGE
+    {% endcomment %}
+    {% for tag in product.tags %}
+      {% if tag_count == 4 and template contains 'collection' %}
+        {% break %}
+      {% endif %}
+
+      {% assign tag_handle = tag | handleize %}
+      {% unless tag_displayed contains tag_handle or settings.product-tag-exclusion contains tag %}
+        <a class="{{ tag | handleize }}" href="/collections/{{ collection.handle | default: 'all' }}/{{ tag | handleize }}">{{ tag }}</a>
+        {% capture tag_displayed %}{{ tag_displayed }},{{ tag_handle }}{% endcapture %}
+        {% assign tag_count = tag_count | plus: 1 %}
+      {% endunless %}
+    {% endfor %}
+
+    {% comment %}
+    DISPLAY ... WHEN PRODUCT TAGS EXCEED 4 ON COLLECTION PAGE
+    {% endcomment %}
+    {% if tag_count == 4 and template contains 'collection' %}
+      {% for tag in product.tags %}
+        {% assign tag_handle = tag | handleize %}
+
+        {% if settings.product-tag-exclusion contains tag %}
+          {% assign tag_total = tag_total | minus: 1 %}
+        {% endif %}
+      {% endfor %}
+
+      {% if tag_total > 4 %}
+        {{ '...' | link_to: product.url }}
+      {% endif %}
+    {% endif %}
+  </div>
+{% endif %}

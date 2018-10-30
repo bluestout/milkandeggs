@@ -1,0 +1,59 @@
+{% assign testimonials = "home-testimonial-1|home-testimonial-2|home-testimonial-3" | split: "|" %}
+{% assign testimonialCount = 0 %}
+{% for testimonial in testimonials %}
+  {% capture enabled %}{{ testimonial }}{% endcapture %}
+  {% if settings[enabled] %}
+    {% assign testimonialCount = testimonialCount | plus: 1 %}
+  {% endif %}
+{% endfor %}
+
+{% capture title %}home-testimonials-title{% endcapture %}
+{% capture button %}home-testimonials-button{% endcapture %}
+{% capture url %}home-testimonials-url{% endcapture %}
+
+{% if testimonialCount > 0 %}
+  <div class="home-module home-testimonials row-of-{{testimonialCount}}">
+    <div class="home-module-content">
+      {% if settings[title] != blank %}
+        <h4 class="section-title">{{ settings[title] }}</h4>
+      {% endif %}
+
+      <div class="home-module-inline-items">
+        {% for testimonial in testimonials %}
+          {% capture enabled %}{{ testimonial }}{% endcapture %}
+          {% capture title %}{{ testimonial }}-title{% endcapture %}
+          {% capture description %}{{ testimonial }}-description{% endcapture %}
+          {% capture name %}{{ testimonial }}-name{% endcapture %}
+          {% capture date %}{{ testimonial }}-date{% endcapture %}
+
+          {% if settings[enabled] %}
+            <div class="home-testimonial home-feature">
+              {% unless settings[title] == empty %}
+                <div class="home-testimonial-content rte">
+                  {% unless settings[title] == empty %}
+                    <h3>{{ settings[title] }}</h3>
+                  {% endunless %}
+
+                  {% unless settings[description] == empty %}
+                    <p>{{ settings[description] }}</p>
+                  {% endunless %}
+
+                  {% unless settings[name] == empty and setting[date] == empty %}
+                    <p class="reviewer">
+                      {% unless settings[name] == empty %}{{ settings[name] }}{% endunless %}
+                      {% unless settings[date] == empty %} on {{ settings[date] }}{% endunless %}
+                    </p>
+                  {% endunless %}
+                </div>
+              {% endunless %}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      {% unless settings.home-testimonials-button == empty or settings.home-testimonials-url == empty %}
+        <p><a class="button" href="{{ settings.home-testimonials-url }}">{{ settings.home-testimonials-button }}</a></p>
+      {% endunless %}
+    </div>
+  </div>
+{% endif %}

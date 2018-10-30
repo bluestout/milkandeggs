@@ -1,0 +1,167 @@
+<!-- Cart Item Free Shopping Bag -->
+
+<style>
+  .free-bag-info {
+	position: relative;
+    display: table-cell;
+  }
+  
+  .free-bag-info-text {
+    background: rgba(0,0,0,1);
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 115px;
+    font-size: 13px;
+    line-height: normal;
+    color: #fff;
+    padding: 10px 25px 10px 15px;
+    border-radius: 4px;
+    display: none;
+  }
+  
+  .free-bag-info-text:before {
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: transparent;
+    border-right-color: rgba(0,0,0,1);
+    border-width: 15px;
+   	top: 25px;
+    left: -29px;
+  }
+  
+  .free-bag-info .fa-times {
+    position: absolute;
+    top: -4px;
+    right: -5px;
+    display: block !important;
+    cursor: pointer;
+  }
+  
+  .free-bag-info-text > p {
+    margin: 0px;
+    margin-bottom: 5px;
+  }
+  
+  .free-bag-info-text > p:last-child {
+    margin-bottom: 0px;
+  }
+  
+  .free-bag-view-info {
+    position: absolute;
+    top: -5px;
+    color: #333;
+    right: 0;
+    font-size: 30px !important;
+    display: none !important;
+    cursor: pointer;
+  }
+  
+  .free-bag-view-detail {
+    font-size: smaller;
+  }
+  
+  .cart-item-quantity-display {
+    margin-right: 0px !important;
+  }
+  
+  .cart-item-quantity-display + span {
+    font-family: 'Pacific';
+    font-size: 12px;
+    display: inline-block;
+    vertical-align: top;
+  }
+  
+  .cart-item-product .free-bag-info span {
+    display: block;
+    margin-left: 120px;
+  }
+  
+  @media (max-width: 718px) {
+    .free-bag-info {
+      width: 1%;
+    }
+    
+    .free-bag-info-text {
+      background: rgba(0,0,0,0.8);
+      height: 240px;
+      width: 240px;
+      margin: 0px auto;
+      right: 0;
+      left: 0;
+      padding-top: 45px;
+      display: none;
+    }
+    
+    .free-bag-info-text:before {
+      display: none;
+    }
+    
+    .free-bag-view-info {
+      display: block !important;
+    }
+    
+    .free-bag-info .cart-item-image {
+      position: relative;
+    }
+    
+    .free-bag-view-detail {
+      display: none !important;
+    }
+    
+    
+    .cart-item-product div>span {
+      margin: 0px auto;
+    }
+  }
+  
+</style>
+
+
+<tr class="cart-item" data-line="" data-variant="" data-title="" data-url="">
+  <td class="cart-item-product first">
+    <div class="free-bag-info">
+      <div class="cart-item-image">
+        <a href="javascript:" onclick="$('.free-bag-info-text').slideDown('slow');">
+        	<img alt="Free Shopping Bag" src="//cdn.shopify.com/s/files/1/1078/0310/files/Milk_EggsBag_A_medium.jpg">
+        </a>
+        <i class="free-bag-view-info fa fa-question-circle" onclick="$('.free-bag-info-text').slideDown('slow');"></i>
+      </div>
+      
+      <span class="cart-item-vendor vendor">
+        Milk &amp; Eggs
+      </span>
+      <span class="cart-item-title">
+        Free Milk and Eggs Insulated Bag *
+      </span>
+      
+      <span class="free-bag-view-detail">
+        <a href="javascript:" onclick="$('.free-bag-info-text').slideDown('slow');">Click to view details</a>
+      </span>
+      
+      <div class="free-bag-info-text">
+        <i class="fa fa-times" onclick="$('.free-bag-info-text').slideUp('slow');"></i>
+        <p>To keep your order fresh, it will be delivered in an insulated bag with an ice pack. This will keep items cool and insulated for hours.</p>
+        <p>Please re-use the bags help us be environmentally conscious by leaving them out for us to pick up on your next order for us to re-use.</p>
+      </div>
+    </div>
+  </td>
+
+  <td class="cart-item-price">
+    <span class="money" data-currency-usd="$ 0.00">$ 0.00</span>
+  </td>
+
+  <td class="cart-item-quantity">
+    <input class="cart-item-quantity-display" type="text" name="updates[]" value="1" size="1">
+    <span>&#57366;</span><!--<span class="cart-item-decrease"></span><span class="cart-item-increase"></span> -->
+  </td>
+  
+  <td class="cart-item-total last">
+    <span class="money" data-currency-usd="$ 0.00">$ 0.00</span>
+  </td>
+  
+</tr>

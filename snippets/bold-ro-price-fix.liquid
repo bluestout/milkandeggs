@@ -1,0 +1,11 @@
+{% assign ro_cart_total = 0 %}
+
+{% for item in cart.items %}
+  {% if item.properties.discounted_price != blank %}
+    {% assign ro_price = item.properties.discounted_price %}
+    {% assign ro_item_price = ro_price | times: item.quantity %}
+    {% assign ro_cart_total = ro_cart_total | plus: ro_item_price %}
+  {% else %}
+    {% assign ro_cart_total = ro_cart_total | plus: item.line_price %}
+  {% endif %}
+{% endfor %}

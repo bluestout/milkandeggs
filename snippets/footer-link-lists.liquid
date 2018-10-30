@@ -1,0 +1,38 @@
+{% assign footerLinkLists = "footer-link-list-1|footer-link-list-2" | split: "|" %}
+<div class="footer-module footer-link-lists">
+  {% for list in footerLinkLists %}
+
+    {% assign name = settings[list] %}
+
+    {% if linklists[name].links.size > 0 %}
+      <div class="footer-link-list">
+        {% if settings.footer-titles %}
+          <h4>{{ linklists[name].title }}</h4>
+        {% endif %}
+        <ul>
+          {% for link in linklists[name].links %}
+            <li><a href="{{link.url}}">{{link.title}}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+  {% endfor %}
+</div>
+
+
+<div class="footer-module footer-link-lists mobileLink">
+  {% for list in footerLinkLists %}
+
+    {% assign name = settings[list] %}
+
+    {% if linklists[name].links.size > 0 %}
+      <div class="footer-link-list mobile">
+        
+          {% for link in linklists[name].links %}
+            <span class="span-{{forloop.index}}" ><a href="{{link.url}}">{{link.title}}</a></span>
+          {% endfor %}
+        
+      </div>
+    {% endif %}
+  {% endfor %}
+</div>

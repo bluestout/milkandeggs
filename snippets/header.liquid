@@ -1,0 +1,330 @@
+{% if settings.header-promo and settings.header-promo-text != blank %}
+    <div class="header-promo-wrapper">
+        <div class="header-promo">
+            <p class="header-promo-text">{{ settings.header-promo-text }}</p>
+        </div>
+    </div>
+{% endif %}
+
+<div class="main-header-wrapper">
+    <header class="main-header clearfix" role="banner">
+
+        <div class="main-header-row">
+            <div class="branding">
+                {% if settings.use-logo %}
+                    <a class="logo {% if settings.use-retina-logo %}has-retina{% endif %}" href="/">
+                        <img class="logo-regular" alt="{{ shop.name | escape }}" src="{{ 'logo.png' | asset_url }}">
+                        {% if settings.use-retina-logo %}
+                            <img class="logo-retina" alt="{{ shop.name | escape }}" src="{{ 'logo-retina.png' | asset_url }}">
+                        {% endif %}
+                    </a>
+                {% else %}
+                    {% if template contains 'index' %}
+                        <h1 class="site-title">{{ shop.name }}</h1>
+                    {% else %}
+                        <div class="site-title"><a href="/">{{ shop.name }}</a></div>
+                    {% endif %}
+                {% endif %}
+            </div>
+
+            <form class="header-search-form" action="/search" method="get">
+                <input type="hidden" name="type" value="product" />
+                <input class="header-search-input" name="q" type="text" placeholder="{{ 'general.search.submit' | t }}" />
+
+                {% comment %}
+                <div style="display:none" class="header-search-toggle">
+                <label class="lbl">Include Blog</label>
+                <input class='tgl tgl-flat' id='cb44' type='checkbox'>
+                <label class='tgl-btn' for='cb44'></label>
+                </div>
+                <script type="text/javascript">
+                $(document).ready(function(){
+
+                $(".header-search-input").keyup(function(){
+                var text = $(this).val();
+                if(text == ""){
+                $(".header-search-toggle").hide();
+                }else{
+                $(".header-search-toggle").show();
+
+                }
+                });
+
+                $("#cb44").change(function(){
+                if($(this).is(':checked')){
+                $("input[name='type']").val('product,article'); 
+                }else{
+                $("input[name='type']").val('product');
+                }
+                });
+
+                });
+                </script>
+                {% endcomment %}
+            </form>
+
+            <div class="header-tools">
+                <script>
+                window['friendbuy'] = window['friendbuy'] || [];
+                window['friendbuy'].push(['widget', "dHo-nlQ"]);
+                </script>
+
+                <button type="button" class="friendbuy-dHo-nlQ">
+                    {% comment %} <img src="{{ 'icon-gift.png' | asset_url }}" />  {% endcomment %}
+                    <i class="milkicon-present"></i>
+                    Get $20
+                </button>
+
+                {% include 'iwish_v2' with 'iwishlink' %}
+
+                <a class="cart-count {% if cart.item_count < 100 %}contain-count{% endif %}" href="/cart">
+                    {% comment %} <span class="bag-count">{{ cart.item_count }}</span> {% endcomment %}
+                    <i class="milkicon-cart"></i>
+                    <span class="bag-text">{{ cart.total_price | money}}</span>
+                    <!-- <span class="bag-text">{{ 'layout.header.cart_item_count' | t: count: cart.item_count }}</span> -->
+                </a>
+
+                {% if settings.enable-currency-switcher %}
+                    <div class="select-wrapper currency-switcher">
+                        <div class="selected-currency"></div>
+                        <select id="currencies" name="currencies">
+                            {% capture codes %},USD,EUR,GBP,CAD,ARS,AUD,BBD,BDT,BSD,BHD,BRL,BOB,BND,BGN,ILS,MMK,KYD,CLP,CNY,COP,CRC,HRK,CZK,DKK,DOP,XCD,EGP,XPF,FJD,GHS,GTQ,GYD,GEL,HKD,HUF,ISK,INR,IDR,NIS,JMD,JPY,JOD,KZT,KES,KWD,LVL,LTL,MXN,MYR,MUR,MDL,MAD,MNT,MZN,ANG,NZD,NGN,NOK,OMR,PKR,PYG,PEN,PHP,PLN,QAR,RON,RUB,SAR,RSD,SCR,SGD,SYP,ZAR,KRW,LKR,SEK,CHF,TWD,THB,TZS,TTD,TRY,UAH,AED,UYU,VEB,VND,ZMK,{% endcapture %}
+                            {% assign supported_codes = settings.currency-switcher-supported-currencies | split: ' ' %}
+                            <option value="{{ shop.currency }}" selected="selected">{{ shop.currency }}</option>
+                            {% for code in supported_codes %}
+                            {% if code != shop.currency and codes contains code %}
+                            <option value="{{ code }}">{{ code }}</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mobile-header-tools">
+                <span class="mobile-header-search-toggle">&#57346;</span>
+                <a class="mobile-cart-count {% if cart.item_count < 100 %}contain-count{% endif %}" href="/cart">&#57348; <span class="bag-count">{{ cart.item_count }}</span></a>
+                <button type="button" class="friendbuy-dHo-nlQ"><img src="{{ 'icon-gift.png' | asset_url }}" />Get $20</button>
+
+                <span class="mobile-navigation-toggle"><span></span></span>
+            </div>
+
+        </div>
+
+        <nav class="navigation">
+            <span class="emailClass" style="display:none;">{{ customer.email }}</span>
+            <ul class="navigation-first-tier">
+                {% assign main_menu = 'main-menu' %}
+                {% if template == 'search.blog' %}
+                    {% assign blog = blogs.food-health-and-eating %}
+                {% endif %}
+                {% if blog %}
+                    {% assign main_menu = 'blog' %}
+                {% endif %}
+
+                {% for link in linklists[main_menu].links %}
+                    {% if link.handle == 'mega-nav' %}
+                        {% include 'mega-navigation' %}
+                    {% else %}
+                        {% include 'has-dropdown' %}
+                        <li class="{% if has-dropdown %}has-dropdown{% endif %} regular-nav">
+                            <a href="{{ link.url }}" class="mobile-toggle">{{ link.title }} {% if has-dropdown %}<span class="mobile-tier-toggle"></span>{% endif %}</a>
+                            {% if has-dropdown %}
+                                <ul class="navigation-second-tier">
+                                    {% for link in linklists[link_handle].links %}
+                                        {% include 'has-dropdown' %}
+                                        <li class="{% if has-dropdown %}has-dropdown{% endif %}">
+                                            <a href="{{ link.url }}">{{ link.title }} {% if has-dropdown %}<span class="mobile-tier-toggle"></span>{% endif %}</a>
+                                            {% if has-dropdown %}
+                                                <ul class="navigation-third-tier">
+                                                    {% for link in linklists[link_handle].links %}
+                                                        {% include 'has-dropdown' %}
+                                                        <li class="{% if has-dropdown %}has-dropdown{% endif %}">
+                                                            <a href="{{ link.url }}">{{ link.title }} {% if has-dropdown %}<span class="mobile-tier-toggle"></span>{% endif %}</a>
+                                                            {% if has-dropdown %}
+                                                                <ul class="navigation-fourth-tier">
+                                                                    {% for link in linklists[link_handle].links %}
+                                                                        <li>
+                                                                            <a href="{{ link.url }}">{{ link.title }}</a>
+                                                                        </li>
+                                                                    {% endfor %}
+                                                                </ul>
+                                                            {% endif %}
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+              <li class="iwish_mobile_link">{% include 'iwish_v2' with 'iwishlink' %}</li>
+
+                {% if shop.customer_accounts_enabled %}
+                    {% unless blog %}
+                        <li class="customer-links">
+                            {% if customer %}
+                                <a href="/account">{% if customer.first_name != '' %}{{ customer.first_name }}'s {% endif %}{{ 'customers.account.title' | t }}</a>
+                            {% else %}
+                                {{ 'customers.login.title' | t | customer_login_link }}
+                            {% endif %}
+                        </li>
+                    {% endunless %}
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+    <!--   <p class="result"></p> -->
+</div>
+
+{% if blog %}
+    {% for link in linklists[main_menu].links %}
+        <div class="submenu">
+            {% include 'has-dropdown' %}
+            {% if has-dropdown %}
+                <ul>
+                    {% for link in linklists[link_handle].links %}
+                        <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+                        {% unless forloop.last %}
+                            <li>|</li>
+                        {% endunless %}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    {% endfor %}
+{% endif %}
+
+<script>
+(function(){
+    $("#customer_login").attr("autocomplete","off");
+})();
+
+$(document).ready(function(){
+
+    function getCookie(cname) {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0; i<ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1);
+            if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+        }
+        return "";
+    }
+
+
+    var delete_cookie = function(name) {
+        document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    };
+
+    var user_mail = '';
+    var pass_word = '';
+
+    var d = new Date();
+    d.setTime(d.getTime() + (365*24*60*60*1000));
+    var expires = "expires="+ d.toUTCString();
+
+
+    var winDimension = $(window).width();
+//if(winDimension <= 1024){
+
+    /*--------------- customer id cookie-------------------------------*/
+    var user_id = '{{customer.id}}';
+    if(user_id){
+// condition on true execution
+document.cookie="customer_id1="+ user_id+";path=/;"+expires;
+}
+/*--------------- customer id cookie-------------------------------*/
+
+
+/*-----------------------click on logout---------------------------*/
+$('#customer_logout_link').click(function(){
+    document.cookie="userEmail=;path=/";
+    document.cookie="combination=;path=/";
+    document.cookie="customer_id1=;path=/";
+    delete_cookie("userEmail");
+    delete_cookie("combination");
+    delete_cookie("customer_id1");
+});
+
+/*-----------------------click on logout---------------------------*/
+
+
+/*-------------------auto login----------------------------*/
+
+//// Auto login is disabled
+
+//get cookies from cookies session
+//     var userId = '{{customer.id}}';
+//     if(userId){
+//       // condition on true execution  
+//     }else
+//     {
+//       var user_email = getCookie('userEmail');
+//       var user_pass = getCookie('combination');
+//       if(user_email && user_pass){
+//         $('#passtxt').val(user_pass);
+//         $('.emailtxt').val(user_email);
+//         $("#customer_login").submit();
+//       }
+//     }
+console.log('Auto login is diabled.');
+/*-------------------auto login----------------------------*/
+
+/*--------------------submit login------------------------------*/    
+
+$('#customer_login').delay(1000).submit(function(){
+    pass_word = $('#passtxt').val();
+//user_mail = $('.emailtxt').val();
+if(/*user_mail &&*/ pass_word ){
+//document.cookie="userEmail="+ user_mail+";path=/;"+ expires;
+document.cookie="combination="+ pass_word+";path=/;"+ expires;
+}        
+
+//var user_email = getCookie('userEmail');
+// var user_pass = getCookie('combination');
+//$('.result').text(user_email + " " + user_pass);
+});
+
+//}
+
+});
+
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+    }
+    return "";
+}
+var user_email = getCookie('userEmail');
+var user_pass = getCookie('combination');
+var user_id = '{{customer.id}}';
+//       if(user_id == '2853842115'){
+//   $('.result').html(user_email + " " + user_pass + " is cookie"+ " " + user_id);
+//       }
+
+/*--------------------blog submenu------------------------------*/    
+if($(window).width() > 769) {
+    $('.blog .has-dropdown a, .search-blog .has-dropdown a, .article .has-dropdown a').on('click', function() {
+        if($('.submenu').eq($(this).parent().index()).hasClass('active')) {
+            $('.submenu.active').removeClass('active').slideToggle();
+        } else {
+            $('.submenu.active').removeClass('active').slideToggle();
+            $('.submenu').eq($(this).parent().index()).addClass('active').slideToggle();
+        }
+        return false;
+    });
+}
+
+</script>
+

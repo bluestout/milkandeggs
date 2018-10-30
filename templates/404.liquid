@@ -1,0 +1,29 @@
+{% assign using-linklist = false %}
+{% if linklists[settings.collections-link-list] and linklists[settings.collections-link-list].links.size > 0 %}
+  {% assign using-linklist = true %}
+{% endif %}
+
+<div class="rte">
+	{% capture searchLink %}<a href="/search">{{ 'general.404.search_link_text' | t }}</a>{% endcapture %}
+	{% capture productsLink %}<a href="/collections/all">{{ 'general.404.products_link_text' | t }}</a>{% endcapture %}
+	<p>{{ 'general.404.message_html' | t: search_link_text: searchLink, products_link_text: productsLink }}</p>
+</div>
+
+<div class="collections-list showing-4-per-row">
+  {% if using-linklist %}
+    {% for link in linklists[settings.collections-link-list].links %}
+      {% include 'collection-list-item' with 'linklist' %}
+    {% endfor %}
+  {% else %}
+    {% for collection in collections %}
+      {% include 'collection-list-item' %}
+    {% endfor %}
+  {% endif %}
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+  	$("body").addClass('template-list-collections');
+  });
+</script>
+

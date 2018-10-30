@@ -1,0 +1,68 @@
+{% assign recipes = false %}
+{% assign blog_pagination = settings.articles-per-page %}
+
+{% if current_tags %}
+    <h2 style="display:none">{{ 'blogs.blog.tag_page_title' | t: tag: current_tags.first }}</h2>
+
+    {% for tag in current_tags %}
+        {% if tag == 'recipe' %}
+            {% assign recipes = true %}
+            {% assign blog_pagination = 12 %}
+            {% break %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+{% include 'blog-mobile-filters' %}
+
+{% paginate blog.articles by blog_pagination %}
+    {% assign featured_offset = 0 %}
+    {% if settings.blog-show-featured-posts and current_page == 1 and recipes == false %}
+        {% assign featured_offset = 2 %}
+        <div class="blog-featured">
+            {% for article in blog.articles limit: 2 %}
+                {% include 'article-list-item' with 'featured' %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if recipes %}
+        {% assign filters = settings.blog-filter | split: ',' %}
+        <div class="filters">
+            <h4>{{ 'blogs.blog.filter' | t }}</h4>
+            <ul>
+                {% for filter in filters %}
+                    {% if current_tags contains filter %}
+                        <li class="active">{{ filter | highlight_active_tag | link_to_remove_tag: filter }}</li>
+                    {% else %}
+                        <li>{{ filter | highlight_active_tag | link_to_add_tag: filter }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <div id="scroll">
+        <div class="blog-posts">
+            {% for article in blog.articles offset: featured_offset %}
+                {% if recipes %}
+                    {% include 'article-list-item' with 'recipes' %}
+                {% else %}
+                    {% include 'article-list-item' %}
+                {% endif %}
+            {% else %}
+                <span class="empty">{{ 'blogs.blog.empty' | t }}</span>
+            {% endfor %}
+
+            {% if paginate.next %}
+              <ul class="pagination">
+                <li class="pagination-next">
+                    <a href="{{ paginate.next.url }}" class="button">{{ 'blogs.blog.load_more' | t }}</a>
+                </li>
+              </ul>
+            {% endif %}
+        </div>
+    </div>
+
+    {% include 'sidebar-blog' %}
+{% endpaginate %}
