@@ -1,0 +1,22 @@
+<style>
+.limespot-recommendation-box .ls-box-title { margin-bottom: 10px !important; }
+.ls-title { margin-bottom: 6px !important; font-size: 18px !important; font-weight: 400 !important; }
+.ls-price,
+.ls-original-price { /*font-family: "Archivo Narrow",sans-serif !important;*/ font-size: 15px !important; }
+.ls-price { color: {{ settings.heading-color }} !important; }
+.ls-add-to-cart-button,
+.ls-add-to-cart-dropdown { color: {{ settings.primary-button-color }} !important; border: none !important; border-radius: 0 !important; background-color: {{ settings.primary-button-background }} !important; }
+.limespot-recommendation-box-carousel-indicator .recomm-arrow { margin-top: 114px !important; }
+.limespot-recommendation-box:hover .limespot-recommendation-box-carousel-indicator.indicator-left { -webkit-transform: none !important; transform: none !important; }
+.limespot-recommendation-box:hover .limespot-recommendation-box-carousel-indicator.indicator-right { -webkit-transform: none !important; transform: none !important; }
+.limespot-recommendation-box-carousel-indicator .arrow-left { background: url({{ 'arrow-left.png' | asset_url }}) no-repeat center top/19px auto transparent !important; }
+.limespot-recommendation-box-carousel-indicator .arrow-right { background: url({{ 'arrow-right.png' | asset_url }}) no-repeat center top/19px auto transparent !important; }
+.limespot-recommendation-box-carousel-indicator img { visibility: hidden !important; }
+
+.template-blog .ls-recommendation-box,
+.template-article .ls-recommendation-box,
+.template-cart .ls-recommendation-box,
+.template-collection .ls-recommendation-box,
+.template-product .ls-recommendation-box { margin-top: 60px !important; }
+</style>
+{% comment %}Checksum: 0c772253afcbc8495436426751582a10{% endcomment %}

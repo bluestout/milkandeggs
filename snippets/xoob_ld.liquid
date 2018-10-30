@@ -1,0 +1,35 @@
+<!-- Start Xoobo Location deliver app code -->
+<style type="text/css">
+  #xld_main{ margin-bottom:10px; }
+  #xld_main #xld_html { margin-bottom:10px }
+  #xld_form h3.label{
+    margin-bottom:5px;
+  }
+  #xld_time{
+    
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+    background: #fff;
+    color: #6e4219;
+    display: block;
+    padding: 14px 15px 9px;
+    font-size: 14px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+</style>
+<div id="xld_main">
+  <div id="xld_html"></div>
+  <div id="xld_form">
+    <h4 class="label">Select Delivery Date:</h4>
+    <input readonly="readonly" type="text" name="attributes[local_delivery_date]" id="datepicker" value="" class="hasDatePicker" />
+    <p class="del_date_error_text">*Select Delivery Date before checkout.</p>
+    
+    <h4 class="label">Drop Off time</h4>
+    <select disabled="disabled" name="attributes[local_delivery_request]" id="xld_time">
+      <option value="">Select Delivery Date First</option>
+    </select>
+  </div>
+</div>
+<!-- End Xoobo Local Delivery Appp Code -->

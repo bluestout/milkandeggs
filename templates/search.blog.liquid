@@ -1,0 +1,52 @@
+{% assign respond_js_secret_key = shop.domain | md5 %}
+
+{% unless search.terms == respond_js_secret_key %}
+    <div class="blog">
+        <div id="scroll">
+            {% paginate search.results by settings.articles-per-page %}
+                {% if search.performed %}
+                    <div class="search-results-count">
+                        {% capture results %}<em>{{ search.terms }}</em>{% endcapture %}
+                        <h3>{{ 'general.search.results_html' | t: search_terms: results }}</h3>
+
+                        {% if search.results_count == 0 %}
+                            <p>{{ 'general.search.no_results_html' | t: search_terms: results }}</p>
+                        {% endif %}
+                    </div>
+
+                    {% if search.results.size > 0 %}
+                        <div class="blog-posts">
+                            {% for article in search.results %}
+                                {% include 'article-list-item' %}
+                            {% else %}
+                                <span class="empty">{{ 'blogs.blog.empty' | t }}</span>
+                            {% endfor %}
+
+                            {% if paginate.next %}
+                              <ul class="pagination">
+                                <li class="pagination-next">
+                                    <a href="{{ paginate.next.url }}" class="button">{{ 'blogs.blog.load_more' | t }}</a>
+                                </li>
+                              </ul>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endif %}
+            {% endpaginate %}
+        </div>
+        {% include 'sidebar-blog' %}
+    </div>
+{% else %}
+    {% include 'respond' %}
+    {% layout none %}
+{% endunless %}
+
+<!-- WC Tracking Code -->
+{% if search.performed %}
+    <script>
+    analytics.track('Searched Articles', {
+        query: "{{ search.terms }}"
+    }, {wcapiVersion: '1.0'});
+    </script>
+{% endif %}
+<!-- WC Tracking Code End -->

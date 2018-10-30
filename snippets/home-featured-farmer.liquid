@@ -1,0 +1,32 @@
+<div class="home-module home-featured-farmer">
+  <div class="home-module-content">
+    <div class="table">
+      <div class="featured-details">
+        <div class="featured-image mobile">
+          {{ 'home-featured-farmer.jpg' | asset_url | img_tag: settings.home-featured-farmer-title }}
+        </div>
+
+        <h6 class="section-subtitle">{{ 'general.home_page.featured_farmer' | t }}</h6>
+        {% unless settings.home-featured-farmer-title == empty %}
+          <h4 class="section-title">{{ settings.home-featured-farmer-title }}</h4>
+        {% endunless %}
+
+        {% unless settings.home-featured-farmer-description == empty %}
+          <p>{{ settings.home-featured-farmer-description }}</p>
+        {% endunless %}
+
+        {% unless settings.home-featured-farmer-button == empty or settings.home-featured-farmer-url == empty %}
+          <p><a class="button" href="{{ settings.home-featured-farmer-url }}">{{ settings.home-featured-farmer-button }}</a></p>
+        {% endunless %}
+      </div>
+
+      <div class="featured-image desktop">
+        {% unless settings.home-featured-farmer-url == empty %}
+          <a href="{{ settings.home-featured-farmer-url }}">{{ 'home-featured-farmer.jpg' | asset_url | img_tag: settings.home-featured-farmer-title }}</a>
+		{% else %}
+          {{ 'home-featured-farmer.jpg' | asset_url | img_tag: settings.home-featured-farmer-title }}
+        {% endunless %}
+      </div>
+    </div>
+  </div>
+</div>

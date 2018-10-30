@@ -1,0 +1,6 @@
+<script type="text/javascript" charset="utf-8">
+//<![CDATA[
+if (typeof jQuery === 'undefined') {document.write({{ "https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js" | script_tag | json }});	document.write('<script type="text/javascript">jQuery.noConflict();<\/script>');}
+//]]>
+</script>
+<script type="text/javascript">var reorder_discount_cart;!function(){reorder_discount_cart=function(){function b(){var a=sessionStorage.getItem("discount");if(null!=a&&""!=a){var b=document.getElementsByTagName("form");if(null!=b)for(var c=0;c<b.length;c++){var d=/cart/i;d.test(b[c].action)&&(pattern_questionmark=/\?/,pattern_discount=/discount\=/,pattern_questionmark.test(b[c].action)&&!pattern_discount.test(b[c].action)?b[c].action=b[c].action+"&discount="+a:pattern_discount.test(b[c].action)||(b[c].action=b[c].action+"?discount="+a))}}else{var b=document.getElementsByTagName("form");if(null!=b)for(var c=0;c<b.length;c++){var d=/cart/i;d.test(b[c].action)&&(pattern_questionmark=/\?/,pattern_ref=/ultimatereorder\=/,pattern_questionmark.test(b[c].action)&&!pattern_ref.test(b[c].action)?b[c].action=b[c].action:pattern_ref.test(b[c].action)||(b[c].action=b[c].action))}}}var c=jQuery;c(document).ready(function(){c(document.body).on("mouseup",function(a){pattern=/cart/i,pattern.test(a.target.className)&&b()}),b()})}}(),reorder_discount_cart();</script>

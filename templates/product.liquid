@@ -1,0 +1,161 @@
+{% include 'bold-product' with product, hide_action: 'break' %}{% if bold_hidden_product %}{% break %}{%endif %}
+
+{% assign variant = bold_selected_or_first_available_variant %}
+{% if product.images.size > 0 %}
+  {% assign columns = settings.product-column-layout %}
+{% else %}
+  {% assign columns = "single-column" %}
+{% endif %}
+
+<div class="product-wrap {{columns}} clearfix" itemscope itemtype="http://schema.org/Product">
+
+  {% if settings.product-modules-order != blank %}
+    {% assign moduleOrder = settings.product-modules-order %}
+    {% if settings.product-column-layout == "two-column" %}
+      {% assign moduleOrder = moduleOrder | remove: "A" | prepend: "A-" %}
+    {% endif %}
+    {% assign modules = moduleOrder | split: "-" %}
+  {% else %}
+    {% assign modules = 'A-B-C-D' | split: "-" %}
+  {% endif %}
+
+  {% for module in modules %}
+    {% case module %}
+      {% when 'A' %}
+        {% include 'product-images' %}
+      {% when 'B' %}
+        {% include 'product-form' %}
+      {% when 'C' %}
+        {% include 'product-description' %}
+      {% when 'D' %}
+        {% include 'share-buttons' %}
+    {% endcase %}
+  {% endfor %}
+</div>
+
+
+
+{% if settings.enable-related-products %}
+  <div class="related-products">
+
+    <h4 class="section-title">{{ 'products.related_products.title' | t }}</h4>
+
+    {% assign numberOfRelatedProductsToShow = settings.collection-products-per-row | plus: 1 %}
+
+    {% if collection == null %}
+      {% assign collection = collections['all'] %}
+    {% endif %}
+
+    {% if collection.products.size > 1 %}
+      <div class="related-products-listing {{settings.collection-layout-style}}-layout {{settings.collection-product-text-style}}-style rows-of-{{settings.collection-products-per-row}}">
+        {% assign currentProductFound = false %}
+        {% for prod in collection.products limit: numberOfRelatedProductsToShow %}
+        {% include 'bold-product' with prod, hide_action: 'skip' %}
+          {% if prod.title == product.title %}
+            {% assign currentProductFound = true %}
+          {% else %}
+            {% unless currentProductFound == false and forloop.last %}
+              {% include 'product-list-item' %}
+            {% endunless %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+
+  </div>
+{% endif %}
+
+<script>
+  // required for splitting variants
+  // see ProductView
+  window.productJSON = bold_product_json[{{ product.id }}];
+  window.FirstVariant = {{ bold_selected_or_first_available_variant | json }};
+</script>
+
+<script>
+  //Bold Fix for Add to Subscription
+  ro_add_to_subscription_fix = function(){
+    $("#add_to_order_modal").addClass("exist_sub");
+    $("#add_to_order_modal").removeClass("modal");
+    $(".modal-content").addClass("bold-add-to-sub");
+    $(".bold-add-to-sub").removeClass("modal-content");
+    $(".modal-header button").remove();
+    $(".add_modal_btn").removeAttr("data-toggle");
+    $(".add_modal_btn").removeAttr("data-target");
+    $(".modal-footer").find(".close_modal_btn").remove();
+    $(".add_modal_btn").off('click').click(function(){$(".exist_sub").slideToggle();});
+    $('.bold-remove-on-load').remove();
+  };
+  jQuery(window).load(ro_add_to_subscription_fix);
+  
+  
+  //Show Reviews Button
+  $(document).ready(function() {
+      $('.show-reviews a').click(function() {
+          $('#shopify-product-reviews .spr-content').slideToggle();
+          $(this).hide();
+          return false;
+      })
+
+      $('#shopify-product-reviews').bind("DOMSubtreeModified",function(){
+        if($('.spr-summary meta[itemprop="votes"]').attr('content') > 0) {
+          $('.show-reviews').show();
+        } else {
+          $('.show-reviews').hide();
+        }
+      });
+  });
+</script>
+<style>
+  .bold-add-to-sub{
+    text-align:left;
+  }
+  .exist_sub{
+    display:none;
+  }
+</style>
+<style class='bold-remove-on-load'>
+  .add_modal_btn { display:none; }
+
+</style>
+
+
+<!-- Start Klaviyo Tracking Code -->
+<script text="text/javascript">
+  var _learnq = _learnq || [];
+
+  var item = {
+    Name: {{ product.title|json }}, 
+    ProductID: {{ product.id|json }},
+    Categories: {{ product.collections|map:'title'|json }},
+    ImageURL: "https:{{ product.featured_image.src|img_url:'grande' }}",
+    URL: "{{ shop.secure_url }}{{ product.url }}",
+    Brand: {{ product.vendor|json }},
+    Price: {{ product.price|money|json }},
+    CompareAtPrice: {{ product.compare_at_price_max|money|json }}
+  };
+
+  _learnq.push(['track', 'Viewed Product', item]);
+  _learnq.push(['trackViewedItem', {
+    Title: item.Name,
+    ItemId: item.ProductID,
+    Categories: item.Categories,
+    ImageUrl: item.ImageURL,
+    Url: item.URL,
+    Metadata: {
+      Brand: item.Brand,
+      Price: item.Price,
+      CompareAtPrice: item.CompareAtPrice
+    }
+  }]);
+</script>
+<!-- End Klaviyo Tracking Code -->
+
+
+<!-- Add Product barcode  -->
+<script>
+ if( '{{product.variants.first.barcode}}' == '{{product.variants.last.barcode}}' ){
+   $('#barcodefield').html('UPC / GTIN: {{ product.variants.first.barcode }}');
+ }
+</script>
+<!--Product barcode end  -->

@@ -1,0 +1,79 @@
+{% assign item = product %}
+
+
+{% assign saleText = 'products.product.sale' | t %}
+{% capture percentage %}{{ bold_compare_at_price_max | minus: bold_price | times: 100.0 | divided_by: bold_compare_at_price_max | money_without_currency | times: 100 | remove: '.0' }}%{% endcapture %}
+{% assign saleText = saleText | replace: '{PCT}', percentage %}
+
+{% if settings.collection-stock-level-overlay and item.available %}
+  {% assign total = 0 %}
+  {% assign threshold = settings.collection-stock-level-overlay-threshold | times: 1 %}
+  {% assign infinity = false %}
+  {% for variant in item.variants %}
+  
+{% include 'bold-hidden-variants' with variant, bold_loop: 'loop' %}
+    {% if variant.inventory_management == null %}
+      {% assign infinity = true %}
+    {% elsif variant.inventory_management == '' %}
+      {% assign infinity = true %}
+    {% elsif variant.inventory_management == 'shopify' and variant.inventory_policy == 'continue' %}
+      {% assign infinity = true %}
+    {% elsif infinity == false %}
+      {% capture temp %}{{ total | plus: variant.inventory_quantity }}{% endcapture %}
+      {% assign total = temp | times: 1 %}
+    {% endif %}
+  {% endfor %}
+  {% assign stockText = settings.collection-stock-level-overlay-text | replace: '{NUM}', total %}
+{% endif %}
+
+{% assign onSale = false %}
+{% if bold_compare_at_price_min > bold_price_min %}
+  {% assign onSale = true %}
+{% endif %}
+
+
+<div class="product-images clearfix">
+<div id="prod_{{item.id}}" data-qty="0" class="product-list-item" data-cart="{{cart.item_count}}" data-product-id="{{item.id}}">
+
+  {% assign isSearch = false %}
+  {% if template contains 'search' %}
+    {% assign isSearch = true %}
+  {% endif %}
+
+  {% if settings.collection-product-text-style == 'overlay' and isSearch == false %}
+  <a class="product-list-item-overlay-link" href="{{ item.url }}"></a>
+  {% endif %}
+  
+  {% assign secondaryImage = false %}
+  {% if item.images.size > 1 and settings.collection-product-image-flip %}
+    {% assign secondaryImage = true %}
+  {% endif %}
+  
+      <figure class="product-list-item-thumbnail">
+      <a>
+        {% assign mainImage = variant.featured_image | default: product.featured_image %}
+    <div class="product-main-image">
+        <img alt="{{ mainImage.alt | escape }}" src="{{ mainImage | img_url: '1024x1024' }}">
+        {% if settings.product-enable-zoom %}
+          <div class="product-zoom"></div>
+        {% endif %}
+        </div>
+        <div class="sh-cart-buttons" data-line="">
+          <span class="product-list-item-badge sh-cart-add" data-id="{{product.id}}" data-vid="{{product.variants[0].id}}">+</span>
+        </div>
+        
+      </a>
+      <div class="sh-cart-buttons" data-line="">
+          <span class="product-list-item-badge sh-cart-add" data-id="{{item.id}}" data-vid="{{item.variants[0].id}}">+</span>
+      </div>
+      </figure>
+  
+    {% if product.images.size > 1 %}
+    <div class="product-thumbnails">
+      {% for image in product.images %}
+        <img alt="{{ image.alt | escape }}" data-high-res="{{ image | img_url: '1024x1024' }}" src="{{ image | img_url: 'small' }}">
+      {% endfor %}
+    </div>
+    {% endif %}
+</div>
+</div>

@@ -1,0 +1,160 @@
+{% assign item = product %}
+{% if template contains 'search' %}
+  {% assign item = item %}
+{% elsif template contains 'product' %}
+  {% assign item = prod %}
+{% endif %}
+
+{% assign saleText = 'products.product.sale' | t %}
+{% capture percentage %}{{ bold_compare_at_price_max | minus: bold_price | times: 100.0 | divided_by: bold_compare_at_price_max | money_without_currency | times: 100 | remove: '.0' }}%{% endcapture %}
+{% assign saleText = saleText | replace: '{PCT}', percentage %}
+
+{% if settings.collection-stock-level-overlay and item.available %}
+  {% assign total = 0 %}
+  {% assign threshold = settings.collection-stock-level-overlay-threshold | times: 1 %}
+  {% assign infinity = false %}
+  {% for variant in item.variants %}
+  
+{% include 'bold-hidden-variants' with variant, bold_loop: 'loop' %}
+    {% if variant.inventory_management == null %}
+      {% assign infinity = true %}
+    {% elsif variant.inventory_management == '' %}
+      {% assign infinity = true %}
+    {% elsif variant.inventory_management == 'shopify' and variant.inventory_policy == 'continue' %}
+      {% assign infinity = true %}
+    {% elsif infinity == false %}
+      {% capture temp %}{{ total | plus: variant.inventory_quantity }}{% endcapture %}
+      {% assign total = temp | times: 1 %}
+    {% endif %}
+  {% endfor %}
+  {% assign stockText = settings.collection-stock-level-overlay-text | replace: '{NUM}', total %}
+{% endif %}
+
+{% assign onSale = false %}
+{% if bold_compare_at_price_min > bold_price_min %}
+  {% assign onSale = true %}
+{% endif %}
+
+<div id="prod_{{item.id}}" data-qty="0" class="product-list-item" data-cart="{{cart.item_count}}" data-product-id="{{item.id}}">
+
+  {% assign isSearch = false %}
+  {% if template contains 'search' %}
+    {% assign isSearch = true %}
+  {% endif %}
+
+  {% if settings.collection-product-text-style == 'overlay' and isSearch == false %}
+  <a class="product-list-item-overlay-link" href="{{ item.url }}"></a>
+  {% endif %}
+  
+  {% assign secondaryImage = false %}
+  {% if item.images.size > 1 and settings.collection-product-image-flip %}
+    {% assign secondaryImage = true %}
+  {% endif %}
+
+  <figure class="product-list-item-thumbnail" {% if secondaryImage %}style="background-image:url({{ item.images[1] | img_url: 'large' }})"{% endif %}>
+
+    {% assign vendor_handle = item.vendor | handleize %}
+      {% if collections[vendor_handle].products.size > 0 %}
+        <p class="product-list-item-vendor vendor">{{ collections[vendor_handle].title | link_to: collections[vendor_handle].url }}</p>
+      {% else %}
+        <p class="product-list-item-vendor vendor">{{ item.vendor | link_to_vendor | replace: '?' , '?view=producer&' }}</p>
+    {% endif %}
+
+    <a href="{{ item.url | within: collection }}">
+      <img class="{% if secondaryImage %}primary-image{% else %}only-image{% endif %}" src="{{ item | img_url: 'large' }}" alt="{{ item.featured_image.alt | escape }}" />
+    </a>
+
+    {% if item.available %}
+      {% if settings.collection-stock-level-overlay
+        and infinity == false
+        and total < threshold
+        and onSale
+      %}
+        <span class="product-list-item-badge meta sale">{{ saleText }}<br>{{ stockText }}</span>
+      {% elsif settings.collection-stock-level-overlay
+        and infinity == false
+        and total < threshold
+      %}
+        <span class="product-list-item-badge meta inventory">{{ stockText }}</span>
+      {% elsif onSale %}
+        <span class="product-list-item-badge meta sale">{{ saleText }}</span>
+      {% endif %}
+    {% else %}
+      <span class="product-list-item-badge inventory">{{ 'products.product.sold_out' | t }}</span>
+    {% endif %}
+	<div class="sh-cart-buttons" data-line="">
+		<span class="product-list-item-badge sh-cart-add" data-id="{{item.id}}" data-vid="{{item.variants[0].id}}">
+      <i class="milkicon-plus"></i>
+    </span>
+	</div>
+</figure>
+
+  {% if settings.collection-product-text-style == 'overlay' and isSearch == false %}
+  <div class="product-list-item-details-wrapper">
+  {% endif %}
+
+  <div class="product-list-item-details">
+    {% comment %}
+    <p class="product-list-item-vendor vendor meta">{{ item.vendor | link_to_vendor | replace: '?' , '?view=producer&' }}</p>
+    {% endcomment %}
+
+    <div class="product-list-item-titledet">
+      <h3 class="product-list-item-title"><a href="{{ item.url | within: collection }}">{{ item.title }}</a></h3>
+    </div>
+
+    <div class="product-list-item-pricedet">
+      <p class="product-list-item-price">
+        {% if item.available %}
+          {% if bold_price_varies %}
+            <span class="price">
+              {{ 'products.product.from' | t }} <span class="money">{{ bold_price_min | money }}</span>
+            </span>
+          {% else %}
+            {% if onSale %}
+              <span class="price on-sale">
+                  <span class="money">{{ bold_price_min | money }}</span>
+                  {% if item.tags contains 'with-weight' %}
+              / {{item.variants[0].weight_in_unit}} {{item.variants[0].weight_unit}}
+                  <!-
+                  {% for variant in item.variants %}
+                    
+                    {% assign my_variable = variant.weight | weight_with_unit %}
+                    {% if my_variable contains '0.0' %}
+                        / {{my_variable | remove: "0.0" }}
+                    {% else %}
+                        / {{my_variable}}
+                    {% endif %}
+              {% endfor %}
+                  -->
+              {% endif %}
+                  
+                  {% if item.tags contains 'with-ea' %}
+                  / ea
+                  {% endif %}
+                
+                
+                  <span class="original money">{{ bold_compare_at_price_min | money }}</span>
+              </span>
+            {% else %}
+              <span class="price on_sale">{{ bold_price_min | money }} 
+                {% if item.tags contains 'with-weight' %} / {{item.variants[0].weight_in_unit}} {{item.variants[0].weight_unit}} {% endif %} </span>
+              {% if item.tags contains 'with-ea' %} / ea {% endif %}
+            {% endif %}
+          {% endif %}
+        {% else %}
+          {{ 'products.product.sold_out' | t }}
+        {% endif %}
+      </p>
+    </div>  
+    
+  </div>
+
+  <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+
+  {% include 'product-tags' %}
+
+  {% if settings.collection-product-text-style == 'overlay' and isSearch == false %}
+  </div>
+  {% endif %}
+
+</div>

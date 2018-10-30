@@ -1,0 +1,445 @@
+<!doctype html>
+<!--[if IE 7]><html class="no-js ie7 lt-ie8 lt-ie9 lt-ie10" lang="en"> <![endif]-->
+<!--[if IE 8]><html class="no-js ie8 lt-ie9 lt-ie10" lang="en"> <![endif]-->
+<!--[if IE 9]><html class="no-js ie9 lt-ie10"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+{% include 'limespot' %}
+  
+  {% if settings.favicon %}
+    <link rel="shortcut icon" href="{{ 'favicon.png' | asset_url }}" type="image/png" />
+  {% endif %}
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <link type="text/css" rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  
+
+  {{ 'https://code.jquery.com/jquery-2.2.4.min.js' | script_tag }}
+  {{ 'https://code.jquery.com/ui/1.12.1/jquery-ui.min.js' | script_tag }}
+  {{ 'api.jquery.js' | shopify_asset_url | script_tag }}
+	
+  <script src="{{ 'localdelivery.js' | asset_url }}"></script>
+  
+  <title>
+    {{ page_title }}
+
+    {% if current_tags %}
+      &ndash; {{ 'blogs.blog.seo_title' | t }} "{{ current_tags | join: ', ' }}"
+    {% endif %}
+
+    {% if current_page != 1 %}
+      &ndash; {{ 'general.pagination.seo_title' | t }} {{ current_page }}
+    {% endif %}
+
+    {% unless page_title contains shop.name %}
+      &ndash; {{ shop.name }}
+    {% endunless %}
+  </title>
+
+  {% if page_description %}
+    <meta name="description" content="{{ page_description | escape }}" />
+  {% endif %}
+
+  <link rel="canonical" href="{{ canonical_url }}" />
+  <meta name="viewport" content="width=device-width" />
+
+  <script src="//www.searchanise.com/widgets/shopify/init.js?a=3B5w3i3g1L&amp;d=.&amp;t=%2c&amp;s=%24&amp;dc=2&amp;r=1&amp;p=false"></script>
+
+  <!-- start header content -->
+  {{ content_for_header }}
+  <!-- end header content-->
+
+  {% include 'social-meta' %}
+
+  <!-- Theme CSS -->
+  {{ 'theme.scss.css' | asset_url | stylesheet_tag }}
+
+  <!-- Third Party JS Libraries -->
+  {{ 'modernizr-2.8.2.min.js' | asset_url | script_tag }}
+
+  <!-- Add media query support to IE8 -->
+  <!--[if lt IE 9]>
+  <script src="{{ 'respond.min.js' | asset_url }}"></script>
+  <link href="{{ 'respond-proxy.html' | asset_url | split: '?' | first }}" id="respond-proxy" rel="respond-proxy" />
+  {% assign respond_js_secret_key = shop.domain | md5 %}
+  <link href="//{{ shop.domain }}/search?q={{ respond_js_secret_key }}" id="respond-redirect" rel="respond-redirect" />
+  <script src="//{{ shop.domain }}/search?q={{ respond_js_secret_key }}" type="text/javascript"></script>
+  <![endif]-->
+
+  <!-- Theme object -->
+  {% include 'theme-options' %}
+
+  {% if settings.custom-css != blank %}
+    <!-- Custom CSS -->
+    <style>
+      {{ settings.custom-css }}
+    </style>
+  {% endif %}
+
+  <!--start crazyegg -->
+  <script type="text/javascript">
+    setTimeout(function(){var a=document.createElement("script");
+    var b=document.getElementsByTagName("script")[0];
+    a.src=document.location.protocol+"//script.crazyegg.com/pages/scripts/0055/3072.js?"+Math.floor(new Date().getTime()/3600000);
+    a.async=true;a.type="text/javascript";b.parentNode.insertBefore(a,b)}, 1);
+  </script>
+  <!--end crazyegg -->
+
+
+  <!--start reload -->
+  <script type="text/JavaScript">
+    setTimeout(function(){
+     window.location.reload(1);
+    }, 600000);
+  </script>
+  <!-- end reload -->
+
+  {% include 'sca-quick-view-init' %}
+  
+  
+
+  
+
+  <!--  Pinterest Tag Base Code -->
+  <script type="text/javascript">
+    !function(e){if(!window.pintrk){window.pintrk=function(){window.pintrk.queue.push(Array.prototype.slice.call(arguments))};var n=window.pintrk;n.queue=[],n.version="3.0";var t=document.createElement("script");t.async=!0,t.src=e;var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(t,r)}}("https://s.pinimg.com/ct/core.js");
+
+    pintrk('load','2612708626767');
+    pintrk('page', {
+      page_name: '{{ page_title }}',
+      page_category: '{{ collection.title }}'
+    });
+    pintrk('track', 'pagevisit');
+    {% if template contains 'pages' %}
+      pintrk('track', 'ViewCategory', {
+        product_category: {{ page.title }}   
+      });
+      {% elsif template contains 'cart' %}
+        pintrk('track', 'addtocart', {
+          value: {{ cart.total_price | money_without_currency }},
+          order_quantity: {{ cart.item_count }},
+          currency: 'USD',
+        line_items: [
+        {% for item in cart.items %}
+          {
+             product_name: '{{ item.title }}',
+             product_id: '{{ item.product.id }}',
+             product_variant_id: '{{ item.id }}',
+             product_price: {{ item.price | money_without_currency }},
+             product_quantity: {{ item.quantity }},
+             product_brand: '{{ item.vendor }}'
+          },
+        {% endfor %}]
+      });
+    {% endif %}
+  </script>
+  <!--SECUREDVISIT START -->
+<script type="text/javascript"> window._svq = window._svq || [];
+window._svq.push(['_setAccount', '2870_03965']); window._svq.push(['_trackPageView']);
+(function (d, c) {
+var sv = d.createElement(c); sv.type = 'text/javascript'; sv.src = '//track.securedvisit.com/js/sv.js';
+var s = d.getElementsByTagName(c)[0]; s.parentNode.insertBefore(sv, s);
+})(document, 'script');
+</script>
+<!-- SECUREDVISIT END -->
+
+
+  <noscript>
+    <img height="1" width="1" style="display:none;" alt=""
+    src="https://ct.pinterest.com/v3/?tid=2612708626767&noscript=1" />
+  </noscript>
+
+  {{ 'bold-helper-functions.js' | asset_url | script_tag }}
+  
+<!-- Friendbuy -->
+  <script>
+          window['friendbuy'] = window['friendbuy'] || [];
+          window['friendbuy'].push(['site', 'site-c57debb0-milkandeggs.com']);
+          window['friendbuy'].push(['track', 'customer',
+              {
+                  id: '{{ customer.id }}',
+                  email: '{{ customer.email }}',
+                  first_name: '{{ customer.first_name }}',
+                  last_name: '{{ customer.last_name }}'
+              }
+          ]);
+          (function (f, r, n, d, b, y) {
+              b = f.createElement(r), y = f.getElementsByTagName(r)[0];b.async = 1;b.src = n;y.parentNode.insertBefore(b, y);
+          })(document, 'script', '//djnf6e5yyirys.cloudfront.net/js/friendbuy.min.js');
+ </script>
+  
+  {% include 'bold-common' %}
+{% include 'bold-ro-init' %}
+
+</head>
+
+{% assign sidebar = false %}
+{% if settings.enable-sidebar == 'all' %}
+  {% if template contains 'index' %}
+    {% assign sidebar = true %}
+  {% elsif template contains 'collection' %}
+    {% assign sidebar = true %}
+  {% endif %}
+{% elsif settings.enable-sidebar == 'not-home' and template contains 'collection' %}
+  {% assign sidebar = true %}
+{% endif %}
+
+<body class="{{ template | replace: '.', '-' }}{% if template contains 'page' %} page-{{ page.handle }}{% endif %} {% if customer %}customer-logged-in{% endif %} sidebar-{% if sidebar %}enabled{% else %}disabled{% endif %} template-{{ template | replace: '.', ' ' | truncatewords: 1, '' | handle }}">
+  {% include 'header' %}
+
+  <div class="main-content-wrapper">
+    <div id="cart-preview"></div>
+
+    {% unless template contains 'index' %}
+      <div class="page-header">
+        {% include 'page-header' %}
+      </div>
+    {% endunless %}
+
+    <div class="main-content">
+      {{ content_for_layout }}
+      <limespot></limespot>
+    </div>
+
+    {% if sidebar %}
+      {% include 'sidebar' %}
+    {% endif %}
+  </div>
+
+  {% include 'footer' %}
+
+  {% if template contains 'cart' %}
+    {% if settings.cart-shipping-calculator %}
+      {{ "https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js" | script_tag }}
+      {{ "/services/javascripts/countries.js" | script_tag }}
+      {{ "shopify_common.js" | shopify_asset_url | script_tag }}
+    {% endif %}
+
+    {{ 'jquery.cart.min.js' | asset_url | script_tag }}
+  {% endif %}
+
+  {% if template contains 'customers' %}
+    {{ 'shopify_common.js' | shopify_asset_url | script_tag }}
+    {{ 'customer_area.js'  | shopify_asset_url | script_tag }}
+  {% endif %}
+
+  {% if settings.enable-currency-switcher %}
+    {{ "//cdn.shopify.com/s/javascripts/currencies.js" | script_tag }}
+    {{ "jquery.currencies.js" | asset_url | script_tag }}
+  {% endif %}
+
+  {{ 'option_selection.js' | shopify_asset_url | script_tag }}
+
+  {{ 'plugins.js' | asset_url | script_tag }}
+  {{ 'theme.js' | asset_url | script_tag }}
+  {% include 'sca-quick-view-template' %}
+
+  {% comment %}{% include 'search-autocomplete' %}{% endcomment %}
+  {% include 'ajaxify-cart' %}
+
+
+  
+  {% include 'modify_lightbox_snippet' %}
+
+
+
+  <script>
+    alert = function() {};
+  </script>
+
+   <!-- begin conversion tracking code -->
+
+  <!-- pinterest -->
+  <meta name="p:domain_verify" content="4f6404c661e8543a09ce2cdec02a3dec"/>
+
+    <!-- adsca fraud -->
+  <script>
+/*<![CDATA[ */	
+var search_params = window.location.search;
+var customer_id = 'ODouLjo0NDI1Pw==';
+/* ]]> */
+</script>
+<script type="text/javascript" async src="//clk.anticlickfraudsystem.com/click.js">
+</script>
+<noscript>
+<div style="display:inline;">
+<img height="1" width="1" style="display:none;border-style:none;" alt="" src="//clk.anticlickfraudsystem.com/Click?customer_id=ODouLjo0NDI1Pw==" />
+</div>
+</noscript>
+  
+  <!-- FB Pixel Code -->
+  <script>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+
+    fbq('init', '254959838174461');
+    fbq('track', "PageView");
+    {% if template contains 'product' %}
+      fbq("track", "ViewContent", {
+        content_type: 'product',
+        content_ids: ['shopify_{{ product.id }}_{{ product.variants.first.id }}']
+      });
+      {% elsif template contains 'cart' %}
+      fbq('track', 'AddToCart', {
+        content_type: 'product',
+        content_ids: [{% for item in cart.items %}'shopify_{{ item.product.id }}_{{ item.id }}',{% endfor %}]
+       });
+    {% endif %}
+  </script>
+  <noscript>
+    <img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=254959838174461&ev=PageView&noscript=1"/>
+  </noscript>
+  <!-- End FB Pixel Code -->
+
+  <!--start klaviyo Tracking Tag -->
+  <script type="text/javascript">
+  var _learnq = _learnq || [];
+
+  _learnq.push(['account', 'AJGx3d']);
+
+  (function () {
+  var b = document.createElement('script'); b.type = 'text/javascript'; b.async = true;
+  b.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'a.klaviyo.com/media/js/analytics/analytics.js';
+  var a = document.getElementsByTagName('script')[0]; a.parentNode.insertBefore(b, a);
+  })();
+</script>
+    <!--end Klaviyo Tracking Tag -->
+
+  <img src="https://traffic.outbrain.com/network/trackpxl?advid=">
+
+  <!-- Twitter universal website tag code -->
+<script>
+!function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);
+},s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='//static.ads-twitter.com/uwt.js',
+a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,'script');
+// Insert Twitter Pixel ID and Standard Event data below
+twq('init','nxbad');
+twq('track','PageView');
+</script>
+<!-- End Twitter universal website tag code -->
+
+    <!-- taxi tag code -->
+  <script type="text/javascript"> (function () {
+var tagjs = document.createElement("script");
+var s = document.getElementsByTagName("script")[0]; tagjs.async = true;
+tagjs.src = "//s.btstatic.com/tag.js#site=1PR3l09"; s.parentNode.insertBefore(tagjs, s);
+}());
+</script>
+<noscript>
+<iframe src="//s.thebrighttag.com/iframe?c=1PR3l09" width="1" height="1" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+</noscript>
+    <!-- End taxi tag code -->
+  
+      <!-- Linked tag code -->
+<script type="text/javascript">
+_linkedin_data_partner_id = "161817";
+</script><script type="text/javascript">
+(function(){var s = document.getElementsByTagName("script")[0];
+var b = document.createElement("script");
+b.type = "text/javascript";b.async = true;
+b.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
+s.parentNode.insertBefore(b, s);})();
+</script>
+<noscript>
+<img height="1" width="1" style="display:none;" alt="" src="https://dc.ads.linkedin.com/collect/?pid=161817&fmt=gif" />
+</noscript>
+    <!-- End linked tag code -->
+
+ 
+  <!-- End conversion tracking code -->
+
+<!--BeginCFFPersistentCartCart-->
+{% if customer %}
+<script>
+
+    window.cffCustomer = {
+        name: '{{customer.name}}',
+        email: '{{customer.email}}',
+        hasAccount: '{{customer.has_account}}',
+        id: '{{customer.id}}'
+    };
+
+
+</script>
+
+{% endif %}
+
+<script>
+    window.cffPCLiquidPlaced = true
+</script>
+
+<!--EndCFFPersistentCartCart-->  
+
+  
+
+
+  
+
+  
+
+{% include 'ultimatereorder-discounts' %}
+  
+
+  
+{% include 'iwish_v2' with 'iwishfooter' %}
+  
+  <script>
+    BOLD.common.eventEmitter.on("BOLD_RECURRING_ORDERS_widget_loaded",function(e){
+      $("[class*='bold-ro__add-to-order']").insertAfter(".iwishAddWrap");
+      $(document).click(function(){
+  
+        setTimeout(function(){
+          if($(".bold-ro__recurring-div").hasClass("bold-ro__bold-active")){
+        $(".addtocart").val("Add subscription to cart");
+      }
+      else{
+         $(".addtocart").val("Add to cart");
+      }
+        }, 50)
+      
+      })
+    
+    });
+  </script>
+  
+  <style>
+    .addtocart{
+      
+      margin-left: 55px;
+      
+    }
+  </style>
+  
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ {% include 'sweettooth-initializer' %}
+
+ {% include 'sweettooth-tab-widget' %}
+
+</body>
+</html>

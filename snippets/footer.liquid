@@ -1,0 +1,94 @@
+{% assign adCount = 0 %}
+{% assign footerPromos = "footer-promo-1|footer-promo-2|footer-promo-3" | split: "|" %}
+{% for ad in footerPromos %}
+  {% capture enabled %}{{ad}}{% endcapture %}
+  {% if settings[enabled] %}
+    {% assign adCount = adCount | plus: 1 %}
+  {% endif %}
+{% endfor %}
+
+<div class="main-footer-wrapper">
+  <footer class="main-footer">
+
+    {% if adCount > 0 %}
+      <div class="footer-promos showing-{{adCount}}-ads">
+        {% for ad in footerPromos %}
+
+          {% capture enabled %}{{ad}}{% endcapture %}
+          {% capture url %}{{ad}}-url{% endcapture %}
+
+          {% if settings[enabled] %}
+            <div class="footer-promo">
+              <a href="{{settings[url]}}">
+                <img alt="" src="{{ ad | append:'.png' | asset_url }}">
+              </a>
+            </div>
+          {% endif %}
+
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% if settings.footer-modules-order != blank %}
+      {% assign modules = settings.footer-modules-order | split: "-" %}
+
+      {% assign modulesCount = modules.size %}
+      {% if modulesCount > 3 %}
+        {% assign modulesCount = 3 %}
+      {% endif %}
+
+      <div class="footer-modules showing-{{ modulesCount }}-modules">
+
+        {% for module in modules limit: 3 %}
+          {% case module %}
+          {% when 'A' %}
+            {% comment %}{% include 'footer-instagram' %}{% endcomment %}
+          {% when 'B' %}
+            {% include 'footer-text-box' %}
+          {% when 'C' %}
+            {% include 'footer-tweet' %}
+          {% when 'D' %}
+            {% include 'footer-connect' %}
+          {% when 'E' %}
+            {% include 'footer-link-lists' %}
+          {% endcase %}
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="copyright">
+
+      {% capture year %}
+        {{ "now" | date: "%Y" }}
+      {% endcapture %}
+
+      {% capture shopName %}{{ shop.name | link_to: '/' }}{% endcapture %}
+
+      <p role="contentinfo">{{ 'layout.footer.copyright_html' | t: year: year, shop_name: shopName }}<br>
+        </p>
+
+      {% if shop.enabled_payment_types.size > 0 and settings.footer-show-payment-options %}
+        <ul class="payment-options">
+          {% for type in shop.enabled_payment_types %}
+            <li class="{{ type | replace: '_','-' }}"></li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+
+      
+
+    </div>
+    
+  </footer>
+</div>
+
+<div class="modal-wrapper">
+  <div class="modal-content">
+    <h2 class="modal-title"></h2>
+
+    <div class="modal-message rte"></div>
+
+    <span class="modal-close modal-close-secondary">{{ 'general.general.close' | t }}</span>
+  </div>
+</div>

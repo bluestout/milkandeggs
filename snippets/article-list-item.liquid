@@ -1,0 +1,45 @@
+<article class="blog-post">
+    <div class="rte post-content">
+        {% if article.image %}
+            <div class="post-image">
+                <a href="{{ article.url }}">
+                    {% assign image_size = '460x460' %}
+                    {% if article-list-item == 'featured' %}
+                        {% assign image_size = '620x620' %}
+                    {% elsif article-list-item == 'recipes' %}
+                        {% assign image_size = '260x260' %}
+                    {% endif %}
+                    <img src="{{ article.image | img_url: image_size, crop: 'center' }}" alt="{{ article.title }}">
+                </a>
+            </div>
+        {% endif %}
+
+        <div class="post-meta">
+            {% unless article-list-item == 'recipes' %}
+                <span class="post-date">{{ article.published_at | date: format: "short_month" }}</span>
+            {% endunless %}
+
+            {% if article-list-item == 'featured' %}
+                <h3 class="post-title"><a href="{{ article.url }}">{{ article.title }}</a></h3>
+            {% elsif article-list-item == 'recipes' %}
+                <h5 class="post-title"><a href="{{ article.url }}">{{ article.title }}</a></h5>
+            {% else %}
+                <h4 class="post-title"><a href="{{ article.url }}">{{ article.title }}</a></h4>
+            {% endif %}
+
+            {% unless article-list-item == 'recipes' %}
+                {% if settings.blog-show-author %}
+                    <span class="post-author">&bull; {{ article.author }}</span>
+                {% endif %}
+
+                {% if article.excerpt != blank %}
+                    {{ article.excerpt }}
+                {% else %}
+                    <p>{{ article.content | strip_html | truncatewords: 40 }}</p>
+                {% endif %}
+
+                <p><a class="post-more" href="{{ article.url }}">{{ 'blogs.article.read_more' | t }}</a></p>
+            {% endunless %}
+        </div>
+    </div>
+</article>

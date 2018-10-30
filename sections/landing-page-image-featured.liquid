@@ -1,0 +1,14 @@
+{{ section.settings.image-featured | img_url: '1080x' | img_tag: section.settings[image].alt }}
+
+{% schema %}
+  {
+    "name": "Image",
+    "settings": [
+      {
+        "id": "image-featured",
+        "type": "image_picker",
+        "label": "Image"
+      }
+    ]
+  }
+{% endschema %}
