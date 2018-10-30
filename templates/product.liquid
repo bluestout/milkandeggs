@@ -19,18 +19,38 @@
     {% assign modules = 'A-B-C-D' | split: "-" %}
   {% endif %}
 
-  {% for module in modules %}
-    {% case module %}
-      {% when 'A' %}
-        {% include 'product-images' %}
-      {% when 'B' %}
-        {% include 'product-form' %}
-      {% when 'C' %}
-        {% include 'product-description' %}
-      {% when 'D' %}
-        {% include 'share-buttons' %}
-    {% endcase %}
-  {% endfor %}
+  <div class="product-order">
+    
+    {% for module in modules %}
+      {% case module %}
+        {% when 'A' %}
+          {% include 'product-images' %}
+      {% endcase %}
+    {% endfor %}
+
+
+    {% include 'product-order' %}
+    
+
+  </div>
+  <div class="product-details">
+
+    {% for module in modules %}
+      {% case module %}
+        {% comment %} {% when 'A' %}
+          {% include 'product-images' %}
+        {% when 'B' %}
+          {% include 'product-form' %} {% endcomment %}
+        {% when 'C' %}
+          {% include 'product-description' %}
+        {% when 'D' %}
+          {% include 'share-buttons' %}
+      {% endcase %}
+    {% endfor %}
+
+  </div>
+
+  
 </div>
 
 

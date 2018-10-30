@@ -1,17 +1,15 @@
 {% include 'bold-product' with product, hide_action: 'break' %}{% if bold_hidden_product %}{% break %}{%endif %}
 <!-- bold css -->
 
-<style>
-  #shappify-qty-msg {
-  margin-left: 25%;
-  
-  }  
-  
-</style>
-
 <div class="product-form">
 
   <div class="product-form-inner">
+
+    <a class="product-vendor vendor" href="{{ product.vendor | url_for_vendor }}">{{ product.vendor }}</a>
+    
+    <h1>{{product.title}}</h1>
+
+
     <meta itemprop="name" content="{{ product.title }}">
     <meta itemprop="brand" content="{{ product.vendor }}">
     <meta itemprop="url" content="{{ shop.url }}{{ product.url }}">
@@ -39,15 +37,6 @@
         </div>
         {% endcomment %}
       </div>
-
-      {% if settings.enable-product-quantity %}
-        <div class="product-quantity">
-          <div class="input-wrapper">
-            <label for="quantity">{{ 'general.general.quantity' | t }}</label>
-            <input type="text" name="quantity" id="quantity" value="1" />
-          </div>
-        </div>
-      {% endif %}
       
 
       <input name="shopify_customer_id" type="hidden" value="{{ customer.id }}" > 
@@ -83,27 +72,56 @@
           {% endif %}
         </span>
         
-        
         {% unless qb_loaded == 'true' %}
         <div id="shappify-qty-msg"></div>
         {% assign qb_loaded = 'true' %}
         {% endunless %}
 
-  {% include 'bold-ro' with product %}
+        {% include 'bold-ro' with product %}
+
+        <div class="product-order-submit">
+
+            {% if settings.enable-product-quantity %}
+                <div class="product-quantity">
+
+                    <div class="input-wrapper">
+                        <a href="#">
+                            <i class="milkicon-plus"></i>
+                        </a>
+                            {% comment %} <label for="quantity">{{ 'general.general.quantity' | t }}</label> {% endcomment %}
+                            <input type="text" name="quantity" id="quantity" value="1" />
+                        <a href="#">
+                            <i class="milkicon-minus"></i>
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+                
+            {% if variant.available %}
             
-        {% if variant.available %}
-          
-          <input class="add-to-cart addtocart" type="submit" value="{{ 'products.product.add_to_cart' | t }}" />
-          <link itemprop="availability" href="http://schema.org/InStock">
-        {% else %}
-          <input type="button" class="add-to-cart disabled" disabled="disabled" value="{{ 'products.product.sold_out' | t }}" />
-          <link itemprop="availability" href="http://schema.org/OutOfStock">
-        {% endif %}
+            <input class="button add-to-cart addtocart" type="submit" value="{{ 'products.product.add_to_cart' | t }}" />
+            <link itemprop="availability" href="http://schema.org/InStock">
+            {% else %}
+            <input type="button" class="button add-to-cart disabled" disabled="disabled" value="{{ 'products.product.sold_out' | t }}" />
+            <link itemprop="availability" href="http://schema.org/OutOfStock">
+            {% endif %}
+
+        </div>
+
+        
         
         {% include 'iwish_v2' with 'iwishproduct' %}
         
         <!-- bold-ro-liquid --> <div class="bold_add_to_orders" style="display: inline-block;"> </div> <!-- bold-ro-liquid -->
         <div class="product-message"></div>
+
+        {% if product.description != blank or product.tags.size > 0 %}
+            <div class="product-description rte" itemprop="description">
+                {% include 'product-tags' with 'product' %}
+                {{ product.description }}
+                <h4 id= "barcodefield"></h4> 
+            </div>
+        {% endif %}
       </div>
 
     </div>

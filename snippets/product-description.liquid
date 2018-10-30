@@ -1,10 +1,10 @@
-{% if product.description != blank or product.tags.size > 0 %}
+{% comment %} {% if product.description != blank or product.tags.size > 0 %}
   <div class="product-description rte" itemprop="description">
     {% include 'product-tags' with 'product' %}
     {{ product.description }}
     <h4 id= "barcodefield"></h4> 
   </div>
-{% endif %}
+{% endif %} {% endcomment %}
 <!-- product review -->
 <div id="shopify-product-reviews" data-id="{{product.id}}">{{ product.metafields.spr.reviews }}</div>
 <div class="show-reviews"><a class="button" href="#">Read Reviews</a></div>
