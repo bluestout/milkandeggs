@@ -12,17 +12,19 @@
       {% else %}
         <img alt="{{ collection.title | escape }}" src="{{ collection.products.first | img_url: 'grande' }}">
       {% endif %}
+
+      <div class="collection-item-details {{settings.collections-text-style}}-style">
+        <h3><a href="{{ collection.url }}">{{ collection.title }}</a></h3>
+
+        {% if collection.description != blank and settings.collections-show-descriptions %}
+          <div class="rte">
+            {{ collection.description | strip_html | truncatewords: 20 }}
+          </div>
+        {% endif %}
+      </div>
     </a>
   </figure>
 
-  <div class="collection-item-details {{settings.collections-text-style}}-style">
-    <h3><a href="{{ collection.url }}">{{ collection.title }}</a></h3>
-
-    {% if collection.description != blank and settings.collections-show-descriptions %}
-      <div class="rte">
-        {{ collection.description | strip_html | truncatewords: 20 }}
-      </div>
-    {% endif %}
-  </div>
+  
 
 </article>

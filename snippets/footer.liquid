@@ -37,7 +37,12 @@
         {% assign modulesCount = 3 %}
       {% endif %}
 
-      <div class="footer-modules showing-{{ modulesCount }}-modules">
+      {% comment %} <div class="footer-modules showing-{{ modulesCount }}-modules"> {% endcomment %}
+      <div class="footer-modules">
+      
+      <div class="footer-logo">
+        <img class="logo-regular" alt="{{ shop.name | escape }}" src="{{ 'logo.png' | asset_url }}">
+      </div>
 
         {% for module in modules limit: 3 %}
           {% case module %}
@@ -47,26 +52,55 @@
             {% include 'footer-text-box' %}
           {% when 'C' %}
             {% include 'footer-tweet' %}
-          {% when 'D' %}
-            {% include 'footer-connect' %}
+          {% comment %} {% when 'D' %}
+            {% include 'footer-connect' %} {% endcomment %}
           {% when 'E' %}
-            {% include 'footer-link-lists' %}
+            <div class="footer-links">
+              {% include 'footer-link-lists' %}
+            </div>
           {% endcase %}
         {% endfor %}
       </div>
+
+
+      
+
+      <div class="footer-end">
+
+        <div class="footer-end-copy">
+
+          {% capture year %}
+            {{ "now" | date: "%Y" }}
+          {% endcapture %}
+
+          {% capture shopName %}{{ shop.name | link_to: '/' }}{% endcapture %}
+
+        </div>
+
+        
+
+        <div class="footer-end-info">
+          <p role="contentinfo">{{ 'layout.footer.copyright_html' | t: year: year, shop_name: shopName }}<br>
+          </p>
+        </div>
+
+        <div class="footer-end-soc">
+          {% for module in modules limit: 3 %}
+            {% case module %}
+            {% when 'D' %}
+              {% include 'footer-connect' %}
+            {% endcase %}
+          {% endfor %}
+        </div>
+        
+      </div>
+
+
+
     {% endif %}
 
-    <div class="copyright">
 
-      {% capture year %}
-        {{ "now" | date: "%Y" }}
-      {% endcapture %}
-
-      {% capture shopName %}{{ shop.name | link_to: '/' }}{% endcapture %}
-
-      <p role="contentinfo">{{ 'layout.footer.copyright_html' | t: year: year, shop_name: shopName }}<br>
-        </p>
-
+    <div class="footer-payment">
       {% if shop.enabled_payment_types.size > 0 and settings.footer-show-payment-options %}
         <ul class="payment-options">
           {% for type in shop.enabled_payment_types %}
@@ -74,11 +108,9 @@
           {% endfor %}
         </ul>
       {% endif %}
-
-
-      
-
     </div>
+
+    
     
   </footer>
 </div>

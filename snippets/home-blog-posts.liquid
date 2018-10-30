@@ -24,7 +24,11 @@
                 <p>{{ post.content | strip_html | truncatewords: 25 }}</p>
               {% endif %}
 
-              <p class="meta"><a href="{{ post.url }}">{{ 'blogs.article.read_more' | t }}</a></p>
+              <p class="home-blog-post-cta">
+                <a class="btn-text" href="{{ post.url }}">{{ 'blogs.article.read_more' | t }}
+                <i class="milkicon-arrow"></i>
+                </a>
+              </p>
             </div>
           </div>
         {% endfor %}
