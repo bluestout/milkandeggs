@@ -4909,7 +4909,6 @@ $slideshowSpeed: 0.3s;
 }
 
 .collections-list {
-  font-size: 0;
 
   &.showing-2-per-row {
     margin: 0 -15px;
@@ -4939,49 +4938,51 @@ $slideshowSpeed: 0.3s;
 
 .collection-item {
   position: relative;
-  margin: 30px 0;
+  margin: 4px;
+  padding: 0;
 
   .showing-2-per-row & {
     display: inline-block;
     width: 50%;
-    margin: 30px 0 0;
-    padding: 0 15px;
+    margin: 4px;
+    padding: 0;
   }
 
   .showing-3-per-row & {
     display: inline-block;
     width: 33.33%;
-    margin: 30px 0 0;
-    padding: 0 15px;
+    margin: 4px;
+    padding: 0;
 
     @include breakpoint(l) {
       margin-top: 15px;
-      padding: 0 7px;
+      margin: 4px;
+      padding: 0;
     }
 
     @include breakpoint(m) {
       width: 50%;
-      margin: 30px 0 0;
-      padding: 0 15px;
+      margin: 4px;
+      padding: 0;
     }
   }
 
   .showing-4-per-row & {
     display: inline-block;
     width: 33.33%;
-    margin: 30px 0 0;
-    padding: 0 15px;
+    margin: 4px;
+    padding: 0;
 
     @include breakpoint(l) {
       width: 50%;
-      margin: 30px 0 0;
-      padding: 0 15px;
+      margin: 4px;
+      padding: 0;
     }
 
     @include breakpoint(m) {
       width: 50%;
-      margin: 30px 0 0;
-      padding: 0 15px;
+      margin: 4px;
+      padding: 0;
     }
   }
 
@@ -4993,8 +4994,8 @@ $slideshowSpeed: 0.3s;
     @include breakpoint(s) {
       display: block;
       width: 100%;
+      margin: 4px;
       padding: 0;
-      margin: 30px 0 0;
     }
   }
 }
@@ -5010,18 +5011,14 @@ $slideshowSpeed: 0.3s;
 
 .collection-item-details.overlay-style {
   position: absolute;
-  top: 50%;
-  left: 25%;
-  width: 50%;
+  left: 15%;
+  width: 70%;
   color: white;
-
-  @include transform(translateY(-50%));
 
   h3 {
     margin: 0;
     font-size: 36px;
     line-height: 40px;
-    text-shadow: 0px 0px 10px rgba(0,0,0,0.30);
 
     .showing-2-per-row & {
       font-size: 30px;
@@ -5558,6 +5555,7 @@ $slideshowSpeed: 0.3s;
 .breadcrumbs {
   @extend .meta;
   text-align: center;
+  
 
   .divider {
     color: $meta-color-secondary;
@@ -12556,7 +12554,9 @@ $slideshowSpeed: 0.3s;
 }
 
 .collections-list {
-  font-size: 0;
+  margin: 15px -4px;
+  display: flex;
+  flex-wrap: wrap;
 
   &.showing-2-per-row {
     margin: 0 -15px;
@@ -12586,30 +12586,66 @@ $slideshowSpeed: 0.3s;
 
 .collection-item {
   position: relative;
-  margin: 30px 0;
+  margin: 4px;
+  padding: 0;
+  overflow: hidden;
+
+  &:hover {
+
+    .collection-item-image {
+
+      &::after {
+        background-color: rgba(0,0,0,.55);
+      }
+
+      &::before {
+        right: 12px;
+        top: 12px;
+        bottom: 12px;
+        left: 12px;
+        opacity: 1;
+      }
+
+      img {
+        transform: scale(1.04);
+      }
+    }
+
+    .collection-item-details {
+      bottom: 22%;
+
+      p {
+        opacity: 1;
+      }
+    }
+  }
+
+  a {
+    display: block;
+  }
 
   .showing-2-per-row & {
     display: inline-block;
     width: 50%;
-    margin: 30px 0 0;
-    padding: 0 15px;
+    margin: 4px;
+    padding: 0;
   }
 
   .showing-3-per-row & {
     display: inline-block;
-    width: 33.33%;
-    margin: 30px 0 0;
-    padding: 0 15px;
+    width: calc(33.33% - 8px);
+    margin: 4px;
+    padding: 0;
 
     @include breakpoint(l) {
-      margin-top: 15px;
-      padding: 0 7px;
+      margin: 4px;
+      padding: 0;
     }
 
     @include breakpoint(m) {
       width: 50%;
-      margin: 30px 0 0;
-      padding: 0 15px;
+      margin: 4px;
+    padding: 0;
     }
   }
 
@@ -12617,19 +12653,19 @@ $slideshowSpeed: 0.3s;
   .showing-4-per-row & {
     display: inline-block;
     width: 25%;
-    margin: 30px 0 0;
-    padding: 0 15px;
+    margin: 4px;
+    padding: 0;
 
     @include breakpoint(l) {
       width: 50%;
-      margin: 30px 0 0;
-      padding: 0 15px;
+      margin: 4px;
+    padding: 0;
     }
 
     @include breakpoint(m) {
       width: 50%;
-      margin: 30px 0 0;
-      padding: 0 15px;
+      margin: 4px;
+    padding: 0;
     }
   }
 
@@ -12640,8 +12676,8 @@ $slideshowSpeed: 0.3s;
     @include breakpoint(s) {
       display: block;
       width: 100%;
+      margin: 4px;
       padding: 0;
-      margin: 30px 0 0;
     }
   }
 }
@@ -12649,26 +12685,65 @@ $slideshowSpeed: 0.3s;
 .collection-item-image {
   margin: 0;
   text-align: center;
+  position: relative;
+
+  &::before {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    right: 3px;
+    bottom: 3px;
+    border: 1px solid rgba(255,255,255,.2);
+    opacity: 0;
+    transition: .3s ease;
+  }
+
+  &::after {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,.35);
+    transition: .3s all;
+  }
+
+  img {
+    transition: .5s ease-out;
+    vertical-align: top;
+  }
 }
 
 .collection-item-details {
   text-align: center;
+  transition: .35s ease-out;
+
+  a {
+    display: block;
+  }
 }
 
+.collection-inner {
+  margin: 0;
+}
 .collection-item-details.overlay-style {
   position: absolute;
-  top: 50%;
-  left: 25%;
-  width: 50%;
-  color: white;
-
-  @include transform(translateY(-50%));
+  bottom: 5%;
+  left: 15%;
+  width: 70%;
+  color: white;  
+  padding: 25px 0;
+  transition: all 350ms cubic-bezier(0.440, 0.855, 0.380, 1.010);
 
   h3 {
     margin: 0;
     font-size: 36px;
     line-height: 40px;
-    text-shadow: 0px 0px 10px rgba(0,0,0,0.30);
+    color: #fff;
 
     .showing-2-per-row & {
       font-size: 30px;
@@ -12682,8 +12757,8 @@ $slideshowSpeed: 0.3s;
 
     .showing-3-per-row &,
     .showing-4-per-row & {
-      font-size: 24px;
-      line-height: 30px;
+      font-size: 1.6em;
+      line-height: 1.2em;
     }
 
     @include breakpoint(s) {
@@ -12692,8 +12767,16 @@ $slideshowSpeed: 0.3s;
     }
   }
 
+  p {
+    line-height: 1.35em;
+    position: absolute;
+    opacity: 0;
+    transition: .3s ease;
+  }
+
   a {
     color: white;
+    position: relative;
   }
 
   .rte {
@@ -13205,9 +13288,22 @@ $slideshowSpeed: 0.3s;
 .breadcrumbs {
   @extend .meta;
   text-align: center;
+  text-transform: none;
+  font-size: 13px;
+  letter-spacing: .04em;
+  color: rgba(0,0,0,.35);
 
   .divider {
     color: $meta-color-secondary;
+  }
+
+  a {
+    color: $body-color;
+    opacity: .6;
+
+    &:hover {
+      opacity: 1;
+    }
   }
 }
 
@@ -15708,9 +15804,11 @@ top:145px;
 .navigation li.favorites { display: none; }
 .navigation-first-tier>li>a { padding: 15px; /*font-size: 17px;*/ }
 .navigation-first-tier>.has-dropdown>a:after { margin-left: 5px; }
-.has-dropdown:hover a { padding: 14px 14px 15px !important; }
 .regular-nav ul { font-size: 15px; }
-.main-content-wrapper .page-header { margin-top: 40px; }
+.main-content-wrapper .page-header { 
+  margin-top: 40px; 
+  margin-bottom: 20px; 
+}
 
 .friendbuy-dHo-nlQ { margin-right: 20px; padding: 0; background: none; text-transform: none; letter-spacing: 0; }
 .friendbuy-dHo-nlQ:hover { background: none; }

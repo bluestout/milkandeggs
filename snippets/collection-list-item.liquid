@@ -5,26 +5,31 @@
     {% assign collection = collections[link_handle] %}
   {% endif %}
 
-  <figure class="collection-item-image">
+  <figure class="collection-inner">
     <a href="{{ collection.url }}">
-      {% if collection.image %}
-        <img alt="{{ collection.image.alt | escape }}" src="{{ collection | img_url: 'grande' }}">
-      {% else %}
-        <img alt="{{ collection.title | escape }}" src="{{ collection.products.first | img_url: 'grande' }}">
-      {% endif %}
-
-      <div class="collection-item-details {{settings.collections-text-style}}-style">
-        <h3><a href="{{ collection.url }}">{{ collection.title }}</a></h3>
-
-        {% if collection.description != blank and settings.collections-show-descriptions %}
-          <div class="rte">
-            {{ collection.description | strip_html | truncatewords: 20 }}
-          </div>
+      <div  class="collection-item-image">
+        {% if collection.image %}
+          <img alt="{{ collection.image.alt | escape }}" src="{{ collection | img_url: 'grande' }}">
+        {% else %}
+          <img alt="{{ collection.title | escape }}" src="{{ collection.products.first | img_url: 'grande' }}">
         {% endif %}
       </div>
+
+      <div class="collection-item-details {{settings.collections-text-style}}-style">
+        <h3>
+          {% comment %} <a href="{{ collection.url }}">{{ collection.title }}</a> {% endcomment %}
+          {{ collection.title }}
+        </h3>
+
+        {% if collection.description != blank and settings.collections-show-descriptions %}
+          <p>
+            {{ collection.description | strip_html | truncatewords: 20 }}
+          </p>
+        {% endif %}
+      </div>
+
     </a>
   </figure>
-
   
 
 </article>
