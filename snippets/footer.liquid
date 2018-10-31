@@ -47,20 +47,24 @@
         <img class="logo-regular" alt="{{ shop.name | escape }}" src="{{ 'logo.png' | asset_url }}">
       </div>
 
-        {% for module in modules limit: 3 %}
+        {% for module in modules limit: 4 %}
           {% case module %}
-          {% when 'A' %}
-            {% comment %}{% include 'footer-instagram' %}{% endcomment %}
-          {% when 'B' %}
-            {% include 'footer-text-box' %}
-          {% when 'C' %}
-            {% include 'footer-tweet' %}
-          {% comment %} {% when 'D' %}
-            {% include 'footer-connect' %} {% endcomment %}
-          {% when 'E' %}
-            <div class="footer-links">
-              {% include 'footer-link-lists' %}
-            </div>
+            {% when 'A' %}
+              {% comment %}{% include 'footer-instagram' %}{% endcomment %}
+            {% when 'B' %}
+              {% include 'footer-text-box' %}
+            {% when 'C' %}
+              {% include 'footer-tweet' %}
+            {% comment %} {% when 'D' %}
+              {% include 'footer-connect' %} {% endcomment %}
+            {% when 'E' %}
+              <div class="footer-links">
+                {% include 'footer-link-lists' %}
+              </div>
+            {% when 'F' %}
+              <div class="footer-connect">
+                {% include 'footer-newsletter' %}
+              </div>
           {% endcase %}
         {% endfor %}
       </div>

@@ -102,11 +102,46 @@
             </div>
 
             <div class="mobile-header-tools">
-                <span class="mobile-header-search-toggle">&#57346;</span>
-                <a class="mobile-cart-count {% if cart.item_count < 100 %}contain-count{% endif %}" href="/cart">&#57348; <span class="bag-count">{{ cart.item_count }}</span></a>
-                <button type="button" class="friendbuy-dHo-nlQ"><img src="{{ 'icon-gift.png' | asset_url }}" />Get $20</button>
+                <div class="mobile-header-l">
+                    <span class="mobile-navigation-toggle">
+                        <span></span>
+                    </span>
+                </div>
+                <div class="mobile-header-branding">
+                    <div class="branding">
+                        {% if settings.use-logo %}
+                            <a class="logo {% if settings.use-retina-logo %}has-retina{% endif %}" href="/">
+                                <img class="logo-regular" alt="{{ shop.name | escape }}" src="{{ 'logo.png' | asset_url }}">
+                                {% if settings.use-retina-logo %}
+                                    <img class="logo-retina" alt="{{ shop.name | escape }}" src="{{ 'logo-retina.png' | asset_url }}">
+                                {% endif %}
+                            </a>
+                        {% else %}
+                            {% if template contains 'index' %}
+                                <h1 class="site-title">{{ shop.name }}</h1>
+                            {% else %}
+                                <div class="site-title"><a href="/">{{ shop.name }}</a></div>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="mobile-header-r">
+                    <button type="button" class="friendbuy-dHo-nlQ">
+                        {% comment %} <img src="{{ 'icon-gift.png' | asset_url }}" /> {% endcomment %}
+                        <i class="milkicon-present"></i>
+                        Get $20
+                        </button>
+                    <span class="mobile-header-search-toggle">
+                        <i class="milkicon-search"></i>
+                    </span>
+                    <a class="mobile-cart-count {% if cart.item_count < 100 %}contain-count{% endif %}" href="/cart">
+                        <i class="milkicon-cart"></i>
+                        <span class="bag-count">{{ cart.item_count }}
+                        </span>
+                    </a>
+                </div>
 
-                <span class="mobile-navigation-toggle"><span></span></span>
+                
             </div>
 
         </div>

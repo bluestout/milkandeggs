@@ -1,5 +1,5 @@
 {% assign collectionCount = 0 %}
-{% assign featuredCollections = 'home-featured-collection-1|home-featured-collection-2|home-featured-collection-3' | split: "|" %}
+{% assign featuredCollections = 'home-featured-collection-1|home-featured-collection-2|home-featured-collection-3|home-featured-collection-4' | split: "|" %}
 
 {% for collection in featuredCollections %}
   {% assign featuredCollection = settings[collection] %}
@@ -23,7 +23,6 @@
           {% capture textColor %}{{collection}}-text-color{% endcapture %}
           {% capture textShadow %}{{collection}}-text-shadow{% endcapture %}
           {% capture intoText %}{{collection}}-intro-text{% endcapture %}
-
 
           {% if featuredCollection != blank %}
 

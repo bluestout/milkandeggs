@@ -1,5 +1,7 @@
-{% assign footerLinkLists = "footer-link-list-1|footer-link-list-2" | split: "|" %}
+{% assign footerLinkLists = "footer-link-list-1|footer-link-list-2|footer-link-list-3" | split: "|" %}
 <div class="footer-module footer-link-lists">
+
+
   {% for list in footerLinkLists %}
 
     {% assign name = settings[list] %}

@@ -54,23 +54,33 @@
 
       <div class="product-submit" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
 
-        <span class="product-price">
-          <span class="product-price-minimum money" itemprop="price">
-            {{ variant.price | money }}
-          </span>
-      <span class="product-price-compare money">
-            {% if variant.compare_at_price_min > variant.price_min %}
-              {{ variant.compare_at_price_min | money }}
-            {% endif %}
-          </span> 
-          
-          {% if product.tags contains 'with-weight' %}
-          / {{variant.weight_in_unit}} {{variant.weight_unit}}
-          {% endif %}
-          {% if product.tags contains 'with-ea' %}
-          / ea
-          {% endif %}
-        </span>
+        <div class="product-pricecode">
+
+          <div class="product-pricebox">
+            <div class="product-price">
+              <span class="product-price-minimum money" itemprop="price">
+                {{ variant.price | money }}
+              </span>
+              <span class="product-price-compare money">
+                {% if variant.compare_at_price_min > variant.price_min %}
+                  {{ variant.compare_at_price_min | money }}
+                {% endif %}
+              </span> 
+              
+              {% if product.tags contains 'with-weight' %}
+              / {{variant.weight_in_unit}} {{variant.weight_unit}}
+              {% endif %}
+              {% if product.tags contains 'with-ea' %}
+              / ea
+              {% endif %}
+            </div>
+          </div>
+        
+          <div class="product-code">
+            <p id="barcodefield"></p>
+          </div>
+        </div>
+        
         
         {% unless qb_loaded == 'true' %}
         <div id="shappify-qty-msg"></div>
@@ -86,12 +96,12 @@
 
                     <div class="input-wrapper">
                         <a href="#">
-                            <i class="milkicon-plus"></i>
+                            <i class="milkicon-minus"></i>
                         </a>
                             {% comment %} <label for="quantity">{{ 'general.general.quantity' | t }}</label> {% endcomment %}
                             <input type="text" name="quantity" id="quantity" value="1" />
                         <a href="#">
-                            <i class="milkicon-minus"></i>
+                            <i class="milkicon-plus"></i>
                         </a>
                     </div>
                 </div>
@@ -118,10 +128,25 @@
         {% if product.description != blank or product.tags.size > 0 %}
             <div class="product-description rte" itemprop="description">
                 {% include 'product-tags' with 'product' %}
-                {{ product.description }}
-                <h4 id= "barcodefield"></h4> 
+                {{ product.description }} 
             </div>
         {% endif %}
+
+        <ul class="list-unstyled list-usp list-usp--small">
+          <li>
+              <i class="milkicon-freedelivery"></i>
+              <p>Free delivery in LA area</p>
+          </li>
+          <li>
+              <i class="milkicon-guarantee"></i>
+              <p>100% Satisfaction Guarantee</p>
+          </li>
+          <li>
+              <i class="milkicon-save"></i>
+              <p>Save up to 50% vs grocery store</p>
+          </li>
+      </ul>
+
       </div>
 
     </div>
