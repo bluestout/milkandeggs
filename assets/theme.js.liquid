@@ -2542,6 +2542,24 @@
       }});
     });
 
+    $('.stepper-control').on('click', function(e) {
+      if ($(this).hasClass('plus')) {
+        var quantity = parseInt($(this).prev("input").val());
+        quantity += 1;
+        $(this).prev("input").val(quantity);
+      } else {
+        var quantity = parseInt($(this).next("input").val());
+        quantity -= 1;
+        if ( quantity <= 0 ) {
+          quantity = 1;
+        }
+        $(this).next("input").val(quantity);
+      }
+      e.stopPropagation();
+      e.preventDefault();
+      return false;
+    });
+
    $(document).on('click','.sh-cart-add',function(){
       var product_id = $(this).attr('data-id');
       var v_id    = $(this).attr('data-vid');

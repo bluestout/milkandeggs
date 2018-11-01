@@ -6,7 +6,7 @@
   <div class="product-form-inner">
 
     <a class="product-vendor vendor" href="{{ product.vendor | url_for_vendor }}">{{ product.vendor }}</a>
-    
+
     <h1>{{product.title}}</h1>
 
 
@@ -37,19 +37,19 @@
         </div>
         {% endcomment %}
       </div>
-      
 
-      <input name="shopify_customer_id" type="hidden" value="{{ customer.id }}" > 
-      <input name="email" type="hidden" value="{{ customer.email }}" > 
-      <input name="address1" type="hidden" value="{{ customer.default_address.address1 }}" > 
-      <input name="address2" type="hidden" value="{{ customer.default_address.address2 }}" > 
-      <input name="city" type="hidden" value="{{ customer.default_address.city }}" > 
-      <input name="company" type="hidden" value="{{ customer.default_address.company }}" > 
-      <input name="country" type="hidden" value="{{ customer.default_address.country }}" > 
-      <input name="first_name" type="hidden" value="{{ customer.default_address.first_name }}" > 
-      <input name="last_name" type="hidden" value="{{ customer.default_address.last_name }}" > 
-      <input name="phone" type="hidden" value="{{ customer.default_address.phone }}" > 
-      <input name="province" type="hidden" value="{{ customer.default_address.province }}" > 
+
+      <input name="shopify_customer_id" type="hidden" value="{{ customer.id }}" >
+      <input name="email" type="hidden" value="{{ customer.email }}" >
+      <input name="address1" type="hidden" value="{{ customer.default_address.address1 }}" >
+      <input name="address2" type="hidden" value="{{ customer.default_address.address2 }}" >
+      <input name="city" type="hidden" value="{{ customer.default_address.city }}" >
+      <input name="company" type="hidden" value="{{ customer.default_address.company }}" >
+      <input name="country" type="hidden" value="{{ customer.default_address.country }}" >
+      <input name="first_name" type="hidden" value="{{ customer.default_address.first_name }}" >
+      <input name="last_name" type="hidden" value="{{ customer.default_address.last_name }}" >
+      <input name="phone" type="hidden" value="{{ customer.default_address.phone }}" >
+      <input name="province" type="hidden" value="{{ customer.default_address.province }}" >
       <input name="zip" type="hidden" value="{{ customer.default_address.zip }}" >
 
       <div class="product-submit" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
@@ -65,8 +65,8 @@
                 {% if variant.compare_at_price_min > variant.price_min %}
                   {{ variant.compare_at_price_min | money }}
                 {% endif %}
-              </span> 
-              
+              </span>
+
               {% if product.tags contains 'with-weight' %}
               / {{variant.weight_in_unit}} {{variant.weight_unit}}
               {% endif %}
@@ -75,13 +75,13 @@
               {% endif %}
             </div>
           </div>
-        
+
           <div class="product-code">
             <p id="barcodefield"></p>
           </div>
         </div>
-        
-        
+
+
         {% unless qb_loaded == 'true' %}
         <div id="shappify-qty-msg"></div>
         {% assign qb_loaded = 'true' %}
@@ -95,20 +95,20 @@
                 <div class="product-quantity">
 
                     <div class="input-wrapper">
-                        <a href="#">
+                        <a href="#" class="stepper-control minus">
                             <i class="milkicon-minus"></i>
                         </a>
                             {% comment %} <label for="quantity">{{ 'general.general.quantity' | t }}</label> {% endcomment %}
                             <input type="text" name="quantity" id="quantity" value="1" />
-                        <a href="#">
+                        <a href="#" class="stepper-control plus">
                             <i class="milkicon-plus"></i>
                         </a>
                     </div>
                 </div>
             {% endif %}
-                
+
             {% if variant.available %}
-            
+
             <input class="button add-to-cart addtocart" type="submit" value="{{ 'products.product.add_to_cart' | t }}" />
             <link itemprop="availability" href="http://schema.org/InStock">
             {% else %}
@@ -118,17 +118,17 @@
 
         </div>
 
-        
-        
+
+
         {% include 'iwish_v2' with 'iwishproduct' %}
-        
+
         <!-- bold-ro-liquid --> <div class="bold_add_to_orders" style="display: inline-block;"> </div> <!-- bold-ro-liquid -->
         <div class="product-message"></div>
 
         {% if product.description != blank or product.tags.size > 0 %}
             <div class="product-description rte" itemprop="description">
                 {% include 'product-tags' with 'product' %}
-                {{ product.description }} 
+                {{ product.description }}
             </div>
         {% endif %}
 
@@ -161,15 +161,15 @@
 
 
  {% if bold_variants_size == 1  %}
-<script> 
+<script>
 $(window).load(function(){
 
  $('.selector-wrapper').hide();
-                         
+
 
 
 });
 
 </script>
 
- {% endif %}  
+ {% endif %}
