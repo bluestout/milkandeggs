@@ -1,0 +1,150 @@
+{% capture WHITESPACE %}
+
+{% comment %}
+
+  This is intended to be used as an alternate collection template.
+  Usage:
+
+  1. Add new collection template, adding this code.
+  2. View the collection https://yourstore.com/collections/foo?view=ratings-json
+  3. Read the output with JavaScript and add to your page as needed.
+
+
+{% endcomment %}
+
+{% comment %} Setup the basic vars {% endcomment %}
+{% assign reviewAverage = 0 %}
+{% assign totalReviews = 0 %}
+{% assign reviewedProducts = 0 %}
+
+{% comment %} Do not edit the two lines below unless you know what they do {% endcomment %}
+{% assign splitMarkerAverage = 'itemprop="average" content="' %}
+{% assign splitMarkerVotes = 'itemprop="votes" content="' %}
+
+{% comment %} Add the usual pagination tags {% endcomment %}
+{% paginate collections.all.products by 1000 %}
+{% for product in collections.all.products %}
+
+  {% assign productReviewMetafield = product.metafields.spr.reviews %}
+
+  {% comment %} Some quick checks to see if the metafield exists, and has what we need. {% endcomment %}
+  {% if productReviewMetafield == blank %}{% continue %}{% endif %}
+  {% unless productReviewMetafield contains splitMarkerAverage and productReviewMetafield contains splitMarkerVotes %}{% continue %}{% endunless %}
+
+  {% comment %} Get the values from the metafield (hopefully)! {% endcomment %}
+  {% assign productAverage = productReviewMetafield | split:splitMarkerAverage | last | split:'"' | first | abs %}
+  {% assign productVotes = productReviewMetafield | split:splitMarkerVotes | last | split:'"' | first  | abs %}
+
+  {% comment %} Update our values {% endcomment %}
+  {% assign reviewAverage = reviewAverage | plus:productAverage  %}
+  {% assign totalReviews = totalReviews | plus:productVotes %}
+  {% assign reviewedProducts = reviewedProducts | plus:1 %}
+
+{% endfor %}
+
+{% comment %} The review average var is the combined amount for all products. Let's get the average and round that amount. {% endcomment %}
+{% assign productsSearched = paginate.items %}
+{% assign reviewAverage = reviewAverage | divided_by:reviewedProducts | round: 1 %}
+
+{% endpaginate %}
+{% endcapture %}
+
+<div class="home-module home-testimonials row-of-{{section.blocks.size}}" data-section-type="testimonial">
+  <div class="home-module-content">
+    {% if section.settings.title != blank %}
+    <h4 class="section-title">{{ section.settings.title }}</h4>
+    {% endif %}
+    <p><span class="spr-starrating spr-badge-starrating">
+      <i class="spr-icon spr-icon-star"></i>
+      <i class="spr-icon spr-icon-star"></i>
+      <i class="spr-icon spr-icon-star"></i>
+      <i class="spr-icon spr-icon-star"></i>
+      <i class="spr-icon spr-icon-star"></i></span>
+    </p>
+    <p class="align-center">Over {{ totalReviews | json }} {{ reviewAverage | json }}-start reviews</p>
+    <div class="review-slider home-module-inline-items slides-ready">
+      {% for block in section.blocks %}
+
+      <div class="home-testimonial home-feature">
+        <div class="home-testimonial-content rte">
+          {% unless block.settings.title == empty %}
+            <h3>{{ block.settings.title }}</h3>
+          {% endunless %}
+
+          {% unless block.settings.content == empty %}
+            <p>{{ block.settings.content }}</p>
+          {% endunless %}
+
+          {% unless block.settings.name == empty and block.settings.date == empty %}
+            <p class="reviewer">
+              {% unless block.settings.name == empty %}{{ block.settings.name }}{% endunless %}
+              {% unless block.settings.date == empty %} on {{ block.settings.date }}{% endunless %}
+            </p>
+          {% endunless %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Testimonials",
+    "class": "testimonial-section",
+    "max_blocks": 10,
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "What Our Clients Say"
+      },
+      {
+        "type": "text",
+        "id": "sub_title",
+        "label": "Sub heading",
+        "default": "Don't trust our word"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "content",
+        "name": "content",
+        "settings": [
+          {
+            "type": "text",
+            "id": "name",
+            "label": "Name"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title"
+          },
+          {
+            "type": "richtext",
+            "id": "content",
+            "label": "Content"
+          },
+          {
+      			"type": "checkbox",
+      			"id": "verified",
+      			"label": "Verified Buyer"
+      		},
+          {
+            "type": "text",
+            "id": "date",
+            "label": "Date"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Testimonials",
+        "category": "Advanced layout"
+      }
+    ]
+  }
+{% endschema %}
