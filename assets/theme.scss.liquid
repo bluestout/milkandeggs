@@ -3765,6 +3765,13 @@ td.cart-item-total {
   }
 }
 
+.product-list-item {
+
+  .product-tags {
+    margin-top: 12px;
+  }  
+}
+
 .product-list-item-overlay-link {
   display: block;
   position: absolute;
@@ -3933,7 +3940,6 @@ url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQV
   }
 
   .sidebar-disabled .home-module:first-child & {
-    border-top: 1px solid $border-color;
     padding-top: 50px;
   }
 
@@ -4813,6 +4819,11 @@ $slideshowSpeed: 0.3s;
     opacity: 0;
     visibility: hidden;
     margin-bottom: -48px;
+
+    i {
+      margin-left: 3px;
+      font-size: .65em;
+    }
 
     &:hover {
       background-color: $primary-button-background;
@@ -11622,7 +11633,6 @@ url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQV
   }
 
   .sidebar-disabled .home-module:first-child & {
-    border-top: 1px solid $border-color;
     padding-top: 50px;
   }
 
@@ -12497,10 +12507,19 @@ $slideshowSpeed: 0.3s;
 
     i {
       margin-left: 5px;
+      font-size: .65em;
+      position: relative;
+      top: 0;
+      transition: .2s ease-out;
+      display: inline-block;
     }
 
     &:hover {
       color: #222;
+
+      i {
+        transform: translateX(4px);
+      }
     }
   }
 }
@@ -15862,9 +15881,26 @@ top:145px;
 .slick-vertical .slick-slide { display: block; height: auto; border: 1px solid transparent; }
 .slick-arrow.slick-hidden { display: none; }
 .slick-dots { width: 100%; position: absolute; bottom: -28px; right: 0; margin: 0; padding: 0; text-align: center; }
-.slick-dots li { width: 10px; height: 10px; display: inline-block; margin: 0 3px; }
-.slick-dots li button { width: 100%; height: 100%; padding: 0; text-indent: -9999px; overflow: hidden; outline: none; border-radius: 50%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; box-shadow: inset 0 0 0 1px #000; background: transparent; }
-.slick-dots .slick-active button { background: #000; }
+.slick-dots li { 
+  width: 4px; 
+  height: 4px; 
+  display: inline-block; 
+  margin: 0 8px; 
+}
+.slick-dots li button { 
+  width: 100%; 
+  height: 100%; 
+  padding: 0; 
+  text-indent: -9999px; 
+  overflow: hidden; 
+  outline: none; 
+  border-radius: 50%; 
+  box-sizing: border-box; 
+  background: rgba(0,0,0,.15); 
+}
+.slick-dots .slick-active button { 
+  background: rgba(0,0,0,.55);
+}
 
 /* Header
 -------------------------------------------------------------- */
@@ -15963,10 +15999,20 @@ top:145px;
     font-size: 1.4em;
     line-height: 1.1em;
     color: $accent-color;
+    position: relative;
+
+    &::before {
+      content: "\e90d";
+      font-family: "milkicon";
+      position: absolute;
+      right: calc(100% + 10px);
+      color: rgba($body-color, .35);
+      font-size: 1.4em;
+    }
   }
 
   p {
-    line-height: 1.3em;
+    line-height: 1.45em;
     font-size: 1.05em;
   }
 
@@ -15986,6 +16032,110 @@ top:145px;
   max-width: 250px;
   margin: 0 auto;
 }
+
+.home-testimonials {
+
+  .section-title {
+    margin-bottom: 12px;
+  }
+}
+
+.home-testimonials-total {
+  text-align: center;
+  margin-bottom: 20px;
+
+  p {
+    margin: 0;
+  }
+
+  .spr-starrating {
+    font-size: 2.8em;
+    line-height: 1em;
+
+    i {
+      margin: 0 -4px;
+    }
+  }
+}
+
+.as-featured {
+  margin: 45px 0;
+
+  .section-title {
+    font-family: $body-font;
+    font-size: 1.2em;
+    font-weight: 400;
+    margin-bottom: 6px;
+  }  
+}
+.asfeat-item {
+  text-align: center;
+  padding: 0 20px;
+
+  img {
+    max-width: 190px;
+    height: auto;
+    margin: 0 auto;
+    opacity: .8;
+  }
+}
+
+
+.email-collect-block {
+  margin: 45px 0;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  position: relative;
+  color: #fff;
+  padding: 85px 20px;
+  text-align: center;
+
+  h3 {
+    color: #fff;
+    font-size: 1.8em;
+    line-height: 1.2em;
+    margin-top: 0;
+  }
+
+  p {
+    color: #fff;
+    font-size: 1.05em;
+  }
+
+  &::before {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,.45);
+  }
+
+  .klaviyo_styling {
+    margin: 0 auto;
+    max-width: 360px;
+  }
+  form#email_signup .klaviyo_field_group {
+    flex: 1 1 auto;
+  }
+  form#email_signup input[type="email"] {
+    background-color: #fff;
+    color: $body-color;
+  }
+  form#email_signup .klaviyo_submit_button {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+}
+
+.email-collect-content {
+  position: relative;
+  z-index: 1;
+}
+
 
 
 
@@ -16168,7 +16318,67 @@ top:145px;
 @media only screen and (min-width: 769px) {
   .blog .regular-nav ul,
   .article .regular-nav ul,
-  .search-blog .regular-nav ul { display: none !important; }
+  .search-blog .regular-nav ul { 
+    display: none !important; 
+  }
+
+  .home-testimonials {
+
+    .home-module-inline-items {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+    }
+
+    .home-testimonial {
+
+      &:nth-child(2) {
+        grid-row: 1 / 1;
+        grid-column: 2 / 2;
+      }
+      &:nth-child(3) {
+        grid-row: 2 / 2;
+        grid-column: 2 / 2;
+      }
+
+      p {
+        font-size: 1.15em;
+      }
+
+      .reviewer {
+        font-size: 13px;
+      }
+
+    }
+    .home-testimonial-first {
+      width: auto;
+      grid-row: 1 / 3;
+      grid-column: 1 / 1;
+
+      h3 {
+        font-size: 2em;
+      }
+
+      p {
+        font-size: 1.35em;
+      }
+
+      .reviewer {
+        font-size: 13px;
+      }
+    }
+    .home-testimonial {
+      padding: 65px 20px;
+      width: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  .home-testimonial-content {
+    max-width: 360px;
+  }
 }
 
 /* Responsive - Tablet Portrait
@@ -16833,9 +17043,9 @@ p.iWishLoginMsg { margin:  10px 0; }
 @font-face {
   font-family: 'milkicon';
   src:
-    url('milkicon.ttf?ptbycd') format('truetype'),
-    url('milkicon.woff?ptbycd') format('woff'),
-    url('milkicon.svg?ptbycd#milkicon') format('svg');
+    url('milkicon.ttf?ptbyce') format('truetype'),
+    url('milkicon.woff?ptbyce') format('woff'),
+    url('milkicon.svg?ptbyce#milkicon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -16855,6 +17065,12 @@ p.iWishLoginMsg { margin:  10px 0; }
   -moz-osx-font-smoothing: grayscale;
 }
 
+.milkicon-confirmed:before {
+  content: "\e90c";
+}
+.milkicon-quote:before {
+  content: "\e90d";
+} 
 .milkicon-freedelivery:before {
   content: "\e90b";
 }

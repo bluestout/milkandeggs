@@ -54,18 +54,24 @@
     {% if section.settings.title != blank %}
     <h4 class="section-title">{{ section.settings.title }}</h4>
     {% endif %}
-    <p><span class="spr-starrating spr-badge-starrating">
-      <i class="spr-icon spr-icon-star"></i>
-      <i class="spr-icon spr-icon-star"></i>
-      <i class="spr-icon spr-icon-star"></i>
-      <i class="spr-icon spr-icon-star"></i>
-      <i class="spr-icon spr-icon-star"></i></span>
-    </p>
-    <p class="align-center">Over {{ totalReviews | json }} {{ reviewAverage | json }}-start reviews</p>
-    <div class="review-slider home-module-inline-items slides-ready">
+    <div class="home-testimonials-total">
+      <p><span class="spr-starrating spr-badge-starrating">
+        <i class="spr-icon spr-icon-star"></i>
+        <i class="spr-icon spr-icon-star"></i>
+        <i class="spr-icon spr-icon-star"></i>
+        <i class="spr-icon spr-icon-star"></i>
+        <i class="spr-icon spr-icon-star"></i></span>
+      </p>
+      <p>Over {{ totalReviews | json }} {{ reviewAverage | json }}-star reviews</p>
+    </div>
+    <div class="home-module-inline-items slides-ready">
       {% for block in section.blocks %}
 
-      <div class="home-testimonial home-feature">
+      {% if forloop.first == true %}
+        <div class="home-testimonial home-testimonial-first home-feature">
+      {% else %}
+        <div class="home-testimonial home-feature">
+      {% endif %}
         <div class="home-testimonial-content rte">
           {% unless block.settings.title == empty %}
             <h3>{{ block.settings.title }}</h3>

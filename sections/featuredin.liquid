@@ -1,0 +1,49 @@
+<div class="home-module as-featured">
+  <div class="home-module-content">
+      {% unless section.settings.title == blank %}
+          <h4 class="section-title">{{ section.settings.title }}</h4>
+      {% endunless %}
+      <div class="asfeat-slider">
+      {% for block in section.blocks %}
+          <div class="asfeat-item">
+              {% unless block.settings.image == blank %}
+                  {{ block.settings.image | img_url: '380x' | img_tag: block.settings.alt }}
+              {% endunless %}
+          </div>
+      {% endfor %}
+      </div>
+    </div>
+</div>
+
+{% schema %}
+{
+  "name": "As Featured",
+  "class": "as-featured",
+  "settings": [
+    {
+      "id": "title",
+      "type": "text",
+      "label": "Title"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "media",
+      "name": "media",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Logo",
+          "info": "380px by 240px size recommended"
+        },
+        {
+          "type": "text",
+          "id": "alt",
+          "label": "Alt tag"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
