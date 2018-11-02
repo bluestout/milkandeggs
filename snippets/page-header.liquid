@@ -58,6 +58,7 @@
             <div class="collection-description rte">
                 {{ collection.description }}
             </div>
+            {% include 'usp' %}
         {% endif %}
     {% endif %}
 {% elsif template contains 'article' %}
@@ -137,7 +138,7 @@
             <p class="btn-orderedbefore">Ordered before? Re-order <a href="/account">here</a></p>
 
         </div>
-        
+
     </div>
 {% elsif template != '' %}
 	<h1 class="page-title"></h1>
