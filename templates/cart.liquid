@@ -20,249 +20,304 @@
 <!-- Bold: Quantity Breaks - Step 7 -->
 <div id="shappify-qty-cart-msg"></div>
 <!-- // end Bold code -->
-<form action="/cart" method="post">
-    <table class="cart-items clean {% if settings.disable-ajax or settings.enable-currency-switcher %}no-ajax{% endif %}">
-        <thead>
-            <tr>
-                <th class="first">{{ 'general.general.product' | t }}</th>
-                <th>{{ 'general.general.price' | t }}</th>
-                <th>{{ 'general.general.quantity' | t }}</th>
-                <th class="last">{{ 'general.general.total' | t }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <script>
-                mixed_cart = false;
+<form class="form" action="/cart" method="post">
 
-            </script>
-            {% assign show_paypal = true %} {% for item in cart.items %} {% assign prod_index = forloop.index0 %}
-            <input type="hidden" name="product_id[{{ forloop.index0 }}]" value="{{ item.product.id }}">
-            <input type="hidden" name="variant_id[{{ forloop.index0 }}]" value="{{ item.variant.id }}">
-            <input type="hidden" name="quantity[{{ forloop.index0 }}]" value="{{ item.quantity }}">
+    <div class="cart-cols">
 
-            <tr class="cart-item variant-{{ item.variant.id }}" data-line="{{ forloop.index }}" data-variant="{{ item.variant.id }}" data-title="{{ item.product.title }}" data-url="{{ item.product.url }}">
-                <td class="cart-item-product first">
-                    <a class="cart-item-image" href="{{ item.product.url }}"><img alt="{{ item.image.alt | escape }}" src="{{ item | img_url: 'medium' }}"></a>
-                    <span class="cart-item-vendor vendor">{{ item.vendor | link_to_vendor }}</span>
-                    <span class="cart-item-title">{{ item.product.title | link_to: item.product.url }}</span> {% for option in item.variant.options %} {% unless option == 'Default Title' %}
-                    <span class="cart-item-option">{{ option }}</span> {% endunless %} {% endfor %}
-                    <div class="bold_properties_div" data-test="{{item.properties}}">
-                        <!-- bold-ro-liquid -->
-                        {% if item.properties.frequency_num == blank %}
-                        <a data-value="-1" data-id="{{item.id}}" class="modify-sub" id="modify-sub-{{item.id}}" href="{{ item.product.url }}">(Click to Subscribe)</a> {% endif %} {% for p in item.properties %} {% if p.first == "frequency_num" %}
-                        <script>
-                            mixed_cart = true;
+        <div class="cart-prods">
 
-                        </script>
-                        <span class="bold_ro_every" id="every-{{item.id}}">Every</span>
-                        <input id="prod_index_{{item.id}}" type="hidden" name="{{ prod_index }}[number]" value={{p.last}} /> {% endif %} {% if p.first == "frequency_type" %}
-                        <input type="hidden" name="{{ prod_index }}[type_id]" value={{p.last}} /> {% endif %} {% if p.first == "frequency_num" or p.first == "frequency_type_text" %}
-                        <span class="current-weeks-{{item.id}}" id="current-weeks-{{item.id}}">{{ p.last }}</span> {% endif %} {% if p.first == "group_id" %} {% assign show_paypal = false %}
-                        <input type="hidden" name="{{ prod_index }}[group_id]" value={{p.last}} /> {% endif %} {% if p.first == "discounted_price" %}
-                        <!-- <br><span class="bold_ro_discounted_price">Discounted Price</span>
-<span class="discounted_price_in_cart">{{ p.last | money }} </span> <span class="bold_ro_each">each</span>-->
+            <table class="cart-items clean {% if settings.disable-ajax or settings.enable-currency-switcher %}no-ajax{% endif %}">
+                <thead>
+                    <tr>
+                        <th class="first">{{ 'general.general.product' | t }}</th>
+                        <th>{{ 'general.general.price' | t }}</th>
+                        <th>{{ 'general.general.quantity' | t }}</th>
+                        <th>{{ 'general.general.total' | t }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <script>
+                        mixed_cart = false;
+
+                    </script>
+                    {% assign show_paypal = true %} {% for item in cart.items %} {% assign prod_index = forloop.index0 %}
+                    <input type="hidden" name="product_id[{{ forloop.index0 }}]" value="{{ item.product.id }}">
+                    <input type="hidden" name="variant_id[{{ forloop.index0 }}]" value="{{ item.variant.id }}">
+                    <input type="hidden" name="quantity[{{ forloop.index0 }}]" value="{{ item.quantity }}">
+
+                    <tr class="cart-item variant-{{ item.variant.id }}" data-line="{{ forloop.index }}" data-variant="{{ item.variant.id }}" data-title="{{ item.product.title }}" data-url="{{ item.product.url }}">
+                        <td class="cart-item-product first">
+
+                            <a class="cart-item-image" href="{{ item.product.url }}"><img alt="{{ item.image.alt | escape }}" src="{{ item | img_url: 'medium' }}"></a>
+                            <span class="cart-item-vendor vendor">{{ item.vendor | link_to_vendor }}</span>
+                            <span class="cart-item-title">{{ item.product.title | link_to: item.product.url }}</span> {% for option in item.variant.options %} {% unless option == 'Default Title' %}
+                            <span class="cart-item-option">{{ option }}</span> {% endunless %} {% endfor %}
+                            <div class="bold_properties_div" data-test="{{item.properties}}">
+                                <!-- bold-ro-liquid -->
+                                {% if item.properties.frequency_num == blank %}
+                                    <a data-value="-1" data-id="{{item.id}}" class="modify-sub" id="modify-sub-{{item.id}}" href="{{ item.product.url }}">(Click to Subscribe)</a> 
+                                {% endif %} 
+                                {% for p in item.properties %} {% if p.first == "frequency_num" %}
+                                <script>
+                                    mixed_cart = true;
+
+                                </script>
+                                <span class="bold_ro_every" id="every-{{item.id}}">Every</span>
+                                <input id="prod_index_{{item.id}}" type="hidden" name="{{ prod_index }}[number]" value={{p.last}} /> {% endif %} {% if p.first == "frequency_type" %}
+                                <input type="hidden" name="{{ prod_index }}[type_id]" value={{p.last}} /> {% endif %} {% if p.first == "frequency_num" or p.first == "frequency_type_text" %}
+                                <span class="current-weeks-{{item.id}}" id="current-weeks-{{item.id}}">{{ p.last }}</span> {% endif %} {% if p.first == "group_id" %} {% assign show_paypal = false %}
+                                <input type="hidden" name="{{ prod_index }}[group_id]" value={{p.last}} /> {% endif %} {% if p.first == "discounted_price" %}
+                                <!-- <br><span class="bold_ro_discounted_price">Discounted Price</span>
+        <span class="discounted_price_in_cart">{{ p.last | money }} </span> <span class="bold_ro_each">each</span>-->
+                                {% endif %}
+                            {% if p.first == "_ro_unformatted_price" %}<input type="hidden" name="{{ prod_index }}[_ro_unformatted_price]" value={{p.last}} />{% endif %}
+                            {% if p.first == "frequency_type_text" %}
+                                <a data-value="{{item.properties.frequency_num}}" data-id="{{item.id}}" class="modify-sub" id="modify-sub-{{item.id}}" href="{{ item.product.url }}"><b>(Modify Subscription)</b></a> {% endif %} {% endfor %}
+
+                                <div class="modify-sub-box" id="modify-box-{{item.id}}">
+                                    <label> Every </label>
+                                    <select class="modify-sub-select" id="weeks_{{item.id}}" name="weeks_{{item.id}}">
+                                        <option value="1">1 Week</option>
+                                        <option value="2">2 Weeks</option>
+                                        <option value="3">3 Weeks</option>
+                                        <option value="4">4 Weeks</option>
+                                        <option value="-1">One Time</option>
+                                    </select>
+                                    <button type="button" data-qty="{{item.quantity}}" data-id="{{item.id}}" data-variant-id="{{item.variant.id}}" class="btn-update">UPDATE</button>
+                                    <button type="button" data-id="{{item.id}}" data-variant-id="{{item.variant.id}}" class="btn-cancel">Cancel</button>
+                                </div>
+
+                                <!-- bold-ro-liquid -->
+                            </div>
+
+                            {% comment %} {% if item.properties %}
+                            <div class="cart-line-item-properties">
+                                {% for property in item.properties %} {% if property.last != blank %}
+                                <span class="cart-item-property">
+                    <strong>{{ property.first }}</strong>:
+                    {% if property.last contains "/uploads/" %}
+                    <span class="cart-item-property-value cart-item-upload" data-file="{{ property.last }}">{{ property.last | split: '/' | last }}</span> {% else %}
+                                <span class="cart-item-property-value">{{ property.last }}</span> {% endif %}
+                                </span>
+                                {% endif %} {% endfor %}
+                            </div>
+                            {% endif %} {% endcomment %} 
+                        </td>
+                        <!-- FIX RO ITEM PRICES -->
+                        {% if item.properties._ro_unformatted_price  != blank %} 
+                            {% assign ro_price = item.properties._ro_unformatted_price  %} 
+                            {% assign ro_item_price = ro_price %} {% assign ro_line_item_price = ro_item_price | times: item.quantity %} 
+                        {% else %} 
+                            {% assign ro_item_price = item.price %} 
+                            {% assign ro_line_item_price = item.line_price %} 
                         {% endif %}
-                      {% if p.first == "_ro_unformatted_price" %}<input type="hidden" name="{{ prod_index }}[_ro_unformatted_price]" value={{p.last}} />{% endif %}
-                      {% if p.first == "frequency_type_text" %}
-                        <a data-value="{{item.properties.frequency_num}}" data-id="{{item.id}}" class="modify-sub" id="modify-sub-{{item.id}}" href="{{ item.product.url }}"><b>(Modify Subscription)</b></a> {% endif %} {% endfor %}
+                        <!-- END RO ITEM PRICES -->
 
-                        <div class="modify-sub-box" id="modify-box-{{item.id}}">
-                            <label> Every </label>
-                            <select class="modify-sub-select" id="weeks_{{item.id}}" name="weeks_{{item.id}}">
-                <option value="1">1 Week</option>
-                <option value="2">2 Weeks</option>
-                <option value="3">3 Weeks</option>
-                <option value="4">4 Weeks</option>
-                <option value="-1">One Time</option>
-              </select>
-                            <button type="button" data-qty="{{item.quantity}}" data-id="{{item.id}}" data-variant-id="{{item.variant.id}}" class="btn-update">UPDATE</button>
-                            <button type="button" data-id="{{item.id}}" data-variant-id="{{item.variant.id}}" class="btn-cancel">Cancel</button>
+                        <td class="cart-item-price">
+                            <span class="money">{{ ro_item_price | money }}</span> {% if item.product.tags contains 'with-weight' %} / {{item.variant.weight_in_unit}} {{item.variant.weight_unit}} {% endif %}
+                        </td>
+
+                        <td class="cart-item-quantity" {% unless item.variant.inventory_management==b lank or item.variant.inventory_policy=='continue' %}data-max="{{ item.variant.inventory_quantity }}" {% endunless %}>
+                            <div class="qtyswitch">
+                                <span class="cart-item-decrease">
+                                    <i class="milkicon-minus"></i>
+                                </span>
+                                <input class="cart-item-quantity-display" type="text" name="updates[]" value="{{ item.quantity }}" size="1">
+                                <span class="cart-item-increase">
+                                    <i class="milkicon-plus"></i>
+                                </span>
+                            </div>
+                        </td>
+                        <td class="cart-item-total last">
+                            <span class="money">{{ item.quantity | times: ro_item_price | money }}</span>
+
+                            {% if settings.disable-ajax or settings.enable-currency-switcher %}
+                                <a class="cart-item-remove bold-ro-remove" href="/cart/change?line={{ forloop.index }}&amp;quantity=0">&#57360;</a> 
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                    <!-- Start Cart Item Free Shopping Bag -->
+                    {% include 'cart_free_bag_item' %}
+                    <!-- End Cart Item Free Shopping Bag   -->
+
+                </tbody>
+            </table>
+
+        </div>
+
+        <div class="cart-summary">
+
+            <div class="cart-summary-inner">
+                <h2>Order Summary</h2>
+
+                {% if settings.cart-special-instructions or settings.shipping-calculator %}
+                <div class="cart-tools">
+                    <!--  start cart checkout recurring order   -->
+                    <div class="cart-checkout-recurring-order">
+                        <p class="cart-subhead">Create or Modify Subscription</p>
+
+                        <!-- Cart total -->
+                        <div class="cart-total">
+                            <p class="cart-price">
+                                <span class="title">Subtotal</span>
+                                {% include 'bold-ro-price-fix' %}
+                                <span class="money">{{ ro_cart_total | money }}</span>
+                            </p>
+                            <div class="cart-free">
+                                Only $12,75 away from free delivery!
+                            </div>
+                            <p class="cart-message"><em>{{ 'cart.tax_and_shipping' | t }}</em></p>
                         </div>
 
-                        <!-- bold-ro-liquid -->
+
+                        {% if settings.cart-special-instructions %}
+                        <div class="cart-instructions">
+                            <!-- Local Delivery App -->
+                            <!-- {% include 'snippet-local-delivery-cart' %} -->
+                            <style type="text/css">
+                                #xld_main {
+                                    margin-bottom: 10px;
+                                }
+                                
+                                #xld_main #xld_html {
+                                    margin-bottom: 10px
+                                }
+                                
+                                #xld_form h3.label {
+                                    margin-bottom: 5px;
+                                }
+                                
+                                #xld_time {
+                                    border: 1px solid #e5e5e5;
+                                    border-radius: 5px;
+                                    background: #fff;
+                                    color: #6e4219;
+                                    display: block;
+                                    padding: 14px 15px 9px;
+                                    font-size: 14px;
+                                    -webkit-box-sizing: border-box;
+                                    -moz-box-sizing: border-box;
+                                    box-sizing: border-box;
+                                }
+                            </style>
+                            <div id="xld_main">
+                                <div id="xld_html"></div>
+                                <div id="xld_form">
+                                    <div class="form-group">
+                                        <label class="label">Select Delivery Date:</label>
+                                            <input readonly="readonly" type="text" name="attributes[local_delivery_date]" id="datepicker" value="" required class="hasDatePicker required" />
+                                        <p class="del_date_error_text">*Select Delivery Date before checkout.</p>
+                                        <p class="del_date_full_error_text" style="font-size: 13px;color: #d60000;display:none;">*Please select another date.</p>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="label">Drop Off time</label>
+                                        <select required class="required" disabled="disabled" name="attributes[local_delivery_request]" id="xld_time">
+                                            <option value="" selected>Select Delivery Date First</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="label">{{ 'cart.special_instructions' | t }}</label>
+                                        <textarea name="note" rows="3">{{ cart.note }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        {% endif %} 
+
+                        <!-- Recurring order -->
+                        <div class="custom-checkbox">
+                            <input type="checkbox" id="cart_recurring_order">
+                            <label for="cart_recurring_order" class="block">Make this a recurring order?</label>
+                        </div>
+                        
+                        <div class="form-group recurring_order_box">
+                            <label>Every</label>
+                            <div class="form-dual">
+                                <select class="cart-sub-select" id="total_weeks">
+                                    <option value="-1">One Time</option>
+                                    <option value="1">1 Week</option>
+                                    <option value="2">2 Weeks</option>
+                                    <option value="3">3 Weeks</option>
+                                    <option value="4">4 Weeks</option>
+                                </select>
+                                <button id="update_all" type="button" class="btn-update btn-update-small">UPDATE</button>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!--  end cart checkout recurring order   -->
+
+                    
+                    
+                    {% if settings.cart-shipping-calculator and cart.requires_shipping %} {% include 'shipping-calculator' %} {% endif %}
+
+                    <!-- Start Cart Button Move -->
+                    {% include 'bold-ro-cart' %} {% if settings.disable-ajax or settings.enable-currency-switcher %}
+                    <!-- <input type="submit" name="update" value="{{ 'cart.update' | t }}" class="secondary"> -->
+                        <input type="submit" name="checkout" value="{{ 'cart.submit' | t }}" class="cart-checkout-button"> {% else %}
+                    
+                        <a class="cart-checkout-button button" href="/checkout">{{ 'cart.submit' | t }}</a> 
+                    {% endif %} 
+                    {% if additional_checkout_buttons and show_paypal %}
+                        <div class="cart-additional-buttons">{{ content_for_additional_checkout_buttons }}</div>
+                    {% endif %}
+                    
+                    <p class="cartMessage">*Select Delivery Date before checkout.</p>
+                    <p class="cartMessage">*Select Delivery Time before checkout.</p>
+                    <!-- End Cart button move -->
+
+                </div>
+                {% endif %}
+
+                <input name="shopify_customer_id" type="hidden" value="{{ customer.id }}">
+                <input name="email" type="hidden" value="{{ customer.email }}">
+                <input name="address1" type="hidden" value="{{ customer.default_address.address1 }}">
+                <input name="address2" type="hidden" value="{{ customer.default_address.address2 }}">
+                <input name="city" type="hidden" value="{{ customer.default_address.city }}">
+                <input name="company" type="hidden" value="{{ customer.default_address.company }}">
+                <input name="country" type="hidden" value="{{ customer.default_address.country }}">
+                <input name="first_name" type="hidden" value="{{ customer.default_address.first_name }}">
+                <input name="last_name" type="hidden" value="{{ customer.default_address.last_name }}">
+                <input name="phone" type="hidden" value="{{ customer.default_address.phone }}">
+                <input name="province" type="hidden" value="{{ customer.default_address.province }}">
+                <input name="zip" type="hidden" value="{{ customer.default_address.zip }}">
+
+                <div class="cart-checkout">
+                    <!--      started -->
+                    <!--<label><b>Change Cart to Every</b> </label>
+                    <select class="modify-sub-select" id="total_weeks">
+                    <option value="-1">One Time</option>
+                    <option value="1">1 Week</option>
+                    <option value="2">2 Weeks</option>
+                    <option value="3">3 Weeks</option>
+                    <option value="4">4 Weeks</option>
+                    </select> -->
+                    <!--<button id="update_all" type="button" class="btn-update">UPDATE</button> -->
+                    <!-- ended -->
+
+                    <div class="modify-sub-box2" style="display:none">
+                        <label><b>Change Cart to Every</b> </label>
+                        <select id="weeks_bulk" class="modify-sub-select">
+                            <option value="1">1 Week</option>
+                            <option value="2">2 Weeks</option>
+                            <option value="3">3 Weeks</option>
+                            <option value="4">4 Weeks</option>
+                            <option value="-1">One Time</option>
+                        </select>
+                        <button id="update_bulk" type="button" class="btn-update">UPDATE CART</button>
                     </div>
 
-                    {% comment %} {% if item.properties %}
-                    <div class="cart-line-item-properties">
-                        {% for property in item.properties %} {% if property.last != blank %}
-                        <span class="cart-item-property">
-              <strong>{{ property.first }}</strong>:
-              {% if property.last contains "/uploads/" %}
-              <span class="cart-item-property-value cart-item-upload" data-file="{{ property.last }}">{{ property.last | split: '/' | last }}</span> {% else %}
-                        <span class="cart-item-property-value">{{ property.last }}</span> {% endif %}
-                        </span>
-                        {% endif %} {% endfor %}
-                    </div>
-                    {% endif %} {% endcomment %} {% if settings.disable-ajax or settings.enable-currency-switcher %}
-                    <a class="cart-item-remove bold-ro-remove" href="/cart/change?line={{ forloop.index }}&amp;quantity=0">&#57360;</a> {% endif %}
-                </td>
-                <!-- FIX RO ITEM PRICES -->
-                {% if item.properties._ro_unformatted_price  != blank %} 
-              		{% assign ro_price = item.properties._ro_unformatted_price  %} 
-              		{% assign ro_item_price = ro_price %} {% assign ro_line_item_price = ro_item_price | times: item.quantity %} 
-             	{% else %} 
-              		{% assign ro_item_price = item.price %} 
-              		{% assign ro_line_item_price = item.line_price %} 
-             	{% endif %}
-                <!-- END RO ITEM PRICES -->
-
-                <td class="cart-item-price">
-                    <span class="money">{{ ro_item_price | money }}</span> {% if item.product.tags contains 'with-weight' %} / {{item.variant.weight_in_unit}} {{item.variant.weight_unit}} {% endif %}
-                </td>
-
-                <td class="cart-item-quantity" {% unless item.variant.inventory_management==b lank or item.variant.inventory_policy=='continue' %}data-max="{{ item.variant.inventory_quantity }}" {% endunless %}>
-                    <input class="cart-item-quantity-display" type="text" name="updates[]" value="{{ item.quantity }}" size="1">
-                    <span class="cart-item-decrease">&#57365;</span><span class="cart-item-increase">&#57366;</span>
-                </td>
-                <td class="cart-item-total last"><span class="money">{{ item.quantity | times: ro_item_price | money }}</span></td>
-            </tr>
-            {% endfor %}
-
-            <!-- Start Cart Item Free Shopping Bag -->
-            {% include 'cart_free_bag_item' %}
-            <!-- End Cart Item Free Shopping Bag   -->
-
-        </tbody>
-    </table>
-
-    {% if settings.cart-special-instructions or settings.shipping-calculator %}
-    <div class="cart-tools">
-        <!--  start cart checkout recurring order   -->
-        <div class="cart-checkout-recurring-order">
-            <h4>Create or Modify Subscription</h4>
-
-            <div class="custom-checkbox">
-                <input type="checkbox" id="cart_recurring_order">
-                <label for="cart_recurring_order" class="block">Make this a recurring order?</label>
-            </div>
-
-            <div class="recurring_order_box"> Every
-                <select class="cart-sub-select" id="total_weeks">
-          <option value="-1">One Time</option>
-          <option value="1">1 Week</option>
-          <option value="2">2 Weeks</option>
-          <option value="3">3 Weeks</option>
-          <option value="4">4 Weeks</option>
-        </select>
-
-                <button id="update_all" type="button" class="btn-update">UPDATE</button>
-            </div>
-
-        </div>
-        <!--  end cart checkout recurring order   -->
-
-        {% if settings.cart-special-instructions %}
-        <div class="cart-instructions">
-            <!-- Local Delivery App -->
-            <!-- {% include 'snippet-local-delivery-cart' %} -->
-            <style type="text/css">
-                #xld_main {
-                    margin-bottom: 10px;
-                }
-                
-                #xld_main #xld_html {
-                    margin-bottom: 10px
-                }
-                
-                #xld_form h3.label {
-                    margin-bottom: 5px;
-                }
-                
-                #xld_time {
-                    border: 1px solid #e5e5e5;
-                    border-radius: 5px;
-                    background: #fff;
-                    color: #6e4219;
-                    display: block;
-                    padding: 14px 15px 9px;
-                    font-size: 14px;
-                    -webkit-box-sizing: border-box;
-                    -moz-box-sizing: border-box;
-                    box-sizing: border-box;
-                }
-
-            </style>
-            <div id="xld_main">
-                <div id="xld_html"></div>
-                <div id="xld_form">
-                    <h4 class="label">Select Delivery Date:</h4>
-                    <input readonly="readonly" type="text" name="attributes[local_delivery_date]" id="datepicker" value="" required class="hasDatePicker required" />
-                    <p class="del_date_error_text">*Select Delivery Date before checkout.</p>
-					<p class="del_date_full_error_text" style="font-size: 13px;color: #d60000;display:none;">*Please select another date.</p>
-                    <h4 class="label">Drop Off time</h4>
-                    <select required class="required" disabled="disabled" name="attributes[local_delivery_request]" id="xld_time">
-      <option value="" selected>Select Delivery Date First</option>
-    </select>
                 </div>
             </div>
-            <p>{{ 'cart.special_instructions' | t }}</p>
-            <textarea name="note" rows="4">{{ cart.note }}</textarea>
         </div>
-        {% endif %} {% if settings.cart-shipping-calculator and cart.requires_shipping %} {% include 'shipping-calculator' %} {% endif %}
-
-        <!-- Start Cart Button Move -->
-        <div style="height:20px;">&nbsp;</div>
-        {% include 'bold-ro-cart' %} {% if settings.disable-ajax or settings.enable-currency-switcher %}
-        <!-- <input type="submit" name="update" value="{{ 'cart.update' | t }}" class="secondary"> -->
-        <input type="submit" name="checkout" value="{{ 'cart.submit' | t }}" class="cart-checkout-button"> {% else %}
-        <a class="cart-checkout-button button" href="/checkout">{{ 'cart.submit' | t }}</a> {% endif %} {% if additional_checkout_buttons and show_paypal %}
-        <div class="cart-additional-buttons">{{ content_for_additional_checkout_buttons }}</div>
-        {% endif %}
-        <p class="cartMessage">*Select Delivery Date before checkout.</p>
-        <p class="cartMessage">*Select Delivery Time before checkout.</p>
-        <!-- End Cart button move -->
-
-
-    </div>
-    {% endif %}
-
-    <input name="shopify_customer_id" type="hidden" value="{{ customer.id }}">
-    <input name="email" type="hidden" value="{{ customer.email }}">
-    <input name="address1" type="hidden" value="{{ customer.default_address.address1 }}">
-    <input name="address2" type="hidden" value="{{ customer.default_address.address2 }}">
-    <input name="city" type="hidden" value="{{ customer.default_address.city }}">
-    <input name="company" type="hidden" value="{{ customer.default_address.company }}">
-    <input name="country" type="hidden" value="{{ customer.default_address.country }}">
-    <input name="first_name" type="hidden" value="{{ customer.default_address.first_name }}">
-    <input name="last_name" type="hidden" value="{{ customer.default_address.last_name }}">
-    <input name="phone" type="hidden" value="{{ customer.default_address.phone }}">
-    <input name="province" type="hidden" value="{{ customer.default_address.province }}">
-    <input name="zip" type="hidden" value="{{ customer.default_address.zip }}">
-
-    <div class="cart-checkout">
-        <!--      started -->
-        <!--<label><b>Change Cart to Every</b> </label>
-    <select class="modify-sub-select" id="total_weeks">
-      <option value="-1">One Time</option>
-      <option value="1">1 Week</option>
-      <option value="2">2 Weeks</option>
-      <option value="3">3 Weeks</option>
-      <option value="4">4 Weeks</option>
-    </select> -->
-        <!--<button id="update_all" type="button" class="btn-update">UPDATE</button> -->
-        <!-- ended -->
-
-        <div class="modify-sub-box2" style="display:none">
-            <label><b>Change Cart to Every</b> </label>
-            <select id="weeks_bulk" class="modify-sub-select">
-        <option value="1">1 Week</option>
-        <option value="2">2 Weeks</option>
-        <option value="3">3 Weeks</option>
-        <option value="4">4 Weeks</option>
-        <option value="-1">One Time</option>
-      </select>
-            <button id="update_bulk" type="button" class="btn-update">UPDATE CART</button>
-        </div>
-
-        <p class="cart-price">
-            {% include 'bold-ro-price-fix' %}
-            <span class="money">{{ ro_cart_total | money }}</span>
-        </p>
-        <p class="cart-message"><em>{{ 'cart.tax_and_shipping' | t }}</em></p>
-
-
     </div>
 </form>
+
 {% else %}
 <p class="cart-empty-message">{{ 'cart.empty' | t }}</p>
 {% endif %}

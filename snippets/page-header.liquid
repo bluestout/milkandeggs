@@ -108,8 +108,35 @@
     </h1>
 {% elsif template contains 'cart' %}
     <div class="flex">
-        <h1 class="page-title">{{ 'cart.title' | t }}</h1>
-        <h6>Ordered before? Re-order <a href="/account">here</a></h6>
+        <div class="page-header-title">
+
+            <h1 class="page-title">
+                <i class="milkicon-cart"></i>
+                {{ 'cart.title' | t }}
+            </h1>
+
+        </div>
+        <div class="page-header-right">
+
+            <ul class="list-unstyled list-usp list-usp--small">
+                <li>
+                    <i class="milkicon-fresh"></i>
+                    <p>Fresh from the local farm</p>
+                </li>
+                <li>
+                    <i class="milkicon-save"></i>
+                    <p>Save up to 50% vs grocery store</p>
+                </li>
+                <li>
+                    <i class="milkicon-guarantee"></i>
+                    <p>100% Satisfaction Guarantee</p>
+                </li>
+            </ul>
+
+            <p class="btn-orderedbefore">Ordered before? Re-order <a href="/account">here</a></p>
+
+        </div>
+        
     </div>
 {% elsif template != '' %}
 	<h1 class="page-title"></h1>
