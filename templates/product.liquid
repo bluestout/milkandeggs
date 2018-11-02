@@ -20,7 +20,7 @@
   {% endif %}
 
   <div class="product-order">
-    
+
     {% for module in modules %}
       {% case module %}
         {% when 'A' %}
@@ -30,25 +30,13 @@
 
 
     {% include 'product-order' %}
-    
+
 
   </div>
   <div class="product-details">
 
-    {% for module in modules %}
-      {% case module %}
-        {% comment %} {% when 'A' %}
-          {% include 'product-images' %}
-        {% when 'B' %}
-          {% include 'product-form' %} {% endcomment %}
-        {% when 'C' %}
-          {% include 'product-description' %}
-        {% when 'D' %}
-          {% include 'share-buttons' %}
-      {% endcase %}
-    {% endfor %}
+    {% section 'product-tabs' %}
 
-    
     <ul class="list-unstyled list-usp list-usp--small">
       <li>
           <img src="{{ 'usp-4.png' | asset_url }}">
@@ -66,7 +54,7 @@
 
   </div>
 
-  
+
 </div>
 
 
@@ -123,8 +111,8 @@
     $('.bold-remove-on-load').remove();
   };
   jQuery(window).load(ro_add_to_subscription_fix);
-  
-  
+
+
   //Show Reviews Button
   $(document).ready(function() {
       $('.show-reviews a').click(function() {
@@ -161,7 +149,7 @@
   var _learnq = _learnq || [];
 
   var item = {
-    Name: {{ product.title|json }}, 
+    Name: {{ product.title|json }},
     ProductID: {{ product.id|json }},
     Categories: {{ product.collections|map:'title'|json }},
     ImageURL: "https:{{ product.featured_image.src|img_url:'grande' }}",

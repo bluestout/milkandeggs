@@ -292,6 +292,12 @@
     },
     "related_products": {
       "title": "Also of interest"
+    },
+    "tabs": {
+      "review": "Customer reviews",
+      "delivery": "Delivery",
+      "quality": "Quality Control",
+      "faq": "FAQ"
     }
   },
   "onboarding": {

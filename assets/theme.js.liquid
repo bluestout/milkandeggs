@@ -2560,6 +2560,20 @@
       return false;
     });
 
+  $('#tab-container').easytabs();
+
+  $('body').on('click', '.faq-q', function(){
+    var container = $(this).parent();
+    var answer = container.find('.faq-a');
+    var trigger = container.find('.faq-t');
+    answer.slideToggle(200);
+    if (!trigger.hasClass('active')) {
+      trigger.addClass('active').html('&and;');
+    } else {
+      trigger.removeClass('active').html('&or;');
+    }
+  });
+
    $(document).on('click','.sh-cart-add',function(){
       var product_id = $(this).attr('data-id');
       var v_id    = $(this).attr('data-vid');

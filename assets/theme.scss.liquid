@@ -3421,7 +3421,7 @@ table.cart-items {
 
   .product-tags {
     margin-top: 12px;
-  }  
+  }
 }
 
 .product-list-item-overlay-link {
@@ -10490,7 +10490,7 @@ tr.cart-item {
 
 .cart-item-product {
 
-  .no-ajax &.first { 
+  .no-ajax &.first {
     position: relative;
 
     @include breakpoint(m) {
@@ -15648,9 +15648,9 @@ top:145px;
 .free-bag-view-detail a { color: $body-color; }
 
 /* Modify Subscription */
-.modify-sub { 
+.modify-sub {
   margin-top: 4px;
-  color: $accent-color; 
+  color: $accent-color;
 
   &:hover {
     color: $body-color;
@@ -15707,24 +15707,24 @@ top:145px;
 .slick-vertical .slick-slide { display: block; height: auto; border: 1px solid transparent; }
 .slick-arrow.slick-hidden { display: none; }
 .slick-dots { width: 100%; position: absolute; bottom: -28px; right: 0; margin: 0; padding: 0; text-align: center; }
-.slick-dots li { 
-  width: 4px; 
-  height: 4px; 
-  display: inline-block; 
-  margin: 0 8px; 
+.slick-dots li {
+  width: 4px;
+  height: 4px;
+  display: inline-block;
+  margin: 0 8px;
 }
-.slick-dots li button { 
-  width: 100%; 
-  height: 100%; 
-  padding: 0; 
-  text-indent: -9999px; 
-  overflow: hidden; 
-  outline: none; 
-  border-radius: 50%; 
-  box-sizing: border-box; 
-  background: rgba(0,0,0,.15); 
+.slick-dots li button {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  text-indent: -9999px;
+  overflow: hidden;
+  outline: none;
+  border-radius: 50%;
+  box-sizing: border-box;
+  background: rgba(0,0,0,.15);
 }
-.slick-dots .slick-active button { 
+.slick-dots .slick-active button {
   background: rgba(0,0,0,.55);
 }
 
@@ -15892,7 +15892,7 @@ top:145px;
     font-size: 1.2em;
     font-weight: 400;
     margin-bottom: 6px;
-  }  
+  }
 }
 .asfeat-item {
   text-align: center;
@@ -16150,8 +16150,8 @@ top:145px;
 @media only screen and (min-width: 769px) {
   .blog .regular-nav ul,
   .article .regular-nav ul,
-  .search-blog .regular-nav ul { 
-    display: none !important; 
+  .search-blog .regular-nav ul {
+    display: none !important;
   }
 
   .home-testimonials {
@@ -16900,7 +16900,7 @@ p.iWishLoginMsg { margin:  10px 0; }
 }
 .milkicon-quote:before {
   content: "\e90d";
-} 
+}
 .milkicon-freedelivery:before {
   content: "\e90b";
 }
@@ -16936,4 +16936,100 @@ p.iWishLoginMsg { margin:  10px 0; }
 }
 .milkicon-save:before {
   content: "\e906";
+}
+
+.product-details {
+  margin-top: 80px;
+  .tab-container {
+    max-width: 800px;
+    margin: 0 auto;
+    .panel-container {
+      background: #fff;
+      padding: 10px;
+    }
+    .etabs {
+      border-bottom: 1px solid #E5E5E5;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 0 0 10px;
+      margin-bottom: 50px;
+      .tab {
+        display: inline-block;
+        zoom:1;
+        *display:inline;
+        background: #fff;
+        margin-bottom: 0;
+        a {
+          display: block;
+          position: relative;
+          margin: 0 25px;
+          outline: none;
+          color: rgba(0,0,0,0.7);
+          text-decoration: none;
+          line-height: 1.2em;
+          font-size: 1.2em;
+          &.active {
+            font-weight: bold;
+            color: #000;
+            &:after {
+              content: "";
+              position: absolute;
+              border-bottom: 3px solid #000;
+              width: 100%;
+              left: 0;
+              bottom: -12px;
+            }
+          }
+          &:hover {
+            font-weight: bold;
+            color: #000;
+            &:after {
+              content: "";
+              position: absolute;
+              border-bottom: 3px solid #000;
+              width: 100%;
+              left: 0;
+              bottom: -12px;
+            }
+          }
+        }
+        &.active {
+          background: #fff;
+          position: relative;
+        }
+        &:first-child {
+          a {
+            margin-left: 0;
+          }
+        }
+      }
+    }
+    .accordion-container {
+      text-align: left;
+      .faq-c {
+        padding: 1em 0 0;
+        &:first-child {
+          padding-top: 0;
+        }
+      }
+      .faq-t {
+        color: rgba(0,0,0,0.85);
+        font-size: 0.8em;
+        padding-right: 1.3em;
+        -webkit-transition: all 200ms;
+        -moz-transition: all 200ms;
+        transition: all 200ms;
+      }
+      .faq-q {
+        cursor: pointer;
+        font-size: 1.5em;
+      }
+      .faq-a {
+        clear: both;
+        color: #000;
+        padding-left: 2.3em;
+        display: none;
+      }
+    }
+  }
 }

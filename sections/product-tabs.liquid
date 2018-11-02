@@ -1,0 +1,66 @@
+<div id="tab-container" class="tab-container">
+  <ul class="etabs">
+    <li class="tab"><a href="#tabs-review">{{ 'products.tabs.review' | t }}</a></li>
+    <li class="tab"><a href="#tabs-delivery">{{ 'products.tabs.delivery' | t }}</a></li>
+    <li class="tab"><a href="#tabs-quality">{{ 'products.tabs.quality' | t }}</a></li>
+    <li class="tab"><a href="#tabs-faq">{{ 'products.tabs.faq' | t }}</a></li>
+  </ul>
+  <div id="tabs-review">
+    <div id="shopify-product-reviews" data-id="{{product.id}}">{{ product.metafields.spr.reviews }}</div>
+  </div>
+  <div id="tabs-delivery">
+    {{ section.settings.delivery }}
+  </div>
+  <div id="tabs-quality">
+    {{ section.settings.quality_control }}
+  </div>
+  <div id="tabs-faq">
+    <div class="accordion-container">
+      {% for block in section.blocks %}
+      <div class="faq-c">
+        <div class="faq-q"><span class="faq-t">&or;</span>{{ block.settings.question }}</div>
+        <div class="faq-a">
+          {{ block.settings.answer }}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% include 'share-buttons' %}
+{% schema %}
+{
+  "name": "Product Tabs",
+  "class": "product-tabs-section",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "delivery",
+      "label": "Delivery"
+    },
+    {
+      "type": "richtext",
+      "id": "quality_control",
+      "label": "Quality Control"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "FAQ",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
