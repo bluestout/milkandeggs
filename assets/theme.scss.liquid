@@ -2895,7 +2895,8 @@ body {
   .flex {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
+
     h6 {
       margin: 1em 0;
     }
@@ -2914,6 +2915,34 @@ body {
       }
     }
   }
+
+  .list-usp--small {
+    margin-top: 12px;
+
+    > li {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      i {
+        font-size: 2em;
+        margin-right: 10px;
+      }
+
+      p {
+        font-size: .8em;
+        color: $accent-color;
+      }
+    }
+  }
+}
+
+.page-header-right {
+  text-align: right;
+}
+.btn-orderedbefore {
+  margin: 12px 0;
+  font-size: .85em;
 }
 
 table.cart-items {
