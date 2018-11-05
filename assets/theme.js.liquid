@@ -2349,6 +2349,25 @@
     });
 
 
+    $('.home-module-inline-items-blog').slick({
+      dots: true,
+      infinite: false,
+      arrows: false,
+      speed: 600,
+      slidesToShow: 3,
+      slidesToScroll: 3,
+      responsive: [
+        {
+          breakpoint: 668,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1
+          }
+        }
+      ]
+    });
+
+
     $('.asfeat-slider').slick({
       dots: true,
       infinite: false,
@@ -2369,7 +2388,7 @@
 
 
     if($(window).width() < 668) {
-      $('.home-featured-products-list').slick({
+     {% comment %}  $('.home-featured-products-list').slick({
         dots: true,
         infinite: false,
         arrows: false,
@@ -2377,7 +2396,7 @@
         slidesToShow: 2,
         slidesToScroll: 2,
         adaptiveHeight: true
-      });
+      }); {% endcomment %}
 
       $('.landing-page .collections-list').slick({
         dots: true,
@@ -2390,6 +2409,7 @@
       });
     }
 
+    {% comment %} 
     $('.review-slider').slick({
       slidesToShow: 3,
       slidesToScroll: 1,
@@ -2397,7 +2417,7 @@
       infinite: true,
       prevArrow: '<button type="button" class="slideshow-navigation slick-prev"><span>&#57361;</span></button>',
       nextArrow: '<button type="button" class="slideshow-navigation slick-next"><span>&#57362;</span></button>'
-    });
+    }); {% endcomment %}
 
     //BLOG INFINITE SCROLL
     if($('#scroll').length > 0 && $('.pagination .pagination-next a').length > 0) {
@@ -2573,6 +2593,28 @@
       trigger.removeClass('active').html('&or;');
     }
   });
+
+
+  //-- Mobile menu control
+  $('.mobile-navigation-toggle').on('click', function(){
+    $('body').toggleClass('menuvisible');
+  });
+
+  $('.btn-closemenu').on('click', function(){
+    $('body').removeClass('menuvisible');
+  });
+
+
+  //-- Footer mobile menu control
+  $('.btn-footermenumobile').on('click', function(e){
+    e.preventDefault();
+    
+    var subMenu = $(this).next('.collapse');
+    subMenu.toggle();
+  });
+
+  
+
 
    $(document).on('click','.sh-cart-add',function(){
       var product_id = $(this).attr('data-id');

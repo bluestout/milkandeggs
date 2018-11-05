@@ -147,6 +147,40 @@
         </div>
 
         <nav class="navigation">
+            <a href="#" class="btn-closemenu">
+                <i class="milkicon-x"></i>
+            </a>
+            <div class="navigation_mobile_header">
+                {% if settings.use-logo %}
+                    <a class="logo {% if settings.use-retina-logo %}has-retina{% endif %}" href="/">
+                        <img class="logo-regular" alt="{{ shop.name | escape }}" src="{{ 'logo.png' | asset_url }}">
+                        {% if settings.use-retina-logo %}
+                            <img class="logo-retina" alt="{{ shop.name | escape }}" src="{{ 'logo-retina.png' | asset_url }}">
+                        {% endif %}
+                    </a>
+                {% else %}
+                    {% if template contains 'index' %}
+                        <h1 class="site-title">{{ shop.name }}</h1>
+                    {% else %}
+                        <div class="site-title"><a href="/">{{ shop.name }}</a></div>
+                    {% endif %}
+                {% endif %}
+
+                <ul class="list-unstyled list-toplinks">
+                    <li class="cart_mobile_link">
+                        <a class="cart-count {% if cart.item_count < 100 %}contain-count{% endif %}" href="/cart">
+                        <i class="milkicon-cart"></i>
+                        <span class="bag-text">{{ cart.total_price | money}}</span>
+                        <i class="milkicon-arrow"></i>
+                    </a>
+                    </li>
+                    <li class="iwish_mobile_link">
+                        <i class="milkicon-heart"></i>
+                        {% include 'iwish_v2' with 'iwishlink' %}
+                    </li>
+                </ul>
+
+            </div>
             <span class="emailClass" style="display:none;">{{ customer.email }}</span>
             <ul class="navigation-first-tier">
                 {% assign main_menu = 'main-menu' %}
@@ -197,7 +231,7 @@
                     {% endif %}
                 {% endfor %}
 
-              <li class="iwish_mobile_link">{% include 'iwish_v2' with 'iwishlink' %}</li>
+              
 
                 {% if shop.customer_accounts_enabled %}
                     {% unless blog %}
