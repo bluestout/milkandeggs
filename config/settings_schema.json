@@ -3633,6 +3633,11 @@
         "label": "Enable Special Instructions"
       },
       {
+        "type": "checkbox",
+        "id": "show_cart_map",
+        "label": "Enable Map"
+      },
+      {
         "type": "header",
         "content": "Shipping Calculator"
       },

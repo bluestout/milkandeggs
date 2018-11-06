@@ -8,7 +8,7 @@
         font-size: smaller;
         margin-left: 120px;
     }
-    
+
     #shappify-qty-cart-msg {
         font-size: initial;
     }
@@ -55,8 +55,8 @@
                             <div class="bold_properties_div" data-test="{{item.properties}}">
                                 <!-- bold-ro-liquid -->
                                 {% if item.properties.frequency_num == blank %}
-                                    <a data-value="-1" data-id="{{item.id}}" class="modify-sub" id="modify-sub-{{item.id}}" href="{{ item.product.url }}">(Click to Subscribe)</a> 
-                                {% endif %} 
+                                    <a data-value="-1" data-id="{{item.id}}" class="modify-sub" id="modify-sub-{{item.id}}" href="{{ item.product.url }}">(Click to Subscribe)</a>
+                                {% endif %}
                                 {% for p in item.properties %} {% if p.first == "frequency_num" %}
                                 <script>
                                     mixed_cart = true;
@@ -101,15 +101,15 @@
                                 </span>
                                 {% endif %} {% endfor %}
                             </div>
-                            {% endif %} {% endcomment %} 
+                            {% endif %} {% endcomment %}
                         </td>
                         <!-- FIX RO ITEM PRICES -->
-                        {% if item.properties._ro_unformatted_price  != blank %} 
-                            {% assign ro_price = item.properties._ro_unformatted_price  %} 
-                            {% assign ro_item_price = ro_price %} {% assign ro_line_item_price = ro_item_price | times: item.quantity %} 
-                        {% else %} 
-                            {% assign ro_item_price = item.price %} 
-                            {% assign ro_line_item_price = item.line_price %} 
+                        {% if item.properties._ro_unformatted_price  != blank %}
+                            {% assign ro_price = item.properties._ro_unformatted_price  %}
+                            {% assign ro_item_price = ro_price %} {% assign ro_line_item_price = ro_item_price | times: item.quantity %}
+                        {% else %}
+                            {% assign ro_item_price = item.price %}
+                            {% assign ro_line_item_price = item.line_price %}
                         {% endif %}
                         <!-- END RO ITEM PRICES -->
 
@@ -132,7 +132,7 @@
                             <span class="money">{{ item.quantity | times: ro_item_price | money }}</span>
 
                             {% if settings.disable-ajax or settings.enable-currency-switcher %}
-                                <a class="cart-item-remove bold-ro-remove" href="/cart/change?line={{ forloop.index }}&amp;quantity=0">&#57360;</a> 
+                                <a class="cart-item-remove bold-ro-remove" href="/cart/change?line={{ forloop.index }}&amp;quantity=0">&#57360;</a>
                             {% endif %}
                         </td>
                     </tr>
@@ -168,6 +168,7 @@
                             <div class="cart-free">
                                 Only $12,75 away from free delivery!
                             </div>
+                            <div id="fsb_placeholder"></div>
                             <p class="cart-message"><em>{{ 'cart.tax_and_shipping' | t }}</em></p>
                         </div>
 
@@ -180,15 +181,15 @@
                                 #xld_main {
                                     margin-bottom: 10px;
                                 }
-                                
+
                                 #xld_main #xld_html {
                                     margin-bottom: 10px
                                 }
-                                
+
                                 #xld_form h3.label {
                                     margin-bottom: 5px;
                                 }
-                                
+
                                 #xld_time {
                                     border: 1px solid #e5e5e5;
                                     border-radius: 5px;
@@ -203,7 +204,7 @@
                                 }
                             </style>
                             <div id="xld_main">
-                                <div id="xld_html"></div>
+                                <div id="xld_html" data-enable-map="{{ settings.show_cart_map }}"></div>
                                 <div id="xld_form">
                                     <div class="form-group">
                                         <label class="label">Select Delivery Date:</label>
@@ -211,7 +212,7 @@
                                         <p class="del_date_error_text">*Select Delivery Date before checkout.</p>
                                         <p class="del_date_full_error_text" style="font-size: 13px;color: #d60000;display:none;">*Please select another date.</p>
                                     </div>
-                                    
+
                                     <div class="form-group">
                                         <label class="label">Drop Off time</label>
                                         <select required class="required" disabled="disabled" name="attributes[local_delivery_request]" id="xld_time">
@@ -225,16 +226,16 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
-                        {% endif %} 
+                        {% endif %}
 
                         <!-- Recurring order -->
                         <div class="custom-checkbox">
                             <input type="checkbox" id="cart_recurring_order">
                             <label for="cart_recurring_order" class="block">Make this a recurring order?</label>
                         </div>
-                        
+
                         <div class="form-group recurring_order_box">
                             <label>Every</label>
                             <div class="form-dual">
@@ -252,21 +253,21 @@
                     </div>
                     <!--  end cart checkout recurring order   -->
 
-                    
-                    
+
+
                     {% if settings.cart-shipping-calculator and cart.requires_shipping %} {% include 'shipping-calculator' %} {% endif %}
 
                     <!-- Start Cart Button Move -->
                     {% include 'bold-ro-cart' %} {% if settings.disable-ajax or settings.enable-currency-switcher %}
                     <!-- <input type="submit" name="update" value="{{ 'cart.update' | t }}" class="secondary"> -->
                         <input type="submit" name="checkout" value="{{ 'cart.submit' | t }}" class="cart-checkout-button"> {% else %}
-                    
-                        <a class="cart-checkout-button button" href="/checkout">{{ 'cart.submit' | t }}</a> 
-                    {% endif %} 
+
+                        <a class="cart-checkout-button button" href="/checkout">{{ 'cart.submit' | t }}</a>
+                    {% endif %}
                     {% if additional_checkout_buttons and show_paypal %}
                         <div class="cart-additional-buttons">{{ content_for_additional_checkout_buttons }}</div>
                     {% endif %}
-                    
+
                     <p class="cartMessage">*Select Delivery Date before checkout.</p>
                     <p class="cartMessage">*Select Delivery Time before checkout.</p>
                     <!-- End Cart button move -->
@@ -324,7 +325,7 @@
 
 
 <script>
-  	
+
     $(document).on("click", "[name='recurring_radio_btn']", function() {
         if ($('.recurring_div').hasClass('bold_active')) {
             $('.cart-additional-buttons').hide();
@@ -343,20 +344,20 @@
 
         $("input[name=checkout]").val('Checkout');
 
-        //     $("input[name=checkout]").attr('disabled','disabled').val('Checkout'); 
+        //     $("input[name=checkout]").attr('disabled','disabled').val('Checkout');
         //     $("input[name=checkout]").attr('disabled','disabled').css("opacity",0.3).css("pointer-events","none");
         //     (function(){
         //       var db = $("#datepicker").val();
         //       if(db != ""){
         //         $("input[name=checkout]").removeAttr("disabled").val('Checkout').css("opacity",1).css("pointer-events","auto");
-        //         $(".cartMessage").hide(); 
+        //         $(".cartMessage").hide();
         //       }else{
-        //         // $("input[name=checkout]").attr('disabled','disabled').val('Select Delivery Date before checkout'); 
+        //         // $("input[name=checkout]").attr('disabled','disabled').val('Select Delivery Date before checkout');
         //         $("input[name=checkout]").attr('disabled','disabled');
 
         //       }
         //       setTimeout(arguments.callee, 1000);
-        //     })(); 
+        //     })();
 
 
         $(document).on('click', '.cart-checkout-button', function(event) {
@@ -395,7 +396,7 @@
 
                 console.log('Select Delivery Date before checkout');
             }
-          
+
         });
 
         $(document).on('click', '#cart_recurring_order', function() {
@@ -537,6 +538,3 @@
 <!-- ATax END -->
 
 <!-- Code for Action: "Shopping Cart" Tracking -->
-
-
-

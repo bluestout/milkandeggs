@@ -13,9 +13,9 @@ $(document).ready(function () {
     $.post(lc_base_url + "/js/index/getBlackout.json", {}, function (e) {
         blackOutDays = e.dates;
     });
-    
-    
-    
+
+
+
     if (xld.length > 0) {
 
         var btnCheckout = $("input[name='checkout']");
@@ -24,12 +24,15 @@ $(document).ready(function () {
         btnCheckout.attr('data-temp', 'Select delivery date before checkout');
         btnCheckout.val('Select delivery date before checkout');
 
-        xld.find('#xld_html').html('<h3 data-test="trure" class="label">Please select delivery date below:</h3><a href="https://cdn.shopify.com/s/files/1/1078/0310/files/map201712.jpg?1309964536974562640" target="0"><img src="https://cdn.shopify.com/s/files/1/1078/0310/files/map201712-small.jpg?1309964536974562640" width="250"><br>Los Angeles / Orange County Delivery Area Map</a>');
+        var xld_html = '<h3 data-test="trure" class="label">Please select delivery date below:</h3>';
+        console.log(xld.find('#xld_html').data('enable-map'));
+        if (xld.find('#xld_html').data('enable-map')) {
+          xld_html += '<a href="https://cdn.shopify.com/s/files/1/1078/0310/files/map201712.jpg?1309964536974562640" target="0"><img src="https://cdn.shopify.com/s/files/1/1078/0310/files/map201712-small.jpg?1309964536974562640" width="250"><br>Los Angeles / Orange County Delivery Area Map</a>';
+        }
+        xld.find('#xld_html').html(xld_html);
 
-      	
-      
         $.post(lc_base_url + "/js/index/getOff.json", {}, function (e) {
-            console.log(e);          	
+            console.log(e);
             maxdate = "+" + e.maxdate + "D";
             mindate = "+" + e.mindate + "D";
             console.log(maxdate);
@@ -48,8 +51,8 @@ $(document).ready(function () {
                 },
                 dateFormat: 'yy/mm/dd',
                 minDate: mindate,
-                maxDate: maxdate,              	
-                beforeShowDay: getUnavailableDays,              	
+                maxDate: maxdate,
+                beforeShowDay: getUnavailableDays,
                 onSelect: function (text, int) {
                     loadTimes(text);
                 }
@@ -59,10 +62,10 @@ $(document).ready(function () {
           //var validDate = $('#datepicker').datepicker('getDate');
           //newvalidDate = validDate.getFullYear()+ "/" + (validDate.getMonth() + 1) + "/" + validDate.getDate();
           //console.log("validate Date: "+ newvalidDate);
-          //loadTimes(newvalidDate);          
+          //loadTimes(newvalidDate);
         });
-        /// init DatePicker     
-   		
+        /// init DatePicker
+
 
     }
 
@@ -91,17 +94,17 @@ function loadTimes(text) {
             }, function (e) {
                 if (e.status == 'success') {
                     xld_time.html(e.html);
-                    xld_time.removeAttr('disabled');                    
+                    xld_time.removeAttr('disabled');
                     btnCheckout.val(btnCheckout.attr('data-temp')).removeAttr('disabled');
                     btnCheckout.attr('data-temp', 'Checkout');
-                    btnCheckout.val('Checkout');                    
-                    console.log(e);                    
+                    btnCheckout.val('Checkout');
+                    console.log(e);
                 } else if (e.status == 'noslot') {
                     console.log(e);
                     xld_time.html(e.html);
                     btnCheckout.attr('disabled', 'disabled');
                     btnCheckout.attr('data-temp', 'Select another delivery date');
-                    btnCheckout.val('Select another delivery date');  
+                    btnCheckout.val('Select another delivery date');
                 }
 
                 if (typeof attrCallback === 'function') {
