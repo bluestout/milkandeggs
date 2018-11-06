@@ -3057,6 +3057,112 @@
     ]
   },
   {
+    "name": "Home: Featured Products 3",
+    "settings": [
+      {
+        "type": "text",
+        "id": "home-featured-products-title3",
+        "label": "Title"
+      },
+      {
+        "type": "select",
+        "id": "home-featured-products-max3",
+        "label": "Products Maximum",
+        "options": [
+          {
+            "value": "2",
+            "label": "2"
+          },
+          {
+            "value": "3",
+            "label": "3"
+          },
+          {
+            "value": "4",
+            "label": "4"
+          },
+          {
+            "value": "6",
+            "label": "6"
+          },
+          {
+            "value": "8",
+            "label": "8"
+          },
+          {
+            "value": "9",
+            "label": "9"
+          },
+          {
+            "value": "10",
+            "label": "10"
+          },
+          {
+            "value": "12",
+            "label": "12"
+          },
+          {
+            "value": "14",
+            "label": "14"
+          },
+          {
+            "value": "15",
+            "label": "15"
+          },
+          {
+            "value": "16",
+            "label": "16"
+          },
+          {
+            "value": "18",
+            "label": "18"
+          },
+          {
+            "value": "20",
+            "label": "20"
+          },
+          {
+            "value": "30",
+            "label": "30"
+          },
+          {
+            "value": "40",
+            "label": "40"
+          },
+          {
+            "value": "50",
+            "label": "50"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "home-featured-products-per-row3",
+        "label": "Products Per Row",
+        "options": [
+          {
+            "value": "2",
+            "label": "2"
+          },
+          {
+            "value": "3",
+            "label": "3"
+          },
+          {
+            "value": "4",
+            "label": "4"
+          }
+        ]
+      },
+      {
+        "type": "collection",
+        "id": "home-featured-products3",
+        "label": "Collection",
+        "info": "Products will be pulled from this collection"
+      }
+    ]
+  },
+  {
     "name": "Home: Imported Content",
     "settings": [
       {

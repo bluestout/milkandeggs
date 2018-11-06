@@ -27,16 +27,16 @@
 
     {% assign name = settings[list] %}
 
-    <a href="#" class="btn-footermenumobile">Menu</a>
+    <a href="#" class="btn-footermenumobile">{{ linklists[name].title }}</a>
 
     <div class="collapse">
     {% if linklists[name].links.size > 0 %}
       <div class="footer-link-list mobile">
-        
+
           {% for link in linklists[name].links %}
             <span class="span-{{forloop.index}}" ><a href="{{link.url}}">{{link.title}}</a></span>
           {% endfor %}
-        
+
       </div>
     {% endif %}
     </div>
