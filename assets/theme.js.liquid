@@ -2602,6 +2602,7 @@
 
   $('.btn-closemenu').on('click', function(){
     $('body').removeClass('menuvisible');
+    $('.mobile-navigation-toggle').removeClass('active');
   });
 
 
@@ -2613,6 +2614,18 @@
     subMenu.toggle();
   });
 
+  
+  //-- Mobile menu control
+  $('.mobile-navigation-toggle').on('click', function(){
+    $('body').toggleClass('menuvisible');
+  });
+
+  //-- Sticky mobile bar
+  if ( $(window).width() < 676 && $('.main-header-wrapper').length != 0 )
+  {
+    $('.main-header-wrapper').stick_in_parent();
+    alert('tes');
+  }
   
 
 
