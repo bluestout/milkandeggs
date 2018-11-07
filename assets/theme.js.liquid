@@ -2330,6 +2330,8 @@
 }).call(this);
 
  $(document).ready(function(){
+   
+
     $('.responsive').slick({
       dots: true,
       infinite: false,
@@ -2347,7 +2349,6 @@
         }
       ]
     });
-
 
     $('.home-module-inline-items-blog').slick({
       dots: true,
@@ -2385,6 +2386,16 @@
         }
       ]
     });
+
+
+    //-- Mobile sticky header
+    if ( $('.main-header-wrapper').length != 0 && $(window).width() < 768 )
+    {
+      $('.main-header-wrapper').stick_in_parent();
+      console.log('Yes this works inside');
+    }
+
+    console.log('Yes this works');
 
 
     if($(window).width() < 668) {
