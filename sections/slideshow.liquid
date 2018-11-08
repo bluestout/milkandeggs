@@ -1,0 +1,202 @@
+{% if section.blocks.size > 0 %}
+  <div class="home-slideshow {{ section.settings.slideshow-layout }} {{ section.settings.slideshow-transition }}">
+
+    <div class="slideshow-slides">
+
+      {% for block in section.blocks %}
+          <div id="{{block.id}}" class="slideshow-slide {{block.id}} text-shadows-{{ block.settings.text-shadow }} content-aligned-{{ block.settings.text_alignment }}">
+
+            {% if block.settings.url != blank %}
+              <a class="slide-link" href="{{ block.settings.url }}"></a>
+            {% endif %}
+
+            <img class="slide-image" alt="{{ block.settings.title }}" src="{{ block.settings.image | img_url: '2048x' }}">
+
+            {% if block.settings.text-above != blank or block.settings.title != blank or settings.text-below != blank %}
+              <div class="slide-content">
+                {% if block.settings.text-above != blank %}
+                  <p>{{ block.settings.text-above }}</p>
+                {% endif %}
+
+                {% if block.settings.title != blank %}
+                  <h3 class="slide-title">{{ block.settings.title }}</h3>
+                {% endif %}
+
+                {% if block.settings.text-below != blank %}
+                  <p>{{ block.settings.text-below }}</p>
+                {% endif %}
+              </div>
+            {% endif %}
+          </div>
+      {% endfor %}
+    </div>
+
+    {% if section.settings.slideshow-navigation and section.blocks.size > 1 %}
+      <div class="slideshow-navigation previous-slide"><span>&#57361;</span></div>
+      <div class="slideshow-navigation next-slide"><span>&#57362;</span></div>
+    {% endif %}
+
+    {% if section.settings.slideshow-pagination and section.blocks.size > 1 %}
+      <div class="slideshow-pagination">
+        {% for block in section.blocks %}
+          <span class="{% if forloop.first == true %}active{% endif %}" data-slide-id="{{ block.id }}"><span></span></span>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+{% else %}
+  <div class="home-slideshow {{ section.settings.slideshow-layout }} {{ section.settings.slideshow-transition }} showing-slide-1">
+
+    <div class="slideshow-slides">
+
+      <div id="slide-1" class="slideshow-slide slide-1 text-shadows-false content-aligned-center">
+
+        <a class="slide-link" href="/admin/themes/{{ theme.id }}/settings"></a>
+
+        <img width="1400" height="600" class="slide-image" alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPYvufQfwAHmAM12jbOLQAAAABJRU5ErkJggg==">
+
+        <div class="slide-content">
+          <p>{{ 'onboarding.slideshow.text_above' | t }}</p>
+          <h3 class="slide-title">{{ 'onboarding.slideshow.title' | t }}</h3>
+          <p>{{ 'onboarding.slideshow.text_below' | t }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Slideshow",
+  "class": "slideshow-section",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "select",
+      "id": "slideshow-layout",
+      "label": "Width",
+      "options": [
+        {
+          "value": "content-width",
+          "label": "Content Width"
+        },
+        {
+          "value": "full-width",
+          "label": "Full-Width"
+        }
+      ],
+      "info": "If the sidebar is enabled this will revert to Content Width"
+    },
+    {
+      "type": "select",
+      "id": "slideshow-transition",
+      "label": "Slide transition",
+      "options": [
+        {
+          "value": "transition-fade",
+          "label": "Fade"
+        },
+        {
+          "value": "transition-slide",
+          "label": "Slide"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "slideshow-navigation",
+      "label": "Enable Slide Navigation",
+      "info": "Allows the customer to navigate to the next or previous slide."
+    },
+    {
+      "type": "checkbox",
+      "id": "slideshow-pagination",
+      "label": "Enable Slide Pagination",
+      "info": "Displays clickable dots representing the number of slides."
+    },
+    {
+      "type": "checkbox",
+      "id": "slideshow-autoplay",
+      "label": "Enable Autoplay"
+    },
+    {
+      "type": "text",
+      "id": "slideshow-autoplay-delay",
+      "label": "Autoplay Delay",
+      "info": "Enter this value in seconds (e.g. 4)"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "We recommend using images no larger than 1440px wide and a ratio of 9:4 (that would be 1440x640)."
+        },
+        {
+          "type": "text",
+          "id": "text-above",
+          "label": "Text Above Title"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "text",
+          "id": "text-below",
+          "label": "Text Below Title"
+        },
+        {
+          "type": "select",
+          "id": "text_alignment",
+          "label": "Text alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "checkbox",
+          "id": "text-shadow",
+          "label": "Enable Text Shadow"
+        },
+        {
+          "type": "color",
+          "id": "text-color",
+          "label": "Text Color"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Slide link"
+        }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Slideshow",
+    "category": "Image",
+    "settings": {
+    },
+    "blocks": [
+    ]
+  }]
+}
+{% endschema %}

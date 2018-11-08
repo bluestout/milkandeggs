@@ -445,7 +445,7 @@
                 qty = parseInt(this_item.find('.cart-item-quantity-display').val()) + 1,
                 variant_id = this_item.attr('data-variant'),
                 this_item_total = this_item.find('.cart-item-total .money'),
-                subtotal = $('.cart-checkout .cart-price .money'),
+                subtotal = $('.cart-total .cart-price .money'),
                 line_no = this_item.attr('data-line');
 
             $.ajax({
@@ -461,7 +461,10 @@
                         this_item.remove();
                     } else {
                         $.each(cart.items, function(index, row) {
-                            if (variant_id == row.variant_id) this_item_total.html('$ ' + parseFloat(row.line_price / 100).toFixed(2));
+                            if (variant_id == row.variant_id) {
+                              this_item_total.html('$ ' + parseFloat(row.line_price / 100).toFixed(2));
+                              this_item.find('.cart-item-quantity-display').val(qty);
+                            }
                         });
                     }
                     subtotal.html('$' + parseFloat(cart.total_price / 100).toFixed(2));
@@ -477,7 +480,7 @@
                 qty = parseInt(this_item.find('.cart-item-quantity-display').val()) - 1,
                 variant_id = this_item.attr('data-variant'),
                 this_item_total = this_item.find('.cart-item-total .money'),
-                subtotal = $('.cart-checkout .cart-price .money'),
+                subtotal = $('.cart-total .cart-price .money'),
                 line_no = this_item.attr('data-line');
 
             $.ajax({
@@ -494,6 +497,7 @@
                     } else {
                         $.each(cart.items, function(index, row) {
                             if (variant_id == row.variant_id) this_item_total.html('$ ' + parseFloat(row.line_price / 100).toFixed(2));
+                            this_item.find('.cart-item-quantity-display').val(qty);
                         });
                     }
                     subtotal.html('$' + parseFloat(cart.total_price / 100).toFixed(2));

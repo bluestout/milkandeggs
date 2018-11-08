@@ -52,7 +52,7 @@
 
                 $("#cb44").change(function(){
                 if($(this).is(':checked')){
-                $("input[name='type']").val('product,article'); 
+                $("input[name='type']").val('product,article');
                 }else{
                 $("input[name='type']").val('product');
                 }
@@ -78,7 +78,7 @@
                 {% include 'iwish_v2' with 'iwishlink' %}
 
                 <a class="cart-count {% if cart.item_count < 100 %}contain-count{% endif %}" href="/cart">
-                    {% comment %} <span class="bag-count">{{ cart.item_count }}</span> {% endcomment %}
+                    <span class="bag-count">{{ cart.item_count }}</span>
                     <i class="milkicon-cart"></i>
                     <span class="bag-text">{{ cart.total_price | money}}</span>
                     <!-- <span class="bag-text">{{ 'layout.header.cart_item_count' | t: count: cart.item_count }}</span> -->
@@ -141,7 +141,7 @@
                     </a>
                 </div>
 
-                
+
             </div>
 
         </div>
@@ -230,7 +230,7 @@
                     {% endif %}
                 {% endfor %}
 
-              
+
 
                 {% if shop.customer_accounts_enabled %}
                     {% unless blog %}
@@ -330,7 +330,7 @@ $('#customer_logout_link').click(function(){
 //get cookies from cookies session
 //     var userId = '{{customer.id}}';
 //     if(userId){
-//       // condition on true execution  
+//       // condition on true execution
 //     }else
 //     {
 //       var user_email = getCookie('userEmail');
@@ -344,7 +344,7 @@ $('#customer_logout_link').click(function(){
 console.log('Auto login is diabled.');
 /*-------------------auto login----------------------------*/
 
-/*--------------------submit login------------------------------*/    
+/*--------------------submit login------------------------------*/
 
 $('#customer_login').delay(1000).submit(function(){
     pass_word = $('#passtxt').val();
@@ -352,7 +352,7 @@ $('#customer_login').delay(1000).submit(function(){
 if(/*user_mail &&*/ pass_word ){
 //document.cookie="userEmail="+ user_mail+";path=/;"+ expires;
 document.cookie="combination="+ pass_word+";path=/;"+ expires;
-}        
+}
 
 //var user_email = getCookie('userEmail');
 // var user_pass = getCookie('combination');
@@ -381,7 +381,7 @@ var user_id = '{{customer.id}}';
 //   $('.result').html(user_email + " " + user_pass + " is cookie"+ " " + user_id);
 //       }
 
-/*--------------------blog submenu------------------------------*/    
+/*--------------------blog submenu------------------------------*/
 if($(window).width() > 769) {
     $('.blog .has-dropdown a, .search-blog .has-dropdown a, .article .has-dropdown a').on('click', function() {
         if($('.submenu').eq($(this).parent().index()).hasClass('active')) {
@@ -395,4 +395,3 @@ if($(window).width() > 769) {
 }
 
 </script>
-
