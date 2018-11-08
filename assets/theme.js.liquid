@@ -2430,6 +2430,25 @@
       nextArrow: '<button type="button" class="slideshow-navigation slick-next"><span>&#57362;</span></button>'
     }); {% endcomment %}
 
+
+    //-- Filtering drodpowns
+    $('.dropdown .btn-filter').on('click', function(e){
+      e.preventDefault();
+
+      var drop = $(this).parent('.dropdown');
+      drop.toggleClass('open');
+    });
+
+    $('body').on('click', function(e){
+
+      var target = $(e.target);
+      if ( !target.hasClass('btn-filter') && target.parents('.dropdown').length == 0 )
+      {
+        $('.dropdown').removeClass('open');
+      }
+    });
+
+
     //BLOG INFINITE SCROLL
     if($('#scroll').length > 0 && $('.pagination .pagination-next a').length > 0) {
         $('#scroll').jscroll({

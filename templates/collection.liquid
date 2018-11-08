@@ -18,6 +18,7 @@
 
   {% if settings.collection-sorting or settings.collection-filtering %}
 
+
     <!-- Mobile side filters -->
     <form class="side-filter">
       <div class="side-filter-head">
@@ -131,7 +132,9 @@
 
     <div class="collection-viewing-parameters">
       {% if settings.collection-sorting %}
+
         <div class="collection-sorting {% if collection.current_vendor %}vendor-collection{% endif %}">
+
           <div class="select-wrapper">
 
             {% assign sortHandles = "manual|price-ascending|price-descending|title-ascending|title-descending|created-ascending|created-descending|best-selling" | split: "|" %}
@@ -245,4 +248,5 @@
   {% include 'pagination' %}
 
 {% endpaginate %}
+
 
