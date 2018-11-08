@@ -2605,6 +2605,11 @@
     }
   });
 
+  $('.product-detail-view-more').on('click', function(){
+    $(this).parents('.brief').hide();
+    $(this).parents('.product-description').find('.detail').show();
+  });
+
 
   //-- Mobile menu control
   $('.mobile-navigation-toggle').on('click', function(){
