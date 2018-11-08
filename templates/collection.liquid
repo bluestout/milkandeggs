@@ -17,6 +17,118 @@
   {% endif %}
 
   {% if settings.collection-sorting or settings.collection-filtering %}
+
+    <!-- Mobile side filters -->
+    <form class="side-filter">
+      <div class="side-filter-head">
+        <h2>Filter products</h2>
+        <a href="#" class="btn-closefilters">
+          <i class="milkicon-x"></i>
+        </a>
+        <a href="#" class="btn-clearfilters">
+          Clear
+        </a>
+      </div>
+      <div class="side-filter-body">
+        <h5>Sort products by:</h5>
+
+        <ul class="list-radios">
+          <li>
+            <div class="check"></div>
+            Featured
+          </li>
+          <li>
+            <div class="check"></div>
+            $ Low to high
+          </li>
+          <li>
+            <div class="check"></div>
+            $ High to low
+          </li>
+          <li>
+            <div class="check"></div>
+            A-Z
+          </li>
+          <li>
+            <div class="check"></div>
+            Z-A
+          </li>
+          <li>
+            <div class="check"></div>
+            Best selling
+          </li>
+        </ul>
+
+        <h5>Filter by feature</h5>
+
+        <ul class="list-checks">
+          <li>
+            <div class="check"></div>
+            Organic
+          </li>
+          <li>
+            <div class="check"></div>
+            Kosher
+          </li>
+          <li class="checked">
+            <div class="check"></div>
+            Imported
+          </li>
+          <li>
+            <div class="check"></div>
+            Seasonal
+          </li>
+          <li>
+            <div class="check"></div>
+            Non-GMO
+          </li>
+          <li>
+            <div class="check"></div>
+            Hormone Free
+          </li>
+          <li>
+            <div class="check"></div>
+            Antibiotic Free
+          </li>
+          <li>
+            <div class="check"></div>
+            Gluten Free
+          </li>
+        </ul>
+
+
+        <h5>Filter by price</h5>
+
+        <ul class="list-radios">
+          <li class="checked">
+            <div class="check"></div>
+            $0 - $10
+          </li>
+          <li>
+            <div class="check"></div>
+            $10 - $20
+          </li>
+          <li>
+            <div class="check"></div>
+            $20 - $30
+          </li>
+          <li>
+            <div class="check"></div>
+            $30 - $50
+          </li>
+          <li>
+            <div class="check"></div>
+            > $50
+          </li>
+        </ul>
+
+      </div>
+      <div class="side-filter-foot">
+        <input class="button filter-products" type="submit" value="Apply filters">
+      </div>
+    </form>
+
+
     <div class="collection-viewing-parameters">
       {% if settings.collection-sorting %}
         <div class="collection-sorting {% if collection.current_vendor %}vendor-collection{% endif %}">

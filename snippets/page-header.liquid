@@ -1,3 +1,8 @@
+<a href="#" class="btn-showfilters">
+    Filter products
+    <i class="milkicon-filters"></i>
+</a>
+
 {% include 'breadcrumbs' %}
 
 {% if template contains 'product' %}
@@ -31,6 +36,7 @@
             <img alt="{{ collection.image.alt | escape }}" src="{{ collection | img_url: '1024x1024' }}">
 
             <div class="collection-details">
+
                 <h1>{{ collection.title }}</h1>
 
                 {% if collection.description != blank and settings.collection-description %}
@@ -52,6 +58,7 @@
             </div>
         </div>
     {% else %}
+
         <h1 class="page-title">{{ collection.title }}</h1>
 
         {% if collection.description != blank and settings.collection-description %}

@@ -2617,6 +2617,16 @@
   });
 
 
+  //-- Mobile filters control
+  $('.btn-showfilters').on('click', function(){
+    $('body').toggleClass('showfilters');
+  });
+
+  $('.btn-closefilters').on('click', function(){
+    $('body').removeClass('showfilters');
+  });
+
+
   //-- Footer mobile menu control
   $('.btn-footermenumobile').on('click', function(e){
     e.preventDefault();
