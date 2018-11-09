@@ -26,79 +26,74 @@
         <a href="#" class="btn-closefilters">
           <i class="milkicon-x"></i>
         </a>
-        <a href="#" class="btn-clearfilters">
+        <a href="#" class="btn-clearfilters collection-remove-filter">
           Clear
         </a>
       </div>
-      <div class="side-filter-body">
+      <div class="side-filter-body collection-sorting">
         <h5>Sort products by:</h5>
+        {% assign sortHandles = "manual|price-ascending|price-descending|title-ascending|title-descending|created-ascending|created-descending|best-selling" | split: "|" %}
+        {% capture sortTitles %}{{ 'collections.collection_sorting.manual' | t }}|{{ 'collections.collection_sorting.price-ascending' | t }}|{{ 'collections.collection_sorting.price-descending' | t }}|{{ 'collections.collection_sorting.title-ascending' | t }}|{{ 'collections.collection_sorting.title-descending' | t }}|{{ 'collections.collection_sorting.created-ascending' | t }}|{{ 'collections.collection_sorting.created-descending' | t }}|{{ 'collections.collection_sorting.best-selling' | t }}{% endcapture %}
+        {% assign sortTitles = sortTitles | split: "|" %}
+
+        {% for handle in sortHandles %}
+          {% if collection.sort_by == blank and collection.default_sort_by == handle %}
+            {% assign currentTitle = sortTitles[forloop.index0] %}
+          {% elsif collection.sort_by == handle %}
+            {% assign currentTitle = sortTitles[forloop.index0] %}
+          {% endif %}
+        {% endfor %}
 
         <ul class="list-radios">
-          <li>
-            <div class="check"></div>
-            Featured
-          </li>
-          <li>
-            <div class="check"></div>
-            $ Low to high
-          </li>
-          <li>
-            <div class="check"></div>
-            $ High to low
-          </li>
-          <li>
-            <div class="check"></div>
-            A-Z
-          </li>
-          <li>
-            <div class="check"></div>
-            Z-A
-          </li>
-          <li>
-            <div class="check"></div>
-            Best selling
-          </li>
+          {% for handle in sortHandles %}
+          {% if collection.sort_by == blank and collection.default_sort_by == handle %}
+            <li data-value="{{ handle }}" class="checked">
+              <div class="check"></div>
+              {{ sortTitles[forloop.index0] }}
+            </li>
+          {% elsif collection.sort_by == handle %}
+            <li data-value="{{ handle }}" class="checked">
+              <div class="check"></div>
+              {{ sortTitles[forloop.index0] }}
+            </li>
+          {% else %}
+            <li data-value="{{ handle }}">
+              <div class="check"></div>
+              {{ sortTitles[forloop.index0] }}
+            </li>
+          {% endif %}
+          {% endfor %}
         </ul>
 
         <h5>Filter by feature</h5>
 
+        <div class="collection-filtering" data-fallback-url="/collections/{{collection.handle}}">
         <ul class="list-checks">
-          <li>
-            <div class="check"></div>
-            Organic
-          </li>
-          <li>
-            <div class="check"></div>
-            Kosher
-          </li>
-          <li class="checked">
-            <div class="check"></div>
-            Imported
-          </li>
-          <li>
-            <div class="check"></div>
-            Seasonal
-          </li>
-          <li>
-            <div class="check"></div>
-            Non-GMO
-          </li>
-          <li>
-            <div class="check"></div>
-            Hormone Free
-          </li>
-          <li>
-            <div class="check"></div>
-            Antibiotic Free
-          </li>
-          <li>
-            <div class="check"></div>
-            Gluten Free
-          </li>
+          {% for tag in collection.all_tags %}
+            {% assign tag_handle = tag | handleize %}
+            {% unless tag contains 'with-' or settings.product-tag-exclusion contains tag_handle %}
+              {% if current_tags contains tag %}
+              <li class="checked">
+                <label for="checkbox-{{ tag }}">
+                  <div class="check"></div>
+                  {{ tag | link_to_remove_tag: tag }}
+                </label>
+              </li>
+              {% else %}
+              <li>
+                <label for="checkbox-{{ tag }}">
+                  <div class="check"></div>
+                  {{ tag | link_to_add_tag: tag }}
+                </label>
+              </li>
+              {% endif %}
+            {% endunless %}
+          {% endfor %}
         </ul>
+        </div>
 
 
-        <h5>Filter by price</h5>
+        <!--<h5>Filter by price</h5>
 
         <ul class="list-radios">
           <li class="checked">
@@ -121,7 +116,7 @@
             <div class="check"></div>
             > $50
           </li>
-        </ul>
+        </ul>-->
 
       </div>
       <div class="side-filter-foot">
@@ -134,9 +129,7 @@
       {% if settings.collection-sorting %}
 
         <div class="collection-sorting {% if collection.current_vendor %}vendor-collection{% endif %}">
-
-          <div class="select-wrapper">
-
+          <div class="dropdown">
             {% assign sortHandles = "manual|price-ascending|price-descending|title-ascending|title-descending|created-ascending|created-descending|best-selling" | split: "|" %}
             {% capture sortTitles %}{{ 'collections.collection_sorting.manual' | t }}|{{ 'collections.collection_sorting.price-ascending' | t }}|{{ 'collections.collection_sorting.price-descending' | t }}|{{ 'collections.collection_sorting.title-ascending' | t }}|{{ 'collections.collection_sorting.title-descending' | t }}|{{ 'collections.collection_sorting.created-ascending' | t }}|{{ 'collections.collection_sorting.created-descending' | t }}|{{ 'collections.collection_sorting.best-selling' | t }}{% endcapture %}
             {% assign sortTitles = sortTitles | split: "|" %}
@@ -149,18 +142,30 @@
               {% endif %}
             {% endfor %}
 
-            <label class="selected-text">{{ 'collections.collection_sorting.title' | t }} <strong>{{ currentTitle }}</strong></label>
-            <select>
+            <a href="#" class="btn-filter" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Sort products by:
+              <span class="selection">{{ currentTitle }}</span>
+            </a>
+            <ul class="dropdown-menu list-radios">
               {% for handle in sortHandles %}
-                {% if collection.sort_by == blank and collection.default_sort_by == handle %}
-                  <option value="{{handle}}" selected="selected">{{ sortTitles[forloop.index0] }}</option>
-                {% elsif collection.sort_by == handle %}
-                  <option value="{{handle}}" selected="selected">{{ sortTitles[forloop.index0] }}</option>
-                {% else %}
-                  <option value="{{handle}}">{{ sortTitles[forloop.index0] }}</option>
-                {% endif %}
+              {% if collection.sort_by == blank and collection.default_sort_by == handle %}
+                <li data-value="{{ handle }}" class="checked">
+                  <div class="check"></div>
+                  {{ sortTitles[forloop.index0] }}
+                </li>
+              {% elsif collection.sort_by == handle %}
+                <li data-value="{{ handle }}" class="checked">
+                  <div class="check"></div>
+                  {{ sortTitles[forloop.index0] }}
+                </li>
+              {% else %}
+                <li data-value="{{ handle }}">
+                  <div class="check"></div>
+                  {{ sortTitles[forloop.index0] }}
+                </li>
+              {% endif %}
               {% endfor %}
-            </select>
+            </ul>
           </div>
         </div>
       {% endif %}
@@ -206,23 +211,36 @@
               There were no links found in any of the link lists
             {% endcomment %}
 
-            <div class="collection-filter">
-              <div class="select-wrapper">
-                <label class="selected-text">{{ 'collections.collection.tags_label' | t }}: <strong>{{ 'collections.collection.any_tag' | t }}</strong></label>
-                <select>
-                  <option value="any">{{ 'collections.collection.any_tag' | t }}</option>
-                  {% for tag in collection.all_tags %}
-                    {% assign tag_handle = tag | handleize %}
-                    {% unless tag contains 'with-' or settings.product-tag-exclusion contains tag_handle %}
-                      {% if current_tags contains tag %}
-                        <option value="{{ tag_handle }}" selected>{{ tag | capitalize }}</option>
-                      {% else %}
-                        <option value="{{ tag_handle }}">{{ tag | capitalize }}</option>
-                      {% endif %}
-                    {% endunless %}
-                  {% endfor %}
-                </select>
-              </div>
+            <!-- Filtering dropdown -->
+            <div class="dropdown">
+              <a href="#" class="btn-filter" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Filter:
+                <span class="selection">{{ current_tags | join: ", " }}</span>
+              </a>
+              <ul class="dropdown-menu list-checks">
+                {% for tag in collection.all_tags %}
+                  {% assign tag_handle = tag | handleize %}
+                  {% unless tag contains 'with-' or settings.product-tag-exclusion contains tag_handle %}
+                    {% if current_tags contains tag %}
+                    <li class="checked">
+                      <input type="checkbox" class="filter-check" id="checkbox-{{ tag_handle }}" value="{{ tag }}" checked="true">
+                      <label for="checkbox-{{ tag_handle }}">
+                        <div class="check"></div>
+                        {{ tag | link_to_remove_tag: tag }}
+                      </label>
+                    </li>
+                    {% else %}
+                    <li>
+                      <input type="checkbox" class="filter-check" id="checkbox-{{ tag_handle }}" value="{{ tag }}">
+                      <label for="checkbox-{{ tag_handle }}">
+                        <div class="check"></div>
+                        {{ tag | link_to_add_tag: tag }}
+                      </label>
+                    </li>
+                    {% endif %}
+                  {% endunless %}
+                {% endfor %}
+              </ul>
             </div>
           {% endif %}
 
@@ -248,5 +266,3 @@
   {% include 'pagination' %}
 
 {% endpaginate %}
-
-

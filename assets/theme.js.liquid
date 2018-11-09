@@ -1089,6 +1089,7 @@
     CollectionView.prototype.events = {
       "change .collection-filter select": "updateFilter",
       "change .collection-sorting select": "sortProducts",
+      "click .collection-sorting .list-radios li": "sortProductsFlexible",
       "click .collection-remove-filter": "resetFilter",
       "click .collection-description-more": "createModal",
       "click .collection-sharing-toggle": "toggleSharing",
@@ -1148,6 +1149,27 @@
       var Sorting, currentSearch, i, index, len, part, search, searchParts;
       Sorting = {};
       Sorting.sort_by = this.$(".collection-sorting select").val();
+      if ($(e.target).closest(".collection-sorting").hasClass("vendor-collection")) {
+        currentSearch = location.search;
+        searchParts = currentSearch.split("&");
+        for (index = i = 0, len = searchParts.length; i < len; index = ++i) {
+          part = searchParts[index];
+          if (part.indexOf("sort_by") !== -1) {
+            searchParts.splice(index, 1);
+          }
+        }
+        search = searchParts.join("&");
+        return location.search = search + "&" + (jQuery.param(Sorting));
+      } else {
+        return location.search = jQuery.param(Sorting);
+      }
+    };
+
+    CollectionView.prototype.sortProductsFlexible = function(e) {
+      var Sorting, currentSearch, i, index, len, part, search, searchParts;
+      Sorting = {};
+      Sorting.sort_by = $(e.target).data('value');
+      console.log($(e.target).data('value'));
       if ($(e.target).closest(".collection-sorting").hasClass("vendor-collection")) {
         currentSearch = location.search;
         searchParts = currentSearch.split("&");
@@ -2622,6 +2644,10 @@
     } else {
       trigger.removeClass('active').html('&or;');
     }
+  });
+
+  $('.collection-filtering .list-checks div.check').on('click', function() {
+    window.location.href = $(this).next().attr('href');
   });
 
   $('.product-detail-view-more').on('click', function(){
