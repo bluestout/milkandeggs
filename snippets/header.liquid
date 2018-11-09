@@ -1,3 +1,9 @@
+{% if settings.fdb-enable %}
+  <div class="fdb-wrapper">
+    <p class="fdb-content"></p>
+    <a href="/checkout" class="button">{{ 'cart.submit' | t }} <i class="milkicon-arrow-r"></i></a>
+  </div>
+{% endif %}
 {% if settings.header-promo and settings.header-promo-text != blank %}
     <div class="header-promo-wrapper">
         <div class="header-promo">

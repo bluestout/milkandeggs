@@ -2084,6 +2084,20 @@
           $(".bag-count").text(cart.item_count);
           $(".bag-text").html(Shopify.formatMoney(cart.total_price, Shop.moneyFormat));
           ref = cart.items;
+
+          var delivery_text;
+          if (cart.total_price < parseInt({{ settings.fdb-amount}})) {
+            var remain_delivery_total = Shopify.formatMoney((parseInt({{ settings.fdb-amount}}) - cart.total_price), Shop.moneyFormat);
+            delivery_text = "{{ settings.fdb-text }}";
+            delivery_text = delivery_text.replace('{amount}', remain_delivery_total);
+          } else {
+            delivery_text = "{{ settings.fdb-free-text }}";
+          }
+          $('.fdb-content').html(delivery_text);
+          $('.fdb-wrapper').slideDown(500);
+          setTimeout(function(){
+            $('.fdb-wrapper').slideUp(500);
+          }, {{settings.fdb-delay}});
         };
       })(this));
     };

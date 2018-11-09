@@ -1300,6 +1300,52 @@
     "settings": [
       {
         "type": "header",
+        "content": "Free Deliver Bar"
+      },
+      {
+        "type": "checkbox",
+        "id": "fdb-enable",
+        "label": "Enable",
+        "default": true
+      },
+      {
+         "type":      "color",
+         "id":        "fdb-background",
+         "label":     "Background",
+         "default":   "#fad405"
+      },
+      {
+        "type": "text",
+        "id": "fdb-amount",
+        "label": "Goal amount",
+        "info": "Input amount in cent, i.e 3500 instead of 35.00",
+        "default": "3500"
+      },
+      {
+        "type": "range",
+        "id": "fdb-delay",
+        "min": 2000,
+        "max": 9000,
+        "step": 1000,
+        "label": "Display duration",
+        "info": "Duration time in ms",
+        "default": 5000
+      },
+      {
+        "type": "text",
+        "id": "fdb-text",
+        "label": "Initial Message",
+        "default": "Only {amount} away from free delivery",
+        "info": "`{amount}` is used for variable amount"
+      },
+      {
+        "type": "text",
+        "id": "fdb-free-text",
+        "label": "Goal Achieved Message",
+        "default": "Congratulations! You've got free delivery!"
+      },
+      {
+        "type": "header",
         "content": "Header Promo"
       },
       {
