@@ -15,8 +15,11 @@
           <a class="product-vendor vendor" href="{{ product.vendor | url_for_vendor }}">{{ product.vendor }}</a>
         {% endif %}
     </div> {% endcomment %}
-{% elsif template contains 'page.list-collections' %}
+{% elsif template contains 'list-collections' %}
     <h1 class="page-title">{{ linklists[page.handle].title }}</h1>
+
+    {% include 'usp' %}
+
 {% elsif template contains 'collections' %}
     <h1 class="page-title">
         {% if settings.collections-title-override != blank %}
@@ -29,11 +32,12 @@
     {% include 'usp' %}
 
 {% elsif template contains 'collection' %}
-    {% if collection.image and settings.collection-featured-imagea %}
-        <div class="collection-header">
+
+    {% if collection.image and settings.collection-featured-image %}
+        <div class="collection-header collection-header-withimg" style="background-image:url('{{ collection | img_url: '1024x1024' }}')">
             <div class="collection-mask"></div>
 
-            <img alt="{{ collection.image.alt | escape }}" src="{{ collection | img_url: '1024x1024' }}">
+            {% comment %} <img alt="{{ collection.image.alt | escape }}" src="{{ collection | img_url: '1024x1024' }}"> {% endcomment %}
 
             <div class="collection-details">
 

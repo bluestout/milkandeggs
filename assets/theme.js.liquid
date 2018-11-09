@@ -2424,12 +2424,24 @@
     });
 
 
-    //-- Mobile sticky header
     if ( $('.main-header-wrapper').length != 0 && $(window).width() < 768 )
     {
       $('.main-header-wrapper').stick_in_parent();
-      console.log('Yes this works inside');
-    }
+    };
+
+
+    //-- Mobile sticky header
+    $(window).smartresize(function(){
+      
+      if ( $('.main-header-wrapper').length != 0 && $(window).width() < 768 )
+      {
+        $('.main-header-wrapper').stick_in_parent();
+      }
+      else if ( $('.main-header-wrapper').length != 0 && $(window).width() > 767 ) {
+        $('.main-header-wrapper').trigger('sticky_kit:detach');
+      }
+
+    });
 
     console.log('Yes this works');
 
@@ -2671,22 +2683,26 @@
 
 
   //-- Mobile menu control
-  $('.mobile-navigation-toggle').on('click', function(){
+  $('.mobile-navigation-toggle').on('click', function(e){
+    e.preventDefault();
     $('body').toggleClass('menuvisible');
   });
 
-  $('.btn-closemenu').on('click', function(){
+  $('.btn-closemenu').on('click', function(e){
+    e.preventDefault();
     $('body').removeClass('menuvisible');
     $('.mobile-navigation-toggle').removeClass('active');
   });
 
 
   //-- Mobile filters control
-  $('.btn-showfilters').on('click', function(){
+  $('.btn-showfilters').on('click', function(e){
+    e.preventDefault();
     $('body').toggleClass('showfilters');
   });
 
-  $('.btn-closefilters').on('click', function(){
+  $('.btn-closefilters').on('click', function(e){
+    e.preventDefault();
     $('body').removeClass('showfilters');
   });
 
@@ -2868,6 +2884,36 @@ function updatePrice(){
    });
 
 }
+
+
+/* Debounded Resize */
+(function($,sr){
+
+  // debouncing function from John Hann
+  // http://unscriptable.com/index.php/2009/03/20/debouncing-javascript-methods/
+  var debounce = function (func, threshold, execAsap) {
+      var timeout;
+
+      return function debounced () {
+          var obj = this, args = arguments;
+          function delayed () {
+              if (!execAsap)
+                  func.apply(obj, args);
+              timeout = null;
+          };
+
+          if (timeout)
+              clearTimeout(timeout);
+          else if (execAsap)
+              func.apply(obj, args);
+
+          timeout = setTimeout(delayed, threshold || 100);
+      };
+  }
+  // smartresize 
+  jQuery.fn[sr] = function(fn){  return fn ? this.bind('resize', debounce(fn)) : this.trigger(sr); };
+
+})(jQuery,'smartresize');
 
 
 /*
