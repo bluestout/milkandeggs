@@ -2082,7 +2082,7 @@
           cartCount = cart.item_count;
           cartCountText = cart.item_count === 1 ? "item" : "items";
           $(".bag-count").text(cart.item_count);
-          $(".bag-text").html(cartCountText);
+          $(".bag-text").html(Shopify.formatMoney(cart.total_price, Shop.moneyFormat));
           ref = cart.items;
         };
       })(this));
