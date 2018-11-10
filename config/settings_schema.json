@@ -1335,8 +1335,8 @@
         "type": "text",
         "id": "fdb-text",
         "label": "Initial Message",
-        "default": "Only {amount} away from free delivery",
-        "info": "`{amount}` is used for variable amount"
+        "default": "Added to cart. Cart total: {total}. Only {amount} away from free delivery",
+        "info": "`{amount}` is used for remaining amount from goal, `{total}` is total amount of cart"
       },
       {
         "type": "text",
