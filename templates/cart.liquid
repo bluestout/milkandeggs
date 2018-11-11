@@ -468,6 +468,8 @@
                         });
                     }
                     subtotal.html('$' + parseFloat(cart.total_price / 100).toFixed(2));
+                    $(".bag-count").text(cart.item_count);
+                    $(".bag-text").html(Shopify.formatMoney(cart.total_price, Shop.moneyFormat));
                 },
                 error: function(response) {
                     alert(response);
@@ -501,6 +503,8 @@
                         });
                     }
                     subtotal.html('$' + parseFloat(cart.total_price / 100).toFixed(2));
+                    $(".bag-count").text(cart.item_count);
+                    $(".bag-text").html(Shopify.formatMoney(cart.total_price, Shop.moneyFormat));
                 },
                 error: function(response) {
                     alert(response);
@@ -516,10 +520,6 @@
 
 
 <script>
-    $(document).on('click', 'span.cart-item-increase, span.cart-item-decrease', function() {
-        //Bold: Check for Bundle eligibility
-        if (typeof(shappify_qb_main) === 'function') Shopify.updateCartFromForm('cartform', shappify_qb_main);
-    });
 
     $(document).on('change', '[name*="updates"]', function() {
         //Bold: Check for Bundle eligibility
