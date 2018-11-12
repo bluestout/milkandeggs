@@ -1,5 +1,8 @@
 
 <div class='product_rp_div p{{ product.id }}'></div>
+<div class='rp_inform_message'>
+	<p>Set it and forget it! Pause, edit or cancel anytime.</p>
+</div>
 
 	<a class="btn btn-shopify small {{ product.id }}_custom_button" data-toggle="modal" data-target="#myModal" style="display:none;">Add to cart</a>
 
@@ -93,6 +96,7 @@
             $('.add_modal_btn').hide();
         }else{
           	$('.add_modal_btn').show();
+						$('.rp_inform_message').show();
         }
       {% else %}
           $('.add_modal_btn').show();

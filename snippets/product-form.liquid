@@ -4,9 +4,9 @@
 <style>
   #shappify-qty-msg {
   margin-left: 25%;
-  
-  }  
-  
+
+  }
+
 </style>
 
 <div class="product-form">
@@ -48,19 +48,19 @@
           </div>
         </div>
       {% endif %}
-      
 
-      <input name="shopify_customer_id" type="hidden" value="{{ customer.id }}" > 
-      <input name="email" type="hidden" value="{{ customer.email }}" > 
-      <input name="address1" type="hidden" value="{{ customer.default_address.address1 }}" > 
-      <input name="address2" type="hidden" value="{{ customer.default_address.address2 }}" > 
-      <input name="city" type="hidden" value="{{ customer.default_address.city }}" > 
-      <input name="company" type="hidden" value="{{ customer.default_address.company }}" > 
-      <input name="country" type="hidden" value="{{ customer.default_address.country }}" > 
-      <input name="first_name" type="hidden" value="{{ customer.default_address.first_name }}" > 
-      <input name="last_name" type="hidden" value="{{ customer.default_address.last_name }}" > 
-      <input name="phone" type="hidden" value="{{ customer.default_address.phone }}" > 
-      <input name="province" type="hidden" value="{{ customer.default_address.province }}" > 
+
+      <input name="shopify_customer_id" type="hidden" value="{{ customer.id }}" >
+      <input name="email" type="hidden" value="{{ customer.email }}" >
+      <input name="address1" type="hidden" value="{{ customer.default_address.address1 }}" >
+      <input name="address2" type="hidden" value="{{ customer.default_address.address2 }}" >
+      <input name="city" type="hidden" value="{{ customer.default_address.city }}" >
+      <input name="company" type="hidden" value="{{ customer.default_address.company }}" >
+      <input name="country" type="hidden" value="{{ customer.default_address.country }}" >
+      <input name="first_name" type="hidden" value="{{ customer.default_address.first_name }}" >
+      <input name="last_name" type="hidden" value="{{ customer.default_address.last_name }}" >
+      <input name="phone" type="hidden" value="{{ customer.default_address.phone }}" >
+      <input name="province" type="hidden" value="{{ customer.default_address.province }}" >
       <input name="zip" type="hidden" value="{{ customer.default_address.zip }}" >
 
       <div class="product-submit" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
@@ -73,8 +73,8 @@
             {% if variant.compare_at_price_min > variant.price_min %}
               {{ variant.compare_at_price_min | money }}
             {% endif %}
-          </span> 
-          
+          </span>
+
           {% if product.tags contains 'with-weight' %}
           / {{variant.weight_in_unit}} {{variant.weight_unit}}
           {% endif %}
@@ -82,26 +82,26 @@
           / ea
           {% endif %}
         </span>
-        
-        
+
+
         {% unless qb_loaded == 'true' %}
         <div id="shappify-qty-msg"></div>
         {% assign qb_loaded = 'true' %}
         {% endunless %}
 
   {% include 'bold-ro' with product %}
-            
+
         {% if variant.available %}
-          
+
           <input class="add-to-cart addtocart" type="submit" value="{{ 'products.product.add_to_cart' | t }}" />
           <link itemprop="availability" href="http://schema.org/InStock">
         {% else %}
           <input type="button" class="add-to-cart disabled" disabled="disabled" value="{{ 'products.product.sold_out' | t }}" />
           <link itemprop="availability" href="http://schema.org/OutOfStock">
         {% endif %}
-        
+
         {% include 'iwish_v2' with 'iwishproduct' %}
-        
+
         <!-- bold-ro-liquid --> <div class="bold_add_to_orders" style="display: inline-block;"> </div> <!-- bold-ro-liquid -->
         <div class="product-message"></div>
       </div>
@@ -118,15 +118,15 @@
 
 
  {% if bold_variants_size == 1  %}
-<script> 
+<script>
 $(window).load(function(){
 
  $('.selector-wrapper').hide();
-                         
+
 
 
 });
 
 </script>
 
- {% endif %}  
+ {% endif %}
