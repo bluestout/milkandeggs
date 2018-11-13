@@ -118,7 +118,21 @@
                         </td>
 
                         <td class="cart-item-quantity" {% unless item.variant.inventory_management==b lank or item.variant.inventory_policy=='continue' %}data-max="{{ item.variant.inventory_quantity }}" {% endunless %}>
-                            <div class="qtyswitch">
+                            <select class="form-control">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                            </select>
+                            {% comment %} <div class="qtyswitch">
                                 <span class="cart-item-decrease">
                                     <i class="milkicon-minus"></i>
                                 </span>
@@ -126,7 +140,7 @@
                                 <span class="cart-item-increase">
                                     <i class="milkicon-plus"></i>
                                 </span>
-                            </div>
+                            </div> {% endcomment %}
                         </td>
                         <td class="cart-item-total last">
                             <span class="money">{{ item.quantity | times: ro_item_price | money }}</span>
