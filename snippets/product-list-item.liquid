@@ -14,7 +14,7 @@
   {% assign threshold = settings.collection-stock-level-overlay-threshold | times: 1 %}
   {% assign infinity = false %}
   {% for variant in item.variants %}
-  
+
 {% include 'bold-hidden-variants' with variant, bold_loop: 'loop' %}
     {% if variant.inventory_management == null %}
       {% assign infinity = true %}
@@ -45,14 +45,21 @@
   {% if settings.collection-product-text-style == 'overlay' and isSearch == false %}
   <a class="product-list-item-overlay-link" href="{{ item.url }}"></a>
   {% endif %}
-  
+
   {% assign secondaryImage = false %}
   {% if item.images.size > 1 and settings.collection-product-image-flip %}
     {% assign secondaryImage = true %}
   {% endif %}
 
   <figure class="product-list-item-thumbnail" {% if secondaryImage %}style="background-image:url({{ item.images[1] | img_url: 'large' }})"{% endif %}>
-
+    {% if settings.product-highlight-tag %}
+      {% assign special_tag = settings.product-highlight-tag %}
+      {% if item.tags contains special_tag %}
+        <div class="special-tag-wrap">
+          <span>{{ special_tag}}</span>
+        </div>
+      {% endif %}
+    {% endif %}
     {% assign vendor_handle = item.vendor | handleize %}
       {% if collections[vendor_handle].products.size > 0 %}
         <p class="product-list-item-vendor vendor">{{ collections[vendor_handle].title | link_to: collections[vendor_handle].url }}</p>
@@ -117,7 +124,7 @@
               / {{item.variants[0].weight_in_unit}} {{item.variants[0].weight_unit}}
                   <!-
                   {% for variant in item.variants %}
-                    
+
                     {% assign my_variable = variant.weight | weight_with_unit %}
                     {% if my_variable contains '0.0' %}
                         / {{my_variable | remove: "0.0" }}
@@ -127,16 +134,16 @@
               {% endfor %}
                   -->
               {% endif %}
-                  
+
                   {% if item.tags contains 'with-ea' %}
                   / ea
                   {% endif %}
-                
-                
+
+
                   <span class="original money">{{ bold_compare_at_price_min | money }}</span>
               </span>
             {% else %}
-              <span class="price on_sale">{{ bold_price_min | money }} 
+              <span class="price on_sale">{{ bold_price_min | money }}
                 {% if item.tags contains 'with-weight' %} / {{item.variants[0].weight_in_unit}} {{item.variants[0].weight_unit}} {% endif %} </span>
               {% if item.tags contains 'with-ea' %} / ea {% endif %}
             {% endif %}
@@ -145,8 +152,8 @@
           {{ 'products.product.sold_out' | t }}
         {% endif %}
       </p>
-    </div>  
-    
+    </div>
+
   </div>
 
   <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>

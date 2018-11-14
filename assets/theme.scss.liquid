@@ -3384,6 +3384,31 @@ table.cart-items {
     position: relative;
     @include transition(background 0.3s $ease-out-quad);
 
+    .special-tag-wrap {
+      position: absolute;
+      top: -22px;
+      width: 100%;
+      font-size: 0.9em;
+      text-align: center;
+      color: #fff;
+      background: {{ settings.product-highlight-tag-bg-color }};
+      span {
+        position: relative;
+        &:after {
+          content: '';
+          position: absolute;
+          display: block;
+          width: 5px;
+          height: 8px;
+          top: 4px;
+          border: solid #fff;
+          border-width: 0 2px 2px 0;
+          transform: rotate(45deg);
+          right: -17px;
+        }
+      }
+    }
+
     img {
       display: block;
       width: 100%;
@@ -15629,6 +15654,12 @@ top:145px;
       color: #fff;
       cursor: pointer;
     }
+
+    &.sh-cart-add {
+      &.disabled {
+        background-color: #ddd;
+      }
+    }
   }
   .sh-cart-remove {
     background-color: rgba($body-color, .6);
@@ -16578,7 +16609,7 @@ top:145px;
     }
   }
 
-  
+
 
 }
 
@@ -18612,7 +18643,7 @@ p.iWishLoginMsg { margin:  10px 0; }
     > * {
       display: inline-block;
     }
-    
+
     .button {
       font-size: 12px;
       padding: 5px 8px;
@@ -18632,7 +18663,7 @@ p.iWishLoginMsg { margin:  10px 0; }
 
 
   .product-order-submit {
-    
+
     .product-quantity {
         padding: 1px 2px;
 

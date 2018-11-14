@@ -3261,6 +3261,18 @@
         "id": "product-tag-exclusion",
         "label": "Tag Exclusion",
         "info": "Excludes tags from tags displayed on the Collection\/Product page. Example: BPA Free,Carrageenan Free,Kosher"
+      },
+      {
+        "type": "text",
+        "id": "product-highlight-tag",
+        "label": "Product Highlight Tag",
+        "info": "Single tag name"
+      },
+      {
+        "type": "color",
+        "id": "product-highlight-tag-bg-color",
+        "label": "Hightlight Tag Background",
+        "default": "#9ab764"
       }
     ]
   },
