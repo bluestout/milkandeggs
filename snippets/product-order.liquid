@@ -5,10 +5,15 @@
 
   <div class="product-form-inner">
 
-    <a class="product-vendor vendor" href="{{ product.vendor | url_for_vendor }}">{{ product.vendor }}</a>
+    {% for collection in product.collections %}
+      {% if collection.title == product.vendor %}
+        <a class="product-vendor vendor" href="{{ collection.url }}">{{ product.vendor }}</a>       
+      {% endif %}
+    {% endfor %}
+    
 
     <h1>{{product.title}}</h1>
-
+    
 
     <meta itemprop="name" content="{{ product.title }}">
     <meta itemprop="brand" content="{{ product.vendor }}">
