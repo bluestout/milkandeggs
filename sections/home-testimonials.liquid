@@ -16,6 +16,7 @@
 {% assign reviewAverage = 0 %}
 {% assign totalReviews = 0 %}
 {% assign reviewedProducts = 0 %}
+{% assign review_count = 0 %}
 
 {% comment %} Do not edit the two lines below unless you know what they do {% endcomment %}
 {% assign splitMarkerAverage = 'itemprop="average" content="' %}
@@ -24,6 +25,21 @@
 {% comment %} Add the usual pagination tags {% endcomment %}
 {% paginate collections.all.products by 1000 %}
 {% for product in collections.all.products %}
+
+  {% assign product__reviews-count=0 %}
+  {% if product.metafields.spr.reviews %}
+    {% capture review_data %}{{ product.metafields.spr.reviews }}{% endcapture %}
+    {% if review_data contains '"votes"' %}
+      {% assign keyword = '"votes"' %}
+    {% else  %}
+      {% assign keyword = '"reviewCount"' %}
+    {% endif %}
+    {% assign rd_a1 = review_data | split: keyword %}
+    {% assign rd_a2 = rd_a1[1] | split: "=" %}
+    {% assign rd_a3 = rd_a2[1] | split: '"' %}
+    {% assign product__reviews-count = rd_a3[1] | plus: 1 | minus: 1 %}
+    {% assign review_count = review_count | plus: product__reviews-count %}
+  {% endif %}
 
   {% assign productReviewMetafield = product.metafields.spr.reviews %}
 
@@ -62,7 +78,7 @@
         <i class="spr-icon spr-icon-star"></i>
         <i class="spr-icon spr-icon-star"></i></span>
       </p>
-      <p>Over {{ totalReviews | json }} {{ reviewAverage | json }}-star reviews</p>
+      <p>Over {{ review_count }} {{ reviewAverage | json }}-star reviews</p>
     </div>
     <div class="home-module-inline-items">
       {% for block in section.blocks %}
