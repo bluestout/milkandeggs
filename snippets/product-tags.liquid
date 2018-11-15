@@ -10,9 +10,9 @@
 
       {% for tag in tag_order %}
         {% comment %}
-        LIMIT TAGS TO 4 ON COLLECTION PAGE
+        LIMIT TAGS TO 6 ON COLLECTION PAGE
         {% endcomment %}
-        {% if tag_count == 4 and template contains 'collection' %}
+        {% if tag_count == 6 and template contains 'collection' %}
           {% break %}
         {% endif %}
 
@@ -30,10 +30,10 @@
     {% endunless %}
 
     {% comment %}
-    LIMIT TAGS TO 4 ON COLLECTION PAGE
+    LIMIT TAGS TO 6 ON COLLECTION PAGE
     {% endcomment %}
     {% for tag in product.tags %}
-      {% if tag_count == 4 and template contains 'collection' %}
+      {% if tag_count == 6 and template contains 'collection' %}
         {% break %}
       {% endif %}
 
@@ -48,7 +48,7 @@
     {% comment %}
     DISPLAY ... WHEN PRODUCT TAGS EXCEED 4 ON COLLECTION PAGE
     {% endcomment %}
-    {% if tag_count == 4 and template contains 'collection' %}
+    {% if tag_count == 6 and template contains 'collection' %}
       {% for tag in product.tags %}
         {% assign tag_handle = tag | handleize %}
 
