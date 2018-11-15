@@ -2941,8 +2941,16 @@ body {
   text-align: right;
 }
 .btn-orderedbefore {
-  margin: 12px 0;
-  font-size: .85em;
+  margin: 0;
+  font-size: .92em;
+  text-align: center;
+  display: block;
+
+  > span {
+    border: 1px solid rgba($body-color, .12);
+    padding: 3px 12px;
+    border-radius: 20px;
+  }
 }
 
 table.cart-items {
@@ -10551,16 +10559,18 @@ tr.cart-item {
     select {
       min-width: 80px;
     }
-  }
 
-  .free-bag-info {
-    position: static;
+    .free-bag-info {
+      position: static;
 
-    .cart-item-vendor,
-    .cart-item-title {
-      margin-left: 0;
+      .cart-item-vendor,
+      .cart-item-title {
+        margin-left: 0;
+      }
     }
   }
+
+  
 
   .cart-item-product.first {
     min-height: 100px;

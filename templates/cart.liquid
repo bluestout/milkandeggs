@@ -180,6 +180,8 @@
                             <p class="cart-message"><em>{{ 'cart.tax_and_shipping' | t }}</em></p>
                         </div>
 
+                        <p class="btn-orderedbefore"><span>Ordered before? Re-order <a href="/account">here</a></span></p>
+
 
                         {% if settings.cart-special-instructions %}
                         <div class="cart-instructions">
@@ -276,8 +278,8 @@
                         <div class="cart-additional-buttons">{{ content_for_additional_checkout_buttons }}</div>
                     {% endif %}
 
-                    <p class="cartMessage">*Select Delivery Date before checkout.</p>
-                    <p class="cartMessage">*Select Delivery Time before checkout.</p>
+                    {% comment %} <p class="cartMessage">*Select Delivery Date before checkout.</p>
+                    <p class="cartMessage">*Select Delivery Time before checkout.</p> {% endcomment %}
                     <!-- End Cart button move -->
 
                 </div>
