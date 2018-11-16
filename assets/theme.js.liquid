@@ -822,9 +822,14 @@
       this.$(".cart-total .cart-price .money").html(newTotal);
       cartCount = cart.item_count;
       cartCountText = cart.item_count === 1 ? "item" : "items";
-      $(".bag-count").text(cartCount);
+      $(".bag-count").each(function(){
+        $(this).text(cartCount);
+      });
       freeDeliveryBadgeUpdate(cart.total_price);
-      return $(".bag-text").text(Shopify.formatMoney(cart.total_price, Shop.moneyFormat));
+      $(".bag-text").each(function(){
+        $(this).text(Shopify.formatMoney(cart.total_price, Shop.moneyFormat));
+      });
+      return ;
     };
 
     CartView.prototype.showFile = function(e) {
@@ -2123,8 +2128,12 @@
           var cartCount, cartCountText, ref;
           cartCount = cart.item_count;
           cartCountText = cart.item_count === 1 ? "item" : "items";
-          $(".bag-count").text(cart.item_count);
-          $(".bag-text").html(Shopify.formatMoney(cart.total_price, Shop.moneyFormat));
+          $(".bag-count").each(function(){
+            $(this).text(cart.item_count);
+          });
+          $(".bag-text").each(function(){
+            $(this).html(Shopify.formatMoney(cart.total_price, Shop.moneyFormat));
+          });
           ref = cart.items;
           var product = $("#prod_"+newItem.product_id);
           product.find('.sh-counter').fadeOut('fast',function(){
@@ -2750,9 +2759,6 @@
     subMenu.toggle();
   });
 
-
-
-
    $(document).on('click','.sh-cart-add',function(e){
      var $this = $(this);
       var product_id = $(this).attr('data-id');
@@ -2780,13 +2786,12 @@
            recurring_radio_btn: 0
          };
 
-
-         console.log(json_data);
          $.ajax({ url:'/cart/add.js', type: 'POST', dataType: 'json', data: json_data , success: function(cart){
             product.find('.product-list-item-thumbnail>a').append('<span class="sh-cart-wrapper"><span class="sh-cart-wrapper-inner"><span class="sh-counter">1</span><span class="sh-heading">In your basket</span></span></span>');
             product.attr('data-qty',new_qty);
             product.find(".sh-cart-buttons").append('<span data-vid="'+v_id+'" data-id="'+product_id+'" class="product-list-item-badge sh-cart-remove"><i class="milkicon-minus"></i></span>');
             $this.removeClass('disabled');
+            updatePrice();
          }});
        }else{
          if (line_no == ""){
@@ -2797,6 +2802,7 @@
                   product.find('.sh-counter').fadeIn('fast');
                   $this.removeClass('disabled');
                  });
+              updatePrice();
            }});
 
          }else{
@@ -2807,12 +2813,14 @@
                   product.find('.sh-counter').fadeIn('fast');
                   $this.removeClass('disabled');
                  });
+              updatePrice();
            }});
          }
        }
 
-       $(".bag-count").html( parseFloat($(".bag-count").html()) + 1 );
-       updatePrice();
+       $(".bag-count").each(function(){
+         $(this).html( parseFloat($(this).html()) + 1 );
+       });
      }
    });
 
@@ -2844,6 +2852,7 @@
                 product.find('.sh-counter').fadeIn('fast');
               });
            }
+           updatePrice();
          }
         });
 
@@ -2865,13 +2874,14 @@
                 product.find('.sh-counter').fadeIn('fast');
               });
            }
+           updatePrice();
          }
        });
      }
 
-
-     $(".bag-count").html( parseFloat($(".bag-count").html()) - 1 );
-     updatePrice();
+     $(".bag-count").each(function(){
+       $(this).html( parseFloat($(this).html()) - 1 );
+     });
    });
 
     $.ajax({
@@ -2918,10 +2928,10 @@ function updatePrice(){
      dataType: 'json',
      data: {},
      success: function (cart){
-      var price = cart.total_price;
-        price = price / 100;
         freeDeliveryBadgeUpdate(cart.total_price);
-        $(".bag-text").html('$ '+ price.toFixed(2));
+        $(".bag-text").each(function(){
+          $(this).html(Shopify.formatMoney(cart.total_price, Shop.moneyFormat));
+        });
      }
    });
 
