@@ -54,10 +54,13 @@
                             <span class="cart-item-option">{{ option }}</span> {% endunless %} {% endfor %}
                             <div class="bold_properties_div" data-test="{{item.properties}}">
                                 <!-- bold-ro-liquid -->
+                                <input type="hidden" name="{{ prod_index }}[ro_group_id]" value="{{item.variant.metafields.bold_rp.rp_group_id}}" />
+                                <input type="hidden" name="{{ prod_index }}[ro_variant_price]" value="{{item.variant.price}}" />
                                 {% if item.properties.frequency_num == blank %}
                                     <a data-value="-1" data-id="{{item.id}}" class="modify-sub" id="modify-sub-{{item.id}}" href="{{ item.product.url }}">(Click to Subscribe)</a>
                                 {% endif %}
-                                {% for p in item.properties %} {% if p.first == "frequency_num" %}
+                                {% for p in item.properties %}
+                                 {% if p.first == "frequency_num" %}
                                 <script>
                                     mixed_cart = true;
 
@@ -241,10 +244,10 @@
                         {% endif %}
 
                         <!-- Recurring order -->
-                        {% comment %} <div class="custom-checkbox">
+                        <div class="custom-checkbox">
                             <input type="checkbox" id="cart_recurring_order">
                             <label for="cart_recurring_order" class="block">Make this a recurring order?</label>
-                        </div> {% endcomment %}
+                        </div>
 
                         <div class="form-group recurring_order_box">
                             <label>Every</label>

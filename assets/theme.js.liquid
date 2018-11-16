@@ -2637,10 +2637,12 @@
       btn.attr('disabled','disabled').html('Updating...');
       var total_product_quantities = [];
       var variant_ids = [];
-      var products = []
+      var products = [];
       for(var i = 0 ; i < total_products_varriant_ids.length ; i++){
-        var $group_id = $(".variant-"+total_products_varriant_ids[i]).find('[name$="[group_id]"]');
-        var $ro_price = $(".variant-"+total_products_varriant_ids[i]).find('[name$="[_ro_unformatted_price]"]')
+        //var $group_id = $(".variant-"+total_products_varriant_ids[i]).find('[name$="[group_id]"]');
+        //var $ro_price = $(".variant-"+total_products_varriant_ids[i]).find('[name$="[_ro_unformatted_price]"]')
+        var $group_id = $(".variant-"+total_products_varriant_ids[i]).find('[name$="[ro_group_id]"]');
+        var $ro_price = $(".variant-"+total_products_varriant_ids[i]).find('[name$="[ro_variant_price]"]');
         products[i] = {
           vid: total_products_varriant_ids[i],
           gid: $group_id.val(),
@@ -2651,9 +2653,9 @@
       }
       $.ajax({ url: '/cart/clear.js', type: 'POST', dataType:'json', success: function(){
         function addtocart(pro){
-          if(pro.length == 0)
-          window.location = '/cart';
-          else{
+          if(pro.length == 0) {
+            window.location = '/cart';
+          } else {
             var details = pro.shift();
             if(details.weeks == '-1'){
               var json_data = {
