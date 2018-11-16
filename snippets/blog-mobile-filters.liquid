@@ -23,7 +23,7 @@
             {% endcomment %}
         </form>
 
-        <script type="text/javascript" src="//www.klaviyo.com/media/js/public/klaviyo_subscribe.js"></script>
+        {{ 'klaviyo_subscribe.js' | asset_url | script_tag }}
         <script type="text/javascript">
         KlaviyoSubscribe.attachToForms('#blog_signup_mobile', {
             hide_form_on_success: true

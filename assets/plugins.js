@@ -1,3 +1,875 @@
+/***************** https://cdn.myshopapps.com/iwish/iwishlist.js *************************/
+var iWishCnt=0,iWishlistmain={},iWishsync=!1,iWishUrl="https://iwish.myshopapps.com/ajax/";if(void 0===iwishWrapperClass)var iwishWrapperClass="form";if(void 0===iWishVarSelector)var iWishVarSelector="[name=id]";if(void 0===iWishQtySelector)var iWishQtySelector="[name=quantity]";if(void 0===iWishSelectClass)var iWishSelectClass="#product-select, .single-option-selector, .single-option-selector__radio, select[id|='product-select'], select[id|='product-variants-option'], select[id|='variant-listbox-option']";function iWishPost(i,s){method="post";var e=document.createElement("form");for(var t in e.setAttribute("method",method),e.setAttribute("action",i),s)if(s.hasOwnProperty(t)){var n=document.createElement("input");n.setAttribute("type","hidden"),n.setAttribute("name",t),n.setAttribute("value",s[t]),e.appendChild(n)}document.head.appendChild(e),e.submit()}function getSession(){"undefined"!=typeof Storage&&(""==iwish_cid&&"true"==localStorage.iWishsync&&(localStorage.removeItem("iWishlistmain"),localStorage.removeItem("iWishCnt"),localStorage.removeItem("iWishsync")),localStorage.iWishlistmain&&(iWishlistmain=JSON.parse(localStorage.getItem("iWishlistmain"))),localStorage.iWishCnt&&!isNaN(localStorage.iWishCnt)&&(iWishCnt=parseInt(localStorage.iWishCnt)),localStorage.iWishsync&&0<parseInt(iwish_cid)&&"true"==localStorage.iWishsync&&(iWishsync=!0),localStorage.setItem("iWishsync",iWishsync))}function pushToSession(){"undefined"!=typeof Storage&&("undefined"!==iWishlistmain&&localStorage.setItem("iWishlistmain",JSON.stringify(iWishlistmain)),"undefined"!==iWishCnt&&localStorage.setItem("iWishCnt",iWishCnt))}function isInWishlist(i,s){return void 0!==iWishlistmain[i]&&null!=s&&0<=iWishlistmain[i].indexOf(s)}function syncWithServer(){var i=JSON.stringify(iWishlistmain);jQuery.ajax({url:iWishUrl+"syncWishlist.php",data:{shop:iwish_shop,cId:iwish_cid,iwishlist:i},dataType:"jsonp",jsonpCallback:"iWishSyncCallback",success:function(i){console.log(JSON.stringify(i)),jQuery.extend(iWishlistmain,i.jsonDt),iWishCnt=i.iwishCnt,pushToSession(),jQuery(".iWishCount").html(iWishCnt),console.log("iWishsync done :: "+JSON.stringify(iWishlistmain)),iWishsync=!0,localStorage.setItem("iWishsync",iWishsync),"undefined"!=typeof iWishsyncFn&&"function"==typeof iWishsyncFn&&iWishsyncFn()},error:function(i,s,e){}})}function checkIwish(i,s){var e=i.find(".iWishAdd"),t=e.attr("data-product"),n=isInWishlist(t,s);console.log("checkIwish "+t+" :: "+s),n?e.addClass("iwishAdded").html(iwish_added_txt):e.removeClass("iwishAdded").html(iwish_add_txt),"undefined"!=typeof iWishSelectChangeFn&&"function"==typeof iWishSelectChangeFn&&iWishSelectChangeFn(e)}function iwish_addOnly(i,s,e,t){if(void 0===iWishlistmain[i]&&(iWishlistmain[i]=[]),console.log("Adding "+i+" :: "+s),iWishlistmain[i].indexOf(s)<0&&(iWishlistmain[i].push(s),iWishCnt++,pushToSession(),jQuery(".iWishCount").html(iWishCnt),0<parseInt(iwish_cid))){var n=1;t.parents(iwishWrapperClass).find(iWishQtySelector).length&&(n=t.parents(iwishWrapperClass).find(iWishQtySelector).val()),jQuery.ajax({url:iWishUrl+"iwishAdd.php",data:{shop:iwish_shop,cId:iwish_cid,pId:i,vId:s,pTitle:e,qty:n},dataType:"jsonp",jsonpCallback:"iWishAddCallback",success:function(i){},error:function(i,s,e){}})}}function iwish_add(i,s){var e=i.attr("data-product");if(i.hasClass("iwishAdded")||null==s||null==e)return!1;if(iwish_addOnly(e,s,i.attr("data-pTitle"),i),0<=iWishlistmain[e].indexOf(s)&&(i.addClass("iwishAdded").html(iwish_added_txt),""==iwish_cid)){var t=i.parents(iwishWrapperClass);t.find(".iWishLoginMsg").fadeIn(500),setTimeout(function(){t.find(".iWishLoginMsg").fadeOut()},6e3)}"undefined"!=typeof iWishAddFn&&"function"==typeof iWishAddFn&&iWishAddFn()}function iwish_addCollection(i,s){var e=i.attr("data-product");if(i.hasClass("iwishAdded")||null==s||null==e)return!1;iwish_addOnly(e,s,i.attr("data-pTitle"),i),0<=iWishlistmain[e].indexOf(s)&&i.addClass("iwishAdded").html(iwish_added_txt_col),"undefined"!=typeof iWishaddCollFn&&"function"==typeof iWishaddCollFn&&iWishaddCollFn()}function iwish_remove(i,s,e){var t=!1;if(pId=i.attr("data-product"),void 0===iWishlistmain[pId])return t;console.log("iwish remove :: "+s);var n=iWishlistmain[pId].indexOf(s);0<=n&&(iWishlistmain[pId].splice(n,1),0<iWishCnt&&iWishCnt--,jQuery(".iWishCount").html(iWishCnt),pushToSession(),0==(e=e||!1)&&i.removeClass("iwishAdded"),0<parseInt(iwish_cid)&&jQuery.ajax({url:iWishUrl+"iwishRemove.php",data:{shop:iwish_shop,cId:iwish_cid,pId:pId,vId:s},dataType:"jsonp",jsonpCallback:"iWishRemoveCallback",success:function(i){},error:function(i,s,e){}}),t=!0);return"undefined"!=typeof iWishRemoveFn&&"function"==typeof iWishRemoveFn&&iWishRemoveFn(),t}function iwish_initQV(){setTimeout(function(){if(0<jQuery(iwish_qvWrapper+":visible").find(".iWishAdd").length){var i=jQuery(iwish_qvWrapper+":visible").find(iWishVarSelector).val();""!=i&&checkIwish(jQuery(iwish_qvWrapper+":visible").find(iwishWrapperClass),i),"undefined"!=typeof iWishQvFn&&"function"==typeof iWishQvFn&&iWishQvFn()}else iwish_initQV()},300)}function iwish_updateQty(i,s){jQuery.ajax({url:iWishUrl+"iwishUpdateQty.php",data:{shop:iwish_shop,cId:iwish_cid,iwishpQty:s,vId:i},dataType:"jsonp",jsonpCallback:"iWishUpdateQtyCallback",success:function(i){},error:function(i,s,e){}}),"undefined"!=typeof iwishUpdateQtyFn&&"function"==typeof iwishUpdateQtyFn&&iwishUpdateQtyFn()}function iwishInit(){var i=!!jQuery.fn.on;if(iwish_pro_template){var s=jQuery(".iWishAdd:visible").parents(iwishWrapperClass),e=s.find(iWishVarSelector).val();""!=e&&checkIwish(s,e)}jQuery(".iWishCount").html(iWishCnt),0<parseInt(iwish_cid)&&(iWishsync||(console.log("Sync Need to be done"),syncWithServer())),"undefined"!=typeof iwish_qvButton&&"undefined"!=typeof iwish_qvWrapper&&(i?jQuery("body").on("click",iwish_qvButton,function(){iwish_initQV()}):jQuery("body").delegate(iwish_qvButton,"click",function(){iwish_initQV()})),i?jQuery(document).on("change",iWishSelectClass,function(){selectedClass=jQuery(this).parents(iwishWrapperClass),setTimeout(function(){var i=selectedClass.find(iWishVarSelector).val();""!=i?checkIwish(selectedClass,i):selectedClass.removeClass("iwishAdded").html(iwish_add_txt)},400)}):jQuery(document).delegate(iWishSelectClass,"change",function(){selectedClass=jQuery(this).parents(iwishWrapperClass),setTimeout(function(){var i=selectedClass.find(iWishVarSelector).val();""!=i?checkIwish(selectedClass,i):selectedClass.removeClass("iwishAdded").html(iwish_add_txt)},400)}),"undefined"!=typeof iWishinitFn&&"function"==typeof iWishinitFn&&iWishinitFn(),jQuery(".iwishRemoveBtn").click(function(){if(jQuery(this).hasClass("iwishRemoved"))return!1;var i=jQuery(this).attr("data-variant");return iwish_remove(jQuery(this),i,!0)&&(jQuery(this).addClass("iwishRemoved"),jQuery(this).parents(".iwishItem").remove(),jQuery(".iwishMsgSuccess").show(),setTimeout(function(){jQuery(".iwishMsgSuccess").fadeOut(),0==iWishCnt&&jQuery(".iwishMsgInfo").fadeIn()},3e3)),!1}),jQuery("input[name=iwishProQuantity]").change(function(){var i=jQuery(this),s=parseInt(i.val()),e=i.parents(".iwishItem").find(iWishVarSelector).val();0<parseInt(iwish_cid)&&(0<s?(iwish_updateQty(e,s),i.parents(".iwishItem").find("[name=quantity]").val(s),i.addClass("iwishProQtyAdded"),setTimeout(function(){i.removeClass("iwishProQtyAdded")},2e3),i.parents(".iwishItem").find(".iwishQtyMsg").fadeIn().delay(3e3).fadeOut()):(i.val(1).addClass("iwishProQtyError"),setTimeout(function(){i.removeClass("iwishProQtyError")},1e3)))})}getSession(),window.addEventListener?window.addEventListener("load",iwishInit,!0):window.attachEvent?window.attachEvent("onload",iwishInit):window.onload=iwishInit;
+
+
+
+/************ currencies.js *********************/
+var Currency = {
+  rates: {"USD":1.0,"EUR":1.13123,"GBP":1.29856,"CAD":0.754847,"ARS":0.0278603,"AUD":0.723254,"BRL":0.264269,"CLP":0.00146516,"CNY":0.143868,"CYP":0.397899,"CZK":0.0434808,"DKK":0.151589,"EEK":0.0706676,"HKD":0.127698,"HUF":0.00350822,"ISK":0.00805664,"INR":0.0138245,"JMD":0.00791546,"JPY":0.00880531,"LVL":1.57329,"LTL":0.320236,"MTL":0.293496,"MXN":0.0490098,"NZD":0.679037,"NOK":0.117537,"PLN":0.263374,"SGD":0.725176,"SKK":21.5517,"SIT":175.439,"ZAR":0.0696009,"KRW":0.000883292,"SEK":0.110087,"CHF":0.993956,"TWD":0.0324901,"UYU":0.0306564,"MYR":0.238289,"BSD":1.0,"CRC":0.00160928,"RON":0.242906,"PHP":0.018842,"AED":0.272294,"VEB":0.000100125,"IDR":6.76313e-05,"TRY":0.182947,"THB":0.0303493,"TTD":0.148502,"ILS":0.27073,"SYP":0.00194175,"XCD":0.370032,"COP":0.000312126,"RUB":0.0149012,"HRK":0.152419,"KZT":0.00266584,"TZS":0.000436409,"XPT":836.297,"SAR":0.266667,"NIO":0.0309713,"LAK":0.00011693,"OMR":2.60078,"AMD":0.00204932,"CDF":0.00061919,"KPW":0.00111103,"SPL":6.0,"KES":0.00973148,"ZWD":0.00276319,"KHR":0.000247669,"MVR":0.0646129,"GTQ":0.12973,"BZD":0.495906,"BYR":4.67138e-05,"LYD":0.71461,"DZD":0.00842626,"BIF":0.000552539,"GIP":1.29856,"BOB":0.144735,"XOF":0.00172455,"STD":4.64332e-05,"NGN":0.0027544,"PGK":0.30722,"ERN":0.0666667,"MWK":0.00137469,"CUP":0.0377358,"GMD":0.0201601,"CVE":0.0102587,"BTN":0.0138245,"XAF":0.00172455,"UGX":0.000268302,"MAD":0.104826,"MNT":0.000390128,"LSL":0.0696009,"XAG":14.1395,"TOP":0.444149,"SHP":1.29856,"RSD":0.00957118,"HTG":0.0137911,"MGA":0.000277461,"MZN":0.0163069,"FKP":1.29856,"BWP":0.0929097,"HNL":0.0412171,"PYG":0.000168568,"JEP":1.29856,"EGP":0.0558392,"LBP":0.00066335,"ANG":0.558754,"WST":0.385631,"TVD":0.723254,"GYD":0.00477848,"GGP":1.29856,"NPR":0.0086,"KMF":0.00229939,"IRR":2.38e-05,"XPD":1117.49,"SRD":0.134119,"TMM":5.71308e-05,"SZL":0.0696009,"MOP":0.123978,"BMD":1.0,"XPF":0.00947969,"ETB":0.0356434,"JOD":1.41044,"MDL":0.0587074,"MRO":0.0027897,"YER":0.00399438,"BAM":0.578388,"AWG":0.558659,"PEN":0.295289,"VEF":0.100125,"SLL":0.000119483,"KYD":1.21951,"AOA":0.00322276,"TND":0.343712,"TJS":0.106162,"SCR":0.0734238,"LKR":0.00567505,"DJF":0.00562716,"GNF":0.000109575,"VUV":0.00881855,"SDG":0.021084,"IMP":1.29856,"GEL":0.37302,"FJD":0.471762,"DOP":0.0200301,"XDR":1.3828,"MUR":0.0287385,"MMK":0.000623104,"LRD":0.00633076,"BBD":0.5,"ZMK":8.40094e-05,"XAU":1210.85,"VND":4.29105e-05,"UAH":0.0359244,"TMT":0.285654,"IQD":0.000841453,"BGN":0.578388,"KGS":0.014317,"RWF":0.00113433,"BHD":2.65957,"UZS":0.000120995,"PKR":0.00744996,"MKD":0.0184172,"AFN":0.0131393,"NAD":0.0696009,"BDT":0.0119284,"AZN":0.589404,"SOS":0.00172315,"QAR":0.274725,"PAB":1.0,"CUC":1.0,"SVC":0.114286,"SBD":0.124635,"ALL":0.00906143,"BND":0.725176,"KWD":3.28468,"GHS":0.204385,"ZMW":0.0840094,"XBT":5407.27,"NTD":0.0337206,"BYN":0.467138,"CNH":0.144021,"MRU":0.027897,"STN":0.0464332,"VES":0.0153016},
+  convert: function(amount, from, to) {
+    return (amount * this.rates[from]) / this.rates[to];
+  }
+};
+
+/*********************** jquery.currencies.js *************************/
+/*
+ * Cookie plugin
+ *
+ * Copyright (c) 2006 Klaus Hartl (stilbuero.de)
+ * Dual licensed under the MIT and GPL licenses:
+ * http://www.opensource.org/licenses/mit-license.php
+ * http://www.gnu.org/licenses/gpl.html
+ *
+ */
+
+jQuery.cookie=function(b,j,m){if(typeof j!="undefined"){m=m||{};if(j===null){j="";m.expires=-1}var e="";if(m.expires&&(typeof m.expires=="number"||m.expires.toUTCString)){var f;if(typeof m.expires=="number"){f=new Date();f.setTime(f.getTime()+(m.expires*24*60*60*1000))}else{f=m.expires}e="; expires="+f.toUTCString()}var l=m.path?"; path="+(m.path):"";var g=m.domain?"; domain="+(m.domain):"";var a=m.secure?"; secure":"";document.cookie=[b,"=",encodeURIComponent(j),e,l,g,a].join("")}else{var d=null;if(document.cookie&&document.cookie!=""){var k=document.cookie.split(";");for(var h=0;h<k.length;h++){var c=jQuery.trim(k[h]);if(c.substring(0,b.length+1)==(b+"=")){d=decodeURIComponent(c.substring(b.length+1));break}}}return d}};
+
+/*
+ * Currency tools
+ *
+ * Copyright (c) 2015 Caroline Schnapp (mllegeorgesand@gmail.com)
+ * Licensed under the MIT license:
+ * http://www.opensource.org/licenses/mit-license.php
+ *
+ */
+
+
+if(typeof Currency==="undefined"){var Currency={}}Currency.cookie={configuration:{expires:365,path:"/",domain:window.location.hostname},name:"currency",write:function(a){jQuery.cookie(this.name,a,this.configuration)},read:function(){return jQuery.cookie(this.name)},destroy:function(){jQuery.cookie(this.name,null,this.configuration)}};Currency.moneyFormats={USD:{money_format:"${{amount}}",money_with_currency_format:"${{amount}} USD"},EUR:{money_format:"&euro;{{amount}}",money_with_currency_format:"&euro;{{amount}} EUR"},GBP:{money_format:"&pound;{{amount}}",money_with_currency_format:"&pound;{{amount}} GBP"},CAD:{money_format:"${{amount}}",money_with_currency_format:"${{amount}} CAD"},ALL:{money_format:"Lek {{amount}}",money_with_currency_format:"Lek {{amount}} ALL"},DZD:{money_format:"DA {{amount}}",money_with_currency_format:"DA {{amount}} DZD"},AOA:{money_format:"Kz{{amount}}",money_with_currency_format:"Kz{{amount}} AOA"},ARS:{money_format:"${{amount_with_comma_separator}}",money_with_currency_format:"${{amount_with_comma_separator}} ARS"},AMD:{money_format:"{{amount}} AMD",money_with_currency_format:"{{amount}} AMD"},AWG:{money_format:"Afl{{amount}}",money_with_currency_format:"Afl{{amount}} AWG"},AUD:{money_format:"${{amount}}",money_with_currency_format:"${{amount}} AUD"},BBD:{money_format:"${{amount}}",money_with_currency_format:"${{amount}} Bds"},AZN:{money_format:"m.{{amount}}",money_with_currency_format:"m.{{amount}} AZN"},BDT:{money_format:"Tk {{amount}}",money_with_currency_format:"Tk {{amount}} BDT"},BSD:{money_format:"BS${{amount}}",money_with_currency_format:"BS${{amount}} BSD"},BHD:{money_format:"{{amount}}0 BD",money_with_currency_format:"{{amount}}0 BHD"},BYR:{money_format:"Br {{amount}}",money_with_currency_format:"Br {{amount}} BYR"},BZD:{money_format:"BZ${{amount}}",money_with_currency_format:"BZ${{amount}} BZD"},BTN:{money_format:"Nu {{amount}}",money_with_currency_format:"Nu {{amount}} BTN"},BAM:{money_format:"KM {{amount_with_comma_separator}}",money_with_currency_format:"KM {{amount_with_comma_separator}} BAM"},BRL:{money_format:"R$ {{amount_with_comma_separator}}",money_with_currency_format:"R$ {{amount_with_comma_separator}} BRL"},BOB:{money_format:"Bs{{amount_with_comma_separator}}",money_with_currency_format:"Bs{{amount_with_comma_separator}} BOB"},BWP:{money_format:"P{{amount}}",money_with_currency_format:"P{{amount}} BWP"},BND:{money_format:"${{amount}}",money_with_currency_format:"${{amount}} BND"},BGN:{money_format:"{{amount}} Ð»Ð²",money_with_currency_format:"{{amount}} Ð»Ð² BGN"},MMK:{money_format:"K{{amount}}",money_with_currency_format:"K{{amount}} MMK"},KHR:{money_format:"KHR{{amount}}",money_with_currency_format:"KHR{{amount}}"},KYD:{money_format:"${{amount}}",money_with_currency_format:"${{amount}} KYD"},XAF:{money_format:"FCFA{{amount}}",money_with_currency_format:"FCFA{{amount}} XAF"},CLP:{money_format:"${{amount_no_decimals}}",money_with_currency_format:"${{amount_no_decimals}} CLP"},CNY:{money_format:"&#165;{{amount}}",money_with_currency_format:"&#165;{{amount}} CNY"},COP:{money_format:"${{amount_with_comma_separator}}",money_with_currency_format:"${{amount_with_comma_separator}} COP"},CRC:{money_format:"&#8353; {{amount_with_comma_separator}}",money_with_currency_format:"&#8353; {{amount_with_comma_separator}} CRC"},HRK:{money_format:"{{amount_with_comma_separator}} kn",money_with_currency_format:"{{amount_with_comma_separator}} kn HRK"},CZK:{money_format:"{{amount_with_comma_separator}} K&#269;",money_with_currency_format:"{{amount_with_comma_separator}} K&#269;"},DKK:{money_format:"{{amount_with_comma_separator}}",money_with_currency_format:"kr.{{amount_with_comma_separator}}"},DOP:{money_format:"RD$ {{amount}}",money_with_currency_format:"RD$ {{amount}}"},XCD:{money_format:"${{amount}}",money_with_currency_format:"EC${{amount}}"},EGP:{money_format:"LE {{amount}}",money_with_currency_format:"LE {{amount}} EGP"},ETB:{money_format:"Br{{amount}}",money_with_currency_format:"Br{{amount}} ETB"},XPF:{money_format:"{{amount_no_decimals_with_comma_separator}} XPF",money_with_currency_format:"{{amount_no_decimals_with_comma_separator}} XPF"},FJD:{money_format:"${{amount}}",money_with_currency_format:"FJ${{amount}}"},GMD:{money_format:"D {{amount}}",money_with_currency_format:"D {{amount}} GMD"},GHS:{money_format:"GH&#8373;{{amount}}",money_with_currency_format:"GH&#8373;{{amount}}"},GTQ:{money_format:"Q{{amount}}",money_with_currency_format:"{{amount}} GTQ"},GYD:{money_format:"G${{amount}}",money_with_currency_format:"${{amount}} GYD"},GEL:{money_format:"{{amount}} GEL",money_with_currency_format:"{{amount}} GEL"},HNL:{money_format:"L {{amount}}",money_with_currency_format:"L {{amount}} HNL"},HKD:{money_format:"${{amount}}",money_with_currency_format:"HK${{amount}}"},HUF:{money_format:"{{amount_no_decimals_with_comma_separator}}",money_with_currency_format:"{{amount_no_decimals_with_comma_separator}} Ft"},ISK:{money_format:"{{amount_no_decimals}} kr",money_with_currency_format:"{{amount_no_decimals}} kr ISK"},INR:{money_format:"Rs. {{amount}}",money_with_currency_format:"Rs. {{amount}}"},IDR:{money_format:"{{amount_with_comma_separator}}",money_with_currency_format:"Rp {{amount_with_comma_separator}}"},ILS:{money_format:"{{amount}} NIS",money_with_currency_format:"{{amount}} NIS"},JMD:{money_format:"${{amount}}",money_with_currency_format:"${{amount}} JMD"},JPY:{money_format:"&#165;{{amount_no_decimals}}",money_with_currency_format:"&#165;{{amount_no_decimals}} JPY"},JEP:{money_format:"&pound;{{amount}}",money_with_currency_format:"&pound;{{amount}} JEP"},JOD:{money_format:"{{amount}}0 JD",money_with_currency_format:"{{amount}}0 JOD"},KZT:{money_format:"{{amount}} KZT",money_with_currency_format:"{{amount}} KZT"},KES:{money_format:"KSh{{amount}}",money_with_currency_format:"KSh{{amount}}"},KWD:{money_format:"{{amount}}0 KD",money_with_currency_format:"{{amount}}0 KWD"},KGS:{money_format:"Ð»Ð²{{amount}}",money_with_currency_format:"Ð»Ð²{{amount}}"},LVL:{money_format:"Ls {{amount}}",money_with_currency_format:"Ls {{amount}} LVL"},LBP:{money_format:"L&pound;{{amount}}",money_with_currency_format:"L&pound;{{amount}} LBP"},LTL:{money_format:"{{amount}} Lt",money_with_currency_format:"{{amount}} Lt"},MGA:{money_format:"Ar {{amount}}",money_with_currency_format:"Ar {{amount}} MGA"},MKD:{money_format:"Ð´ÐµÐ½ {{amount}}",money_with_currency_format:"Ð´ÐµÐ½ {{amount}} MKD"},MOP:{money_format:"MOP${{amount}}",money_with_currency_format:"MOP${{amount}}"},MVR:{money_format:"Rf{{amount}}",money_with_currency_format:"Rf{{amount}} MRf"},MXN:{money_format:"$ {{amount}}",money_with_currency_format:"$ {{amount}} MXN"},MYR:{money_format:"RM{{amount}} MYR",money_with_currency_format:"RM{{amount}} MYR"},MUR:{money_format:"Rs {{amount}}",money_with_currency_format:"Rs {{amount}} MUR"},MDL:{money_format:"{{amount}} MDL",money_with_currency_format:"{{amount}} MDL"},MAD:{money_format:"{{amount}} dh",money_with_currency_format:"Dh {{amount}} MAD"},MNT:{money_format:"{{amount_no_decimals}} &#8366",money_with_currency_format:"{{amount_no_decimals}} MNT"},MZN:{money_format:"{{amount}} Mt",money_with_currency_format:"Mt {{amount}} MZN"},NAD:{money_format:"N${{amount}}",money_with_currency_format:"N${{amount}} NAD"},NPR:{money_format:"Rs{{amount}}",money_with_currency_format:"Rs{{amount}} NPR"},ANG:{money_format:"&fnof;{{amount}}",money_with_currency_format:"{{amount}} NA&fnof;"},NZD:{money_format:"${{amount}}",money_with_currency_format:"${{amount}} NZD"},NIO:{money_format:"C${{amount}}",money_with_currency_format:"C${{amount}} NIO"},NGN:{money_format:"&#8358;{{amount}}",money_with_currency_format:"&#8358;{{amount}} NGN"},NOK:{money_format:"kr {{amount_with_comma_separator}}",money_with_currency_format:"kr {{amount_with_comma_separator}} NOK"},OMR:{money_format:"{{amount_with_comma_separator}} OMR",money_with_currency_format:"{{amount_with_comma_separator}} OMR"},PKR:{money_format:"Rs.{{amount}}",money_with_currency_format:"Rs.{{amount}} PKR"},PGK:{money_format:"K {{amount}}",money_with_currency_format:"K {{amount}} PGK"},PYG:{money_format:"Gs. {{amount_no_decimals_with_comma_separator}}",money_with_currency_format:"Gs. {{amount_no_decimals_with_comma_separator}} PYG"},PEN:{money_format:"S/. {{amount}}",money_with_currency_format:"S/. {{amount}} PEN"},PHP:{money_format:"&#8369;{{amount}}",money_with_currency_format:"&#8369;{{amount}} PHP"},PLN:{money_format:"{{amount_with_comma_separator}} zl",money_with_currency_format:"{{amount_with_comma_separator}} zl PLN"},QAR:{money_format:"QAR {{amount_with_comma_separator}}",money_with_currency_format:"QAR {{amount_with_comma_separator}}"},RON:{money_format:"{{amount_with_comma_separator}} lei",money_with_currency_format:"{{amount_with_comma_separator}} lei RON"},RUB:{money_format:"&#1088;&#1091;&#1073;{{amount_with_comma_separator}}",money_with_currency_format:"&#1088;&#1091;&#1073;{{amount_with_comma_separator}} RUB"},RWF:{money_format:"{{amount_no_decimals}} RF",money_with_currency_format:"{{amount_no_decimals}} RWF"},WST:{money_format:"WS$ {{amount}}",money_with_currency_format:"WS$ {{amount}} WST"},SAR:{money_format:"{{amount}} SR",money_with_currency_format:"{{amount}} SAR"},STD:{money_format:"Db {{amount}}",money_with_currency_format:"Db {{amount}} STD"},RSD:{money_format:"{{amount}} RSD",money_with_currency_format:"{{amount}} RSD"},SCR:{money_format:"Rs {{amount}}",money_with_currency_format:"Rs {{amount}} SCR"},SGD:{money_format:"${{amount}}",money_with_currency_format:"${{amount}} SGD"},SYP:{money_format:"S&pound;{{amount}}",money_with_currency_format:"S&pound;{{amount}} SYP"},ZAR:{money_format:"R {{amount}}",money_with_currency_format:"R {{amount}} ZAR"},KRW:{money_format:"&#8361;{{amount_no_decimals}}",money_with_currency_format:"&#8361;{{amount_no_decimals}} KRW"},LKR:{money_format:"Rs {{amount}}",money_with_currency_format:"Rs {{amount}} LKR"},SEK:{money_format:"{{amount_no_decimals}} kr",money_with_currency_format:"{{amount_no_decimals}} kr SEK"},CHF:{money_format:"SFr. {{amount}}",money_with_currency_format:"SFr. {{amount}} CHF"},TWD:{money_format:"${{amount}}",money_with_currency_format:"${{amount}} TWD"},THB:{money_format:"{{amount}} &#xe3f;",money_with_currency_format:"{{amount}} &#xe3f; THB"},TZS:{money_format:"{{amount}} TZS",money_with_currency_format:"{{amount}} TZS"},TTD:{money_format:"${{amount}}",money_with_currency_format:"${{amount}} TTD"},TND:{money_format:"{{amount}}",money_with_currency_format:"{{amount}} DT"},TRY:{money_format:"{{amount}}TL",money_with_currency_format:"{{amount}}TL"},UGX:{money_format:"Ush {{amount_no_decimals}}",money_with_currency_format:"Ush {{amount_no_decimals}} UGX"},UAH:{money_format:"â‚´{{amount}}",money_with_currency_format:"â‚´{{amount}} UAH"},AED:{money_format:"Dhs. {{amount}}",money_with_currency_format:"Dhs. {{amount}} AED"},UYU:{money_format:"${{amount_with_comma_separator}}",money_with_currency_format:"${{amount_with_comma_separator}} UYU"},VUV:{money_format:"${{amount}}",money_with_currency_format:"${{amount}}VT"},VEF:{money_format:"Bs. {{amount_with_comma_separator}}",money_with_currency_format:"Bs. {{amount_with_comma_separator}} VEF"},VND:{money_format:"{{amount_no_decimals_with_comma_separator}}&#8363;",money_with_currency_format:"{{amount_no_decimals_with_comma_separator}} VND"},XBT:{money_format:"{{amount_no_decimals}} BTC",money_with_currency_format:"{{amount_no_decimals}} BTC"},XOF:{money_format:"CFA{{amount}}",money_with_currency_format:"CFA{{amount}} XOF"},ZMW:{money_format:"K{{amount_no_decimals_with_comma_separator}}",money_with_currency_format:"ZMW{{amount_no_decimals_with_comma_separator}}"}};Currency.formatMoney=function(b,g){if(typeof Shopify.formatMoney==="function"){return Shopify.formatMoney(b,g)}if(typeof b=="string"){b=b.replace(".","")}var f="";var e=/\{\{\s*(\w+)\s*\}\}/;var a=g||"${{amount}}";function c(h,i){return(typeof h=="undefined"?i:h)}function d(m,k,l,j){k=c(k,2);l=c(l,",");j=c(j,".");if(isNaN(m)||m==null){return 0}m=(m/100).toFixed(k);var n=m.split("."),i=n[0].replace(/(\d)(?=(\d\d\d)+(?!\d))/g,"$1"+l),h=n[1]?(j+n[1]):"";return i+h}switch(a.match(e)[1]){case"amount":f=d(b,2);break;case"amount_no_decimals":f=d(b,0);break;case"amount_with_comma_separator":f=d(b,2,".",",");break;case"amount_no_decimals_with_comma_separator":f=d(b,0,".",",");break}return a.replace(e,f)};Currency.currentCurrency="";Currency.format="money_with_currency_format";Currency.convertAll=function(c,b,a,d){jQuery(a||"span.money").each(function(){if(jQuery(this).attr("data-currency")===b){return}if(jQuery(this).attr("data-currency-"+b)){jQuery(this).html(jQuery(this).attr("data-currency-"+b))}else{var e=0;var f=Currency.moneyFormats[c][d||Currency.format]||"{{amount}}";var g=Currency.moneyFormats[b][d||Currency.format]||"{{amount}}";if(f.indexOf("amount_no_decimals")!==-1){e=Currency.convert(parseInt(jQuery(this).html().replace(/[^0-9]/g,""),10)*100,c,b)}else{if(c==="JOD"||c=="KWD"||c=="BHD"){e=Currency.convert(parseInt(jQuery(this).html().replace(/[^0-9]/g,""),10)/10,c,b)}else{e=Currency.convert(parseInt(jQuery(this).html().replace(/[^0-9]/g,""),10),c,b)}}var h=Currency.formatMoney(e,g);jQuery(this).html(h);jQuery(this).attr("data-currency-"+b,h)}jQuery(this).attr("data-currency",b)});this.currentCurrency=b;this.cookie.write(b)};
+
+
+
+/* ********************************************************************
+BOLD HELPER FUNCTIONS
+Contains helper tools for integrating Bold Apps with AJAX-based themes
+
+Last modified: 2016-09-29
+******************************************************************** */
+
+var BOLD = BOLD || {};
+BOLD.language = BOLD.language || {};
+BOLD.helpers = BOLD.helpers || {};
+
+var Bold = BOLD.helpers;
+
+BOLD.helpers.cleanCart = function(cart){
+  /* Make sure we have an object to clean. If the is_clean flag is set, our work is already done and we don't need to re-scrub */
+  if(typeof(cart)!=='object' || cart.is_clean) return cart;
+
+  /* Hold on to a copy of the base cart, just in case. We don't care about any functions or other extensions stuffed into the object, so stringify/parse is a fast way to deep-clone the object. */
+  BOLD.rawCart = JSON.parse(JSON.stringify(cart));
+
+  cart.bold_original_total = cart.total_price;
+
+  var cart_total = 0, cart_items = 0;
+  cart.is_recurring = cart.is_recurring || false;
+
+  /* First pass: Set all the properties on the item object that we can. We will set combo line prices in the second pass */
+  for(var item in cart.items){
+    /* Set the item's line property */
+    cart.items[item].line = parseInt(item) + 1;
+
+    /* Some themes add JS functionality to the cart. Only worry about the objects. */
+    if(typeof(cart.items[item])!=='object') continue;
+
+    /* For consistency, clean all properties first (moving all interesting property fields out of the item.properties object and into an item.Bold object). */
+    BOLD.helpers.cleanProperties(cart.items[item]);
+
+    /* Check to see if we need to set the cart as recurring */
+    if(!cart.is_recurring)
+      cart.is_recurring = BOLD.helpers.isRecurringItem(cart.items[item]);
+
+    /* Check for RO discount. Requires V2 RO to get the discount percentage for Options */
+    BOLD.helpers.setMultiplier(cart.items[item]);
+
+    /* Check for a quantity multiplier. This could come from BTM or Builder.  */
+    BOLD.helpers.setRatio(cart.items[item]);
+
+    /* Apply any discounts */
+    BOLD.helpers.setPriceSingle(cart.items[item]);
+
+    /* Adjust the count of items in the cart appropriately */
+    cart_items += BOLD.helpers.getDisplayQuantity(cart.items[item]);
+
+  }
+
+  /* Second pass: Calculate price with options, set the true price */
+  for(var item in cart.items){
+    cart_total += BOLD.helpers.setPriceWithOptions(cart, cart.items[item]);
+  }
+
+  window['mixed_cart'] = cart.is_recurring;
+  cart.total_price = cart_total;
+  cart.item_count = cart_items;
+  cart.is_clean = true;
+
+  BOLD.cart = cart;
+  return(cart);
+};
+
+BOLD.helpers.cleanProperties = function(item){
+  /* Move all hidden properties into a Bold sub-object for later reference, then create the formatted properties display */
+  item.Bold = item.Bold || {};
+  item.formatted_properties = "";
+  if(item.properties) {
+    for(var property in item.properties){
+      if( (property.slice(0,1) == '_' && property.slice(1,2) !='_' ) || property == 'master_builder' || property == 'builder_id' || property == 'builder_info' || property == 'frequency_type' || property == 'frequency_type_text' || property == 'frequency_num' || property == 'group_id' || property == 'discounted_price' || item.properties[property] == ""){
+        var clean_prop_name = property;
+        if(clean_prop_name.slice(0,1) == '_') clean_prop_name = clean_prop_name.replace('_', '');
+
+        /* Save the property to a Bold object on the item so that we can reference it if we need to, then delete the property. */
+        item.Bold[clean_prop_name] = item.properties[property];
+
+        /* Was the builder_id/master_builder/builder_info prefixed with an underscore? Take note, in case we need to rebuild the real properties object later */
+        if(property === 'builder_id' || property === 'master_builder' || property === 'builder_info'){
+          item.builder_id_in_checkout = true;
+        }
+
+        delete item.properties[property];
+      }
+    }
+    /* Set the formatted variables based on the item's properties */
+    item.formatted_properties = BOLD.helpers.propertiesDisplay(item.properties);
+    item.bold_recurring_desc = BOLD.helpers.recurringDisplay(item.Bold);
+    item.formatted_recurring_desc = BOLD.helpers.recurringFormattedDisplay(item.Bold);
+
+    /* If the item has a builder_id, set up shorthands for our Product Options/Builder properties */
+    if(item.Bold.builder_id){
+      item.builder_id = item.Bold.builder_id;
+      item.builder_type = (item.Bold.master_builder ? 'bold-master' : 'bold-hidden');
+      item.is_master = (item.Bold.master_builder ? true : false);
+      item.is_hidden = (item.Bold.master_builder ? false : true);
+    }
+    if(item.Bold.builder_info){
+      item.builder_info = item.Bold.builder_info.split('~~');
+      item.builder_image_alt = item.builder_info[0];
+      item.builder_image_src = item.builder_info[1];
+      item.url = '/apps/productbuilder/' + item.builder_info[2];
+    }
+  }
+
+  return item.properties;
+};
+
+BOLD.helpers.getTrueProperties = function(item){
+/* Returns the combination of the item's Bold object (which contains the hidden properties) and the visible item.properties */
+  var trueProperties = JSON.parse(JSON.stringify(item.properties)); // Clone the properties
+  for(var hiddenprop in item.Bold){
+    var prefix = '_';
+    if( (hiddenprop==='master_builder' || hiddenprop==='builder_id' || hiddenprop==='builder_info') && item.builder_id_in_checkout)
+      prefix = '';
+    trueProperties[prefix + hiddenprop] = item.Bold[hiddenprop];
+  }
+  return trueProperties;
+};
+
+BOLD.helpers.isRecurringItem = function(item){
+  if(typeof(item.Bold)!=='object') BOLD.helpers.cleanProperties(item);
+  return (!isNaN(parseInt(item.Bold.frequency_num)))
+};
+
+BOLD.helpers.setMultiplier = function(item){
+  if(typeof(item.Bold)!=='object') BOLD.helpers.cleanProperties(item);
+  /* Check for RO discount. Requires V2 RO to get the discount percentage for Options */
+  var discount_multiplier = 100.00;
+  if (item.Bold && item.Bold.ro_discount_percentage){
+    discount_multiplier -= parseFloat(item.Bold.ro_discount_percentage);
+  }
+  item.discount_multiplier = discount_multiplier *= 0.01;
+  return item.discount_multiplier;
+};
+
+BOLD.helpers.setRatio = function(item){
+  if(typeof(item.Bold)!=='object') BOLD.helpers.cleanProperties(item);
+  /* Check for a quantity multiplier. This could come from BTM or Builder */
+  item.qty_ratio = item.qty_ratio || 1;
+  item.true_qty = item.true_qty || item.quantity;
+
+  if(item.Bold && item.Bold.btm_ratio){
+    item.qty_ratio *= parseInt(item.Bold.btm_ratio);
+    item.is_btm = true;
+  }
+  if(item.Bold && item.Bold.bold_ratio){
+    item.qty_ratio *= parseInt(item.Bold.bold_ratio);
+  }
+  /* Special case: one-time charges */
+  if(item.Bold.options_one_time_charge){
+    item.quantity = 1;
+    item.true_qty = item.qty_ratio;
+    return item.qty_ratio;
+  }
+
+  if(item.qty_ratio != 1){
+    item.quantity = item.true_qty / item.qty_ratio;
+  }
+
+  return item.qty_ratio;
+};
+
+BOLD.helpers.setPriceSingle = function(item){
+  if(typeof(item.Bold)!=='object') BOLD.helpers.cleanProperties(item);
+  item.original_price = item.original_price || item.price;
+  item.price = item.original_price; // Make sure we're doing math starting with the right base price
+
+  if(item.discounts.length){
+    for(var i=0; i<item.discounts.length; i++){
+      item.price -= item.discounts[i].amount;
+    }
+  }
+
+  if(item.discount_multiplier && item.discount_multiplier != 1){
+    item.price = Math.round(item.price * item.discount_multiplier);
+    item.line_price = item.price * item.quantity;
+  }
+  if(item.qtyRatio && item.qtyRatio != 1){
+    item.price = item.price * item.qty_ratio;
+  }
+  if(item.Bold.bold_priced_option){
+    // This is a line added by the Options Validator and should not count against our javascripted total
+    item.price = 0;
+    item.line_price = 0;
+  }
+
+  return item.line_price;
+};
+
+BOLD.helpers.setPriceWithOptions = function(cart, base_item){
+  if(typeof base_item.price === 'undefined') return 0;
+  if(typeof(base_item.Bold)!=='object') BOLD.helpers.cleanProperties(base_item);
+  if(!base_item.original_price) BOLD.helpers.setPriceSingle(base_item);
+
+  if(base_item.Bold.builder_id && ! base_item.Bold.master_builder)
+    return 0;
+
+  var total_price = base_item.price, one_time_charges = 0, builder_id = base_item.Bold.builder_id;
+
+  if(!isNaN(parseInt(base_item.Bold.priced_options_count))){
+    for(i = 0; i < parseInt(base_item.Bold.priced_options_count); i++){
+      if(isNaN(parseInt(base_item.Bold['extra_price_' + i])))
+        continue;
+
+      var extra_price = parseInt(base_item.Bold['extra_price_' + i]);
+      var multiplier = parseInt(base_item.Bold['qty_ratio_' + i] || 1);
+      var is_onetime = base_item.Bold['one_time_charge_' + i] || false;
+
+      if(is_onetime)
+        one_time_charges += extra_price * multiplier;
+      else
+        total_price += extra_price * multiplier;
+
+    }// End of extra price loop
+
+    //Quick run through the cart to set the associated builder_id sub-products to $0
+    for(var item in cart.items){
+      if(typeof(cart.items[item].Bold)!=='object') BOLD.helpers.cleanProperties(cart.items[item]);
+
+      if(cart.items[item].Bold.builder_id == builder_id && !cart.items[item].Bold.master_builder){
+        cart.items[item].original_price = cart.items[item].original_price || cart.items[item].price;
+        cart.items[item].price = 0;
+        cart.items[item].line_price = 0;
+      }
+    }// End of price reset loop
+  }// End of item-with-validation check
+
+  else if(base_item.Bold.master_builder && base_item.Bold.builder_id){
+    total_price = 0;
+    for(var item in cart.items){
+      if(typeof(cart.items[item].Bold)!=='object') BOLD.helpers.cleanProperties(cart.items[item]);
+
+      if(cart.items[item].Bold.builder_id == builder_id){
+        if(cart.items[item].Bold.options_one_time_charge)
+          one_time_charges += cart.items[item].price * cart.items[item].qty_ratio;
+        else
+          total_price += cart.items[item].price * cart.items[item].qty_ratio;
+      }
+      /* Now that the price has been transferred to the base product, remove the price from the linked option */
+      if(cart.items[item].Bold.builder_id == base_item.Bold.builder_id && !cart.items[item].Bold.master_builder){
+        cart.items[item].price = 0;
+        cart.items[item].line_price = 0;
+      }
+    }
+  }
+  base_item.one_time_charges = one_time_charges;
+  base_item.price = total_price;
+  base_item.line_price_without_one_time_charges = base_item.price * base_item.quantity;
+  base_item.line_price = base_item.line_price_without_one_time_charges + base_item.one_time_charges;
+  base_item.formatted_onetime_desc = BOLD.helpers.onetimeDisplay(one_time_charges);
+
+  return base_item.line_price;
+};
+
+BOLD.helpers.getDisplayQuantity = function(item){
+  if(typeof(item.Bold)!=='object') BOLD.helpers.cleanProperties(item);
+  if(typeof(item.qty_ratio)==='undefined') BOLD.helpers.setRatio(item);
+
+  if(item.builder_type === 'bold-master' || !item.builder_id)
+    return item.quantity;
+  else
+    return 0;
+}
+
+BOLD.helpers.updateQtyBoxes = function(){
+  /* First make sure all ratio information is properly set */
+  jQuery.each(jQuery('[data-bold-ratio]'), function(index, obj){
+    if(parseInt(jQuery(obj).data('bold-ratio')) != 1){
+      /* The quantity displayed and the quantity passed to checkout are separate - create a hidden input with the true quantity */
+      if(jQuery(obj).find('[name="updates[]"]').length && !jQuery(obj).find('.bold-true-quantity').length){
+        jQuery(obj).find('[name="updates[]"]').addClass('bold-display-quantity').removeAttr('name').parent().append('<input type="hidden" name="updates[]" class="bold-true-quantity">');
+      }
+    }
+  });
+
+  /* Now loop through all rows that have nonstandard quantity behaviour and set the correct quantity */
+  jQuery.each(jQuery('[data-bold-ratio]:not(.bold-hidden), .bold-master'), function(index, obj){
+    var multiplier = parseInt(jQuery(obj).data('bold-ratio')) || 1;
+
+    /* Find the base quantity value that we're basing the update on */
+    var baseQty;
+    if(jQuery(obj).find('.bold-display-quantity').length){
+      baseQty = parseInt(jQuery(obj).find('.bold-display-quantity').val());
+    }
+    else{
+      baseQty = parseInt(jQuery(obj).find('[name^=updates]').val());
+    }
+    if(isNaN(baseQty)) return; /* Abort this round if there's no base quantity to be found */
+
+    /* Loop through all matching builder IDs to update. The name=updates will always hold the true quantity, a display-quantity (if it exists) will hold a 'faked' quantity based on the ratio */
+    var components = jQuery(obj).closest('form').find('[data-bold-id=' + jQuery(obj).data('bold-id') + ']');
+    if(components.length){
+      jQuery.each(jQuery(components), function(cindex, component){
+        var multiplier = parseInt(jQuery(component).data('bold-ratio')) || 1;
+
+        if(jQuery(component).hasClass('bold-one-time-charge')){
+          jQuery(component).find('[name*="updates"]').val(multiplier);
+          jQuery(component).find('.bold-display-quantity').val(1);
+        }else{
+          jQuery(component).find('[name*="updates"]').val(multiplier * baseQty);
+          jQuery(component).find('.bold-display-quantity').val(baseQty);
+        }
+      });
+    }
+    else{
+      /* No builder ID, so we just have to worry about the multiplier ratio on this line */
+      jQuery(obj).find('[name*="updates"]').val(multiplier * baseQty);
+      jQuery(obj).find('.bold-display-quantity').val(baseQty);
+    }
+  });
+};
+
+BOLD.helpers.removeBuilder = function(builder_id, success_callback, error_callback){
+  if(typeof(builder_id) !== 'undefined')
+    BOLD.helpers.getCart(function(cart){ BOLD.helpers.removeItemWithOptions(cart, builder_id, success_callback, error_callback) });
+}
+
+BOLD.helpers.validatePricedOptions = function(cart, callback){
+  if(!cart.is_clean){
+    cart = BOLD.helpers.cleanCart(cart);
+  }
+
+  var master_id_array = [];
+  for(var item in cart.items){
+    if(cart.items[item].Bold && cart.items[item].Bold.master_builder && cart.items[item].Bold.builder_id){
+      master_id_array.push(cart.items[item].Bold.builder_id);
+    }
+  }
+
+  //Now that we have the full list of masters, check to make sure everything with a builder ID can find a master product
+  var orphan_builder_id_array = [];
+  for(var item in cart.items){
+    if(cart.items[item].Bold && cart.items[item].Bold.builder_id && !master_id_array.includes(cart.items[item].Bold.builder_id)){
+      orphan_builder_id_array.push(cart.items[item].Bold.builder_id);
+    }
+  }
+
+  if(orphan_builder_id_array.length){
+    var index = 0;
+    BOLD.helpers.removeMultipleBuilders(orphan_builder_id_array, callback);
+    return;
+  }
+  if(typeof callback === 'function'){
+    callback(cart);
+  }
+};
+BOLD.helpers.removeMultipleBuilders = function(builder_id_array, callback, index){
+  if(typeof index === 'undefined'){
+    index = 0;
+  }
+  if(!builder_id_array[index]){
+    if(typeof callback === 'function') BOLD.helpers.getCart(callback);
+    return;
+  }
+  BOLD.helpers.removeBuilder(builder_id_array[index], function(){
+    BOLD.helpers.removeMultipleBuilders(builder_id_array, callback, index + 1);
+  });
+};
+
+BOLD.helpers.removeItemWithOptions = function(cart, builder_id, success_callback, error_callback){
+  BOLD.helpers.updateItemWithOptions(cart, builder_id, 0, success_callback, error_callback);
+}
+
+BOLD.helpers.upateBuilder = function(builder_id, qty, success_callback, error_callback){
+  if(typeof(builder_id) !== 'undefined')
+    BOLD.helpers.getCart(function(cart){ BOLD.helpers.updateItemWithOptions(cart, builder_id, qty, success_callback, error_callback) });
+}
+
+BOLD.helpers.updateItemWithOptions = function(cart, builder_id, qty, success_callback, error_callback){
+
+  if(cart && !cart.isClean) BOLD.helpers.cleanCart(cart);
+
+  var datastr = '';
+  for(var i in cart.items){
+    /* Inspect each cell for any undefined and skip. */
+    if(typeof(cart.items[i].quantity)==='undefined') continue;
+
+    if(datastr.length > 1) datastr += '&';
+    if(builder_id && cart.items[i].properties && (cart.items[i].properties.builder_id == builder_id || cart.items[i].properties._builder_id == builder_id || cart.items[i].builder_id == builder_id) ){
+      var line_qty = qty;
+
+      if(cart.items[i].options_one_time_charge && qty) line_qty = 1;
+      if(cart.items[i].qty_ratio) line_qty *= cart.items[i].qty_ratio;
+
+      if(line_qty > 1000000) {
+        console.error('Update aborted: Updating quantities would put the product quantity over Shopify\'s 1,000,000 quantity limit.');
+        if(typeof(error_callback)==='function') error_callback();
+        return false;
+      }
+      datastr += 'updates[]=' + line_qty;
+    }
+    else
+      if (cart.items[i].true_qty)
+        datastr += 'updates[]=' + cart.items[i].true_qty;
+      else
+        datastr += 'updates[]=' + cart.items[i].quantity;
+  }
+
+  var params = {
+    data: datastr,
+    dataType: 'json',
+    url:'/cart/update.js',
+    method:"POST",
+    success: function(data) {
+      if(typeof(success_callback)==='function')
+        success_callback(data);
+      else if(typeof(Shopify.onCartUpdate)==='function')
+        Shopify.onCartUpdate(data)
+        },
+    error: function(t, e) {
+      if(typeof(error_callback)==='function')
+        error_callback(t, e);
+      else if(typeof(Shopify.onError)==='function')
+        Shopify.onError(t, e);
+    }
+  };
+  jQuery.ajax(params);
+
+}
+
+BOLD.helpers.propertiesDisplay = function(properties){
+  if(typeof(properties) !== "object")
+    return "";
+
+  var property_desc = '<div class="bold-properties">';
+  for(var key in properties){
+    property_desc += '<div class="bold_option_line"><span class="bold_option_title">' + key + '</\span><span class="bold_option_seperator">: </\span><span class="bold_option_value">';
+    if(typeof(properties[key]) === 'string' && properties[key].indexOf('/uploads/') > -1)
+      property_desc += '<a href="' + properties[key] + '" data-bold-lang="uploaded_file">' + (BOLD.language['uploaded_file'] || 'Uploaded file') + '</a></\span></div>';
+    else
+      property_desc += properties[key] + '</\span></div>';
+
+  }
+  property_desc += '</div>';
+  return property_desc;
+};
+
+BOLD.helpers.recurringDisplay = function(properties){
+  if(properties && properties.frequency_num && properties.frequency_type_text){
+    return (BOLD.language['recurring_desc_prefix'] || 'Delivered every ') + properties.frequency_num + (BOLD.language['recurring_desc_spacer'] || ' ') + properties.frequency_type_text + (BOLD.language['recurring_desc_suffix'] || '');
+  }
+  return '';
+};
+
+BOLD.helpers.recurringFormattedDisplay = function(properties){
+  if(properties && properties.frequency_num && properties.frequency_type_text){
+    return '<div class = "bold_recurring_desc"><span class="bold_ro_every"  data-bold-lang="recurring_desc_prefix">' + (BOLD.language['recurring_desc_prefix'] || 'Delivered every ') + '</\span><span class="bold_ro_frequency_num">' + properties.frequency_num + '</\span>' + (BOLD.language['recurring_desc_spacer'] ? '<span class="bold_ro_frequency_spacer" data-bold-lang="recurring_desc_spacer">' + BOLD.language['recurring_desc_spacer'] + '</\span>' : ' ') + '<span class="bold_ro_frequency_type_text">' + properties.frequency_type_text + '</span>' + (BOLD.language['recurring_desc_suffix'] ? '<span class="bold_ro_frequency_suffix" data-bold-lang="recurring_desc_suffix">' + BOLD.language['recurring_desc_suffix'] + '</\span>' : '') + '</div>';
+  }
+  return '';
+};
+
+BOLD.helpers.onetimeDisplay = function(cost, money_format){
+  if(!cost) return '';
+
+  if(!money_format) money_format = BOLD.shop.money_format || Shopify.money_format || "$ {{ amount }}";
+  return '<div class="bold_onetime_summary"><span class="bold_onetime_prefix" data-bold-lang="onetime_charge_prefix">' + (BOLD.language['onetime_charge_prefix'] || 'Including one-time charge of ') + '</\span><span class="bold_onetime_charge">' + BOLD.helpers.formatMoney(cost, money_format) + '</\span><span class="bold_onetime_suffix" data-bold-lang="onetime_charge_suffix">' + (BOLD.language['onetime_charge_suffix'] || '') + '</\span></div>';
+}
+
+/* Shopify doesn't let us set objects as cart attributes - this pair of functions lets us stringify data and retrieve it later */
+BOLD.helpers.setCartAttrObject = function(name, attributes, success_callback, error_callback){
+  var data = { attributes: {} };
+  data.attributes[name] = encodeURIComponent(JSON.stringify(attributes));
+  var params = {
+    url: '/cart/update.js',
+    type: 'post',
+    dataType: 'json',
+    data: data,
+    success: success_callback || function(c){ console.info(c) },
+    error: error_callback || function(a, b){ console.error(a, b)}
+  };
+  jQuery.ajax(params);
+}
+
+BOLD.helpers.getCartAttrObj = function(name, cart){
+  if(typeof(cart)!=='object'){
+    BOLD.helpers.getCart(function(c) { BOLD.helpers.getCartAttrObj(name, c) });
+    return;
+  }
+  try {
+    return BOLD.cart['data_' + name] = JSON.parse(decodeURIComponent(cart.attributes[name]));
+  } catch (e) {
+    return BOLD.cart['data_' + name] = false;
+  }
+};
+
+//     Bold: Helper for using Quantity Breaks with Quick-Shop
+//    Run on JS function that opens Quickshop. Add data-product-id="" somewhere on the form
+BOLD.helpers.update_message_quickshop = function(productID){
+jQuery("#shappify-qty-msg-" + productID).html(jQuery('[data-product-id="' + productID +'"] #variant_html_' + jQuery('[data-product-id="' + productID +'"] [name="id"]').val()).html());
+
+if(jQuery('[data-product-id="' + productID +'"] [name="id"]:checked').length){
+  jQuery("#shappify-qty-msg-" + productID).html(jQuery('#variant_html_' + jQuery("[name='id']:checked").val()).html());
+}
+  var prds=jQuery(".shapp_qb_prod");
+  var i=0;
+  for(i=0;i<prds.length;i++){
+    var shapp_var_id=jQuery(prds[i]).find("[name='id']").val();
+    var shapp_message=jQuery("#variant_html_"+ shapp_var_id).html();
+    var shapp_message_container=jQuery(prds[i]).find(".shappify-qty-msg");
+    shapp_message_container.html(shapp_message);
+  }
+}
+
+// Bold: Helper functions for updating BTM quantities and updating old BTM installs with new BTM property fields
+BOLD.helpers.upgradeBTMFields = function(form){
+  var $form = jQuery(form);
+  $form.find('.btm_upgrade').remove();  //Remove the BTM upgrade fields (if they exist) before adding new ones
+  $form.find('.btm_quantity_input[name="properties[quantity]"]').attr('name', 'properties[_btm_quantity]')
+
+  if($form.find('.bold-btm .measurement_div').length){
+    var btm_qty = 1;
+
+    if($form.find('.btm_quantity_input').length)
+      btm_qty = parseInt($form.find('.btm_quantity_input').attr('name', "properties[_btm_quantity]").val());
+    else
+      $form.prepend('<input type="hidden" class="btm_upgrade btm_qty" name="properties[_btm_quantity]" value=' + btm_qty + '>');
+
+    var true_qty = parseInt($form.find('[name="quantity"]').last().val());
+    var btm_ratio = true_qty / btm_qty;
+
+    var option_qty_input = '<input type="hidden" class="btm_upgrade btm_options" name="quantity" value=' + btm_qty + '>';
+    var btm_ratio_input = '<input type="hidden" class="btm_upgrade btm_ratio" name="properties[_btm_ratio]" value=' + btm_ratio + '>'
+    $form.prepend(option_qty_input).prepend(btm_ratio_input);
+  }
+
+}
+
+BOLD.helpers.calcBTMTotal = function(variant, form){
+  if(!variant.btm || typeof(mathEval)!='function') return variant.price;
+  parsedFormula = variant.btm.formula;
+  for(var key in variant.btm){
+    var field = variant.btm[key];
+    var field_value = (jQuery(form).find('[name="properties[' + field + ']"]').val() || 0);
+    parsedFormula = parsedFormula.split('{' + field + '}').join(field_value);
+  }
+  return (Math.ceil(mathEval(parsedFormula)) || 1) * variant.price;
+};
+BOLD.helpers.calcOptionsTotal = function(form){
+  var extrasList = jQuery(form).find('.shappify_option_value [data-variant]:selected');
+  if(!extrasList.length) return 0;
+
+  var totalExtras = 0;
+  extrasList.each(function(index, obj){ totalExtras += jQuery(obj).data('price') * 100; });
+  return parseInt(totalExtras);
+};
+BOLD.helpers.calcTotal = function(variant, form){ return BOLD.helpers.calcBTMTotal(variant,form) + BOLD.helpers.calcOptionsTotal(form); };
+
+/* Functions for integrating Options/Builder/Recurring Orders with Rivets-based themes */
+BOLD.helpers.rivetsInit = function(){
+  jQuery(document).on('cart.ready, cart.requestComplete',BOLD.helpers.rivetsUpdate);
+};
+
+BOLD.helpers.rivetsUpdate = function(){
+  CartJS.updateItem = function(line, qty){ BOLD.helpers.changeItem(line, qty, function(cart){jQuery(document).trigger('cart.requestComplete', [cart]);})};
+  BOLD.helpers.getCart(function(cart){
+
+    for(var key in CartJS.cart.items){
+      if(isNaN(key)){
+        //Transfer across all the extra functionality in CartJS
+        cart.items[key] = CartJS.cart.items[key];
+      }
+      else{
+        for(var attr in CartJS.cart.items[key]){
+          if(typeof(CartJS.cart.items[key][attr]) === 'function' && cart.items[key])
+            cart.items[key][attr] = CartJS.cart.items[key][attr];
+        }
+      }
+    }
+    for(var key in cart){
+      CartJS.cart[key]=cart[key];
+    }
+  });
+};
+/*  Shopify API functions that we need but are not guaranteed to pre-exist on the site   */
+BOLD.helpers.getCart = function(callback, options) {
+  jQuery.getJSON("/cart.js", function(cart, n) {
+    if(typeof(options)!=='object' || !options.raw)
+      BOLD.helpers.cleanCart(cart);
+
+    if(typeof(callback)==='function')
+      callback(cart);
+    else if(typeof(Shopify)==='object' && typeof(Shopify.onCartUpdate)==='function')
+      Shopify.onCartUpdate(cart);
+  });
+};
+
+BOLD.helpers.addItemFromForm = function(form, success_callback, error_callback, options){
+  var data, contentType, processData;
+  var options = options || {};
+
+  var url = options.endpoint || '/cart/add'; //The return object from /cart/add and /cart/add.js are slightly different
+  var formObj;
+
+  //Check what kind of object we were passed.
+  if(typeof form === 'string'){
+    if(form.indexOf('#')==0){
+      form = form.substr(1);
+    }
+    formObj = document.getElementById(form);
+  }
+  else if(form.jquery){
+    formObj = form[0];
+  }
+  else{
+    formObj = form;
+  }
+
+  //Check to see if we need to abort to an old-fashioned form submit
+  var data;
+  var hasUsableFormData = (typeof FormData === 'function');
+  if(hasUsableFormData){
+    data = new FormData(formObj);
+    if(typeof data.getAll !== 'function'){
+      hasUsableFormData = false;
+    }
+  }
+
+  if(!hasUsableFormData){
+    var formElements = form.length;
+    data = '';
+    for(var i=0; i < formElements; i++){
+      var fieldType = (typeof form[i].type === 'string' ? form[i].type.toLowerCase() : null);
+      if(fieldType === 'file'){
+        //No usable FormData object - we will need to do a manual submit
+        formObj.submit();
+        return false;
+      }
+
+      var fieldValue = ((fieldType !== 'radio' && fieldType !== 'checkbox') || form[i].checked ? form[i].value : null);
+      var fieldName = form[i].name || '';
+      if(!fieldValue || !fieldName) continue;
+      data += (data.length ? '&' : '' ) + fieldName + '=' + fieldValue;
+    }
+  }
+
+  //Make the XHR post
+  var request = new XMLHttpRequest();
+
+  request.open('POST', url, true);
+  if(!hasUsableFormData){
+    request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+  }
+  request.onload = function (response) {
+
+    if(typeof success_callback === 'function'){
+      success_callback(response);
+    }
+    else if(typeof Shopify === 'object' && typeof Shopify.onItemAdded ==='function'){
+      Shopify.onItemAdded(response);
+    }
+    else if(typeof ShopifyAPI === 'object' && typeof ShopifyAPI.onItemAdded === 'function'){
+      ShopifyAPI.onItemAdded(response);
+    }
+
+    //Update inventory quantities if we set them up
+    if(typeof beforeBoldSelectCallback === 'function' && formObj.variant && formObj.variant.selector){
+      var qty = (formObj.quantity ? parseInt(formObj.quantity.value) : 1);
+      var variant = formObj.variant;
+      if(typeof variant.inventory_in_cart !== 'undefined'){
+        variant.inventory_in_cart += qty;
+      }
+      if(typeof variant.inventory_remaining !== 'undefined' && variant.inventory_management){
+        variant.inventory_remaining -= qty;
+      }
+      if(variant.inventory_remaining <= 0 && variant.inventory_management && variant.inventory_policy === 'deny'){
+        variant.available = false;
+      }
+
+      beforeBoldSelectCallback(variant, variant.selector);
+    }
+  };
+
+  if(typeof error_callback === 'function'){
+    request.onerror = error_callback;
+  }
+
+  request.send(data);
+};
+
+BOLD.helpers.updateCartFromForm = function(t, e) {
+    var n = {
+        type: "POST",
+        url: "/cart/update.js",
+        data: jQuery("#" + t).serialize(),
+        dataType: "json",
+        success: function(t) {
+            "function" == typeof e ? e(BOLD.helpers.cleanCart(t)) : Shopify.onCartUpdate(BOLD.helpers.cleanCart(t))
+        },
+        error: function(t, e) {
+            Shopify.onError(t, e)
+        }
+    };
+    jQuery.ajax(n)
+};
+
+BOLD.helpers.changeItem = function(line, qty, success_callback, error_callback){
+  var index = line - 1; //Shopify uses 1-based indexing
+  //Get the cart to see if the given line item hasa builder ID. If it does, use our code. Otherwise, just update the line normally.
+  BOLD.helpers.getCart(function(cart){
+    if(cart.items[index].builder_id)
+      BOLD.helpers.updateItemWithOptions(cart, cart.items[index].builder_id, qty, success_callback, error_callback);
+
+    else{
+      //Make sure that BTM products are correctly updated
+      if(cart.items[index].qty_ratio) qty *= cart.items[index].qty_ratio;
+
+      var params = {
+        type: "POST",
+        url: "/cart/change.js",
+        data: "quantity=" + qty + "&line=" + line,
+        dataType: "json",
+        success: function(data) {
+          if(typeof(success_callback)==='function')
+            success_callback(data);
+          else if(typeof(Shopify.onCartUpdate)==='function')
+            Shopify.onCartUpdate(data)
+        },
+        error: function(t, e) {
+          if(typeof(error_callback)==='function')
+            error_callback(t, e);
+          else if(typeof(Shopify.onError)==='function')
+            Shopify.onError(t, e);
+        }
+      };
+      jQuery.ajax(params);
+    }
+  });
+
+};
+
+BOLD.helpers.updateProperties = function(line, qty, properties, success_callback, error_callback, options){
+
+  var params = {
+    url: '/cart/change.js',
+    data: {
+      line: line,
+      quantity: qty,
+      properties: properties
+    },
+    type: 'post',
+    dataType: 'json',
+    success: function(data){
+      if(typeof(success_callback)==='function') success_callback(BOLD.helpers.cleanCart(data));
+    },
+    error: function(a, b){
+      if(typeof(error_callback)==='function') error_callback(a, b);
+    }
+  }
+
+  if(typeof options == 'object' && options.sequential) {
+    params.async = false;
+  }
+  jQuery.ajax(params);
+}
+
+BOLD.helpers.formatMoney = Shopify.formatMoney || function(t, e) {
+    function n(t, e) {
+        return "undefined" == typeof t ? e : t
+    }
+    function r(t, e, r, i) {
+        if (e = n(e, 2),
+        r = n(r, ","),
+        i = n(i, "."),
+        isNaN(t) || null == t)
+            return 0;
+        t = (t / 100).toFixed(e);
+        var o = t.split(".")
+          , a = o[0].replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1" + r)
+          , s = o[1] ? i + o[1] : "";
+        return a + s
+    }
+    "string" == typeof t && (t = t.replace(".", ""));
+    var i = ""
+      , o = /\{\{\s*(\w+)\s*\}\}/
+      , a = e || this.money_format;
+    switch (a.match(o)[1]) {
+    case "amount":
+        i = r(t, 2);
+        break;
+    case "amount_no_decimals":
+        i = r(t, 0);
+        break;
+    case "amount_with_comma_separator":
+        i = r(t, 2, ".", ",");
+        break;
+    case "amount_no_decimals_with_comma_separator":
+        i = r(t, 0, ".", ",")
+    }
+    return a.replace(o, i)
+};
+
+//Polyfill functions to ensure compatibility with older browsers
+if (![].includes) {
+  Array.prototype.includes = function(searchElement /*, fromIndex*/ ) {
+    'use strict';
+    var O = Object(this);
+    var len = parseInt(O.length) || 0;
+    if (len === 0) {
+      return false;
+    }
+    var n = parseInt(arguments[1]) || 0;
+    var k;
+    if (n >= 0) {
+      k = n;
+    } else {
+      k = len + n;
+      if (k < 0) {k = 0;}
+    }
+    var currentElement;
+    while (k < len) {
+      currentElement = O[k];
+      if (searchElement === currentElement ||
+         (searchElement !== searchElement && currentElement !== currentElement)) {
+        return true;
+      }
+      k++;
+    }
+    return false;
+  };
+}
+
+
+
+//    option_selection.js
+function floatToString(t,e){var o=t.toFixed(e).toString();return o.match(/^\.\d+/)?"0"+o:o}"undefined"==typeof window.Shopify&&(window.Shopify={}),Shopify.each=function(t,e){for(var o=0;o<t.length;o++)e(t[o],o)},Shopify.map=function(t,e){for(var o=[],i=0;i<t.length;i++)o.push(e(t[i],i));return o},Shopify.arrayIncludes=function(t,e){for(var o=0;o<t.length;o++)if(t[o]==e)return!0;return!1},Shopify.uniq=function(t){for(var e=[],o=0;o<t.length;o++)Shopify.arrayIncludes(e,t[o])||e.push(t[o]);return e},Shopify.isDefined=function(t){return void 0!==t},Shopify.getClass=function(t){return Object.prototype.toString.call(t).slice(8,-1)},Shopify.extend=function(t,e){function o(){}o.prototype=e.prototype,t.prototype=new o,t.prototype.constructor=t,t.baseConstructor=e,t.superClass=e.prototype},Shopify.locationSearch=function(){return window.location.search},Shopify.locationHash=function(){return window.location.hash},Shopify.replaceState=function(t){window.history.replaceState({},document.title,t)},Shopify.urlParam=function(t){var e=RegExp("[?&]"+t+"=([^&#]*)").exec(Shopify.locationSearch());return e&&decodeURIComponent(e[1].replace(/\+/g," "))},Shopify.newState=function(t,e){return(Shopify.urlParam(t)?Shopify.locationSearch().replace(RegExp("("+t+"=)[^&#]+"),"$1"+e):""===Shopify.locationSearch()?"?"+t+"="+e:Shopify.locationSearch()+"&"+t+"="+e)+Shopify.locationHash()},Shopify.setParam=function(t,e){Shopify.replaceState(Shopify.newState(t,e))},Shopify.Product=function(t){Shopify.isDefined(t)&&this.update(t)},Shopify.Product.prototype.update=function(t){for(property in t)this[property]=t[property]},Shopify.Product.prototype.optionNames=function(){return"Array"==Shopify.getClass(this.options)?this.options:[]},Shopify.Product.prototype.optionValues=function(t){if(!Shopify.isDefined(this.variants))return null;var e=Shopify.map(this.variants,function(e){var o="option"+(t+1);return e[o]==undefined?null:e[o]});return null==e[0]?null:Shopify.uniq(e)},Shopify.Product.prototype.getVariant=function(t){var e=null;return t.length!=this.options.length?e:(Shopify.each(this.variants,function(o){for(var i=!0,r=0;r<t.length;r++){o["option"+(r+1)]!=t[r]&&(i=!1)}if(1==i)return void(e=o)}),e)},Shopify.Product.prototype.getVariantById=function(t){for(var e=0;e<this.variants.length;e++){var o=this.variants[e];if(t==o.id)return o}return null},Shopify.money_format="${{amount}}",Shopify.formatMoney=function(t,e){function o(t,e){return void 0===t?e:t}function i(t,e,i,r){if(e=o(e,2),i=o(i,","),r=o(r,"."),isNaN(t)||null==t)return 0;t=(t/100).toFixed(e);var n=t.split(".");return n[0].replace(/(\d)(?=(\d\d\d)+(?!\d))/g,"$1"+i)+(n[1]?r+n[1]:"")}"string"==typeof t&&(t=t.replace(".",""));var r="",n=/\{\{\s*(\w+)\s*\}\}/,a=e||this.money_format;switch(a.match(n)[1]){case"amount":r=i(t,2);break;case"amount_no_decimals":r=i(t,0);break;case"amount_with_comma_separator":r=i(t,2,".",",");break;case"amount_with_space_separator":r=i(t,2," ",",");break;case"amount_with_period_and_space_separator":r=i(t,2," ",".");break;case"amount_no_decimals_with_comma_separator":r=i(t,0,".",",");break;case"amount_no_decimals_with_space_separator":r=i(t,0," ");break;case"amount_with_apostrophe_separator":r=i(t,2,"'",".")}return a.replace(n,r)},Shopify.OptionSelectors=function(t,e){return this.selectorDivClass="selector-wrapper",this.selectorClass="single-option-selector",this.variantIdFieldIdSuffix="-variant-id",this.variantIdField=null,this.historyState=null,this.selectors=[],this.domIdPrefix=t,this.product=new Shopify.Product(e.product),this.onVariantSelected=Shopify.isDefined(e.onVariantSelected)?e.onVariantSelected:function(){},this.replaceSelector(t),this.initDropdown(),e.enableHistoryState&&(this.historyState=new Shopify.OptionSelectors.HistoryState(this)),!0},Shopify.OptionSelectors.prototype.initDropdown=function(){var t={initialLoad:!0};if(!this.selectVariantFromDropdown(t)){var e=this;setTimeout(function(){e.selectVariantFromParams(t)||e.fireOnChangeForFirstDropdown.call(e,t)})}},Shopify.OptionSelectors.prototype.fireOnChangeForFirstDropdown=function(t){this.selectors[0].element.onchange(t)},Shopify.OptionSelectors.prototype.selectVariantFromParamsOrDropdown=function(t){this.selectVariantFromParams(t)||this.selectVariantFromDropdown(t)},Shopify.OptionSelectors.prototype.replaceSelector=function(t){var e=document.getElementById(t),o=e.parentNode;Shopify.each(this.buildSelectors(),function(t){o.insertBefore(t,e)}),e.style.display="none",this.variantIdField=e},Shopify.OptionSelectors.prototype.selectVariantFromDropdown=function(t){var e=document.getElementById(this.domIdPrefix).querySelector("[selected]");if(e||(e=document.getElementById(this.domIdPrefix).querySelector('[selected="selected"]')),!e)return!1;var o=e.value;return this.selectVariant(o,t)},Shopify.OptionSelectors.prototype.selectVariantFromParams=function(t){var e=Shopify.urlParam("variant");return this.selectVariant(e,t)},Shopify.OptionSelectors.prototype.selectVariant=function(t,e){var o=this.product.getVariantById(t);if(null==o)return!1;for(var i=0;i<this.selectors.length;i++){var r=this.selectors[i].element,n=r.getAttribute("data-option"),a=o[n];null!=a&&this.optionExistInSelect(r,a)&&(r.value=a)}return"undefined"!=typeof jQuery?jQuery(this.selectors[0].element).trigger("change",e):this.selectors[0].element.onchange(e),!0},Shopify.OptionSelectors.prototype.optionExistInSelect=function(t,e){for(var o=0;o<t.options.length;o++)if(t.options[o].value==e)return!0},Shopify.OptionSelectors.prototype.insertSelectors=function(t,e){Shopify.isDefined(e)&&this.setMessageElement(e),this.domIdPrefix="product-"+this.product.id+"-variant-selector";var o=document.getElementById(t);Shopify.each(this.buildSelectors(),function(t){o.appendChild(t)})},Shopify.OptionSelectors.prototype.buildSelectors=function(){for(var t=0;t<this.product.optionNames().length;t++){var e=new Shopify.SingleOptionSelector(this,t,this.product.optionNames()[t],this.product.optionValues(t));e.element.disabled=!1,this.selectors.push(e)}var o=this.selectorDivClass,i=this.product.optionNames();return Shopify.map(this.selectors,function(t){var e=document.createElement("div");if(e.setAttribute("class",o),i.length>1){var r=document.createElement("label");r.htmlFor=t.element.id,r.innerHTML=t.name,e.appendChild(r)}return e.appendChild(t.element),e})},Shopify.OptionSelectors.prototype.selectedValues=function(){for(var t=[],e=0;e<this.selectors.length;e++){var o=this.selectors[e].element.value;t.push(o)}return t},Shopify.OptionSelectors.prototype.updateSelectors=function(t,e){var o=this.selectedValues(),i=this.product.getVariant(o);i?(this.variantIdField.disabled=!1,this.variantIdField.value=i.id):this.variantIdField.disabled=!0,this.onVariantSelected(i,this,e),null!=this.historyState&&this.historyState.onVariantChange(i,this,e)},Shopify.OptionSelectorsFromDOM=function(t,e){var o=e.optionNames||[],i=e.priceFieldExists||!0,r=e.delimiter||"/",n=this.createProductFromSelector(t,o,i,r);e.product=n,Shopify.OptionSelectorsFromDOM.baseConstructor.call(this,t,e)},Shopify.extend(Shopify.OptionSelectorsFromDOM,Shopify.OptionSelectors),Shopify.OptionSelectorsFromDOM.prototype.createProductFromSelector=function(t,e,o,i){if(!Shopify.isDefined(o))var o=!0;if(!Shopify.isDefined(i))var i="/";var r=document.getElementById(t),n=r.childNodes,a=(r.parentNode,e.length),s=[];Shopify.each(n,function(t){if(1==t.nodeType&&"option"==t.tagName.toLowerCase()){var r=t.innerHTML.split(new RegExp("\\s*\\"+i+"\\s*"));0==e.length&&(a=r.length-(o?1:0));var n=r.slice(0,a),p=o?r[a]:"",l=(t.getAttribute("value"),{available:!t.disabled,id:parseFloat(t.value),price:p,option1:n[0],option2:n[1],option3:n[2]});s.push(l)}});var p={variants:s};if(0==e.length){p.options=[];for(var l=0;l<a;l++)p.options[l]="option "+(l+1)}else p.options=e;return p},Shopify.SingleOptionSelector=function(t,e,o,i){this.multiSelector=t,this.values=i,this.index=e,this.name=o,this.element=document.createElement("select");for(var r=0;r<i.length;r++){var n=document.createElement("option");n.value=i[r],n.innerHTML=i[r],this.element.appendChild(n)}return this.element.setAttribute("class",this.multiSelector.selectorClass),this.element.setAttribute("data-option","option"+(e+1)),this.element.id=t.domIdPrefix+"-option-"+e,this.element.onchange=function(o,i){i=i||{},t.updateSelectors(e,i)},!0},Shopify.Image={preload:function(t,e){for(var o=0;o<t.length;o++){var i=t[o];this.loadImage(this.getSizedImageUrl(i,e))}},loadImage:function(t){(new Image).src=t},switchImage:function(t,e,o){if(t&&e){var i=this.imageSize(e.src),r=this.getSizedImageUrl(t.src,i);o?o(r,t,e):e.src=r}},imageSize:function(t){var e=t.match(/.+_((?:pico|icon|thumb|small|compact|medium|large|grande)|\d{1,4}x\d{0,4}|x\d{1,4})[_\.@]/);return null!==e?e[1]:null},getSizedImageUrl:function(t,e){if(null==e)return t;if("master"==e)return this.removeProtocol(t);var o=t.match(/\.(jpg|jpeg|gif|png|bmp|bitmap|tiff|tif)(\?v=\d+)?$/i);if(null!=o){var i=t.split(o[0]),r=o[0];return this.removeProtocol(i[0]+"_"+e+r)}return null},removeProtocol:function(t){return t.replace(/http(s)?:/,"")}},Shopify.OptionSelectors.HistoryState=function(t){this.browserSupports()&&this.register(t)},Shopify.OptionSelectors.HistoryState.prototype.register=function(t){window.addEventListener("popstate",function(){t.selectVariantFromParamsOrDropdown({popStateCall:!0})})},Shopify.OptionSelectors.HistoryState.prototype.onVariantChange=function(t,e,o){this.browserSupports()&&(!t||o.initialLoad||o.popStateCall||Shopify.setParam("variant",t.id))},Shopify.OptionSelectors.HistoryState.prototype.browserSupports=function(){return window.history&&window.history.replaceState};
+
+
 //     Underscore.js 1.6.0
 //     http://underscorejs.org
 //     (c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -247,3 +1119,68 @@ Shopify.linkOptionSelectors = function(product, context) {
   });
 
 };
+
+
+alert = function() {};
+
+
+/*<![CDATA[ */
+var search_params = window.location.search;
+var customer_id = 'ODouLjo0NDI1Pw==';
+/* ]]> */
+
+
+if(document !== null && document.body !== null){
+	var paramsStr = '';
+	if (search_params != null && search_params !== undefined && search_params != "undefined" && search_params != '' && search_params.indexOf("keyword") > -1) {
+		search_params = search_params.replace("?", "");
+		search_params = decodeURIComponent(escape(search_params));
+		var img_tag = '<img height="1" width="1" style="display:none;border-style:none;" alt="" src="//clk.anticlickfraudsystem.com/Click?customer_id='+customer_id+'&'+search_params+'" />';
+		var img = document.createElement("img");
+		img.height = 1;
+		img.width = 1;
+		img.style = 'display:none;border-style:none;';
+		img.src = '//clk.anticlickfraudsystem.com/Click?customer_id='+customer_id+'&'+search_params;
+
+		document.body.appendChild(img);
+	}
+}
+
+/************* start klaviyo Tracking Tag ************************/
+var _learnq = _learnq || [];
+
+_learnq.push(['account', 'AJGx3d']);
+
+(function () {
+var b = document.createElement('script'); b.type = 'text/javascript'; b.async = true;
+b.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'a.klaviyo.com/media/js/analytics/analytics.js';
+var a = document.getElementsByTagName('script')[0]; a.parentNode.insertBefore(b, a);
+})();
+
+
+/**************** Twitter universal website tag code *********************/
+!function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);
+},s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='//static.ads-twitter.com/uwt.js',
+a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,'script');
+// Insert Twitter Pixel ID and Standard Event data below
+twq('init','nxbad');
+twq('track','PageView');
+
+
+
+/******************** taxi tag code *********************/
+(function () {
+var tagjs = document.createElement("script");
+var s = document.getElementsByTagName("script")[0]; tagjs.async = true;
+tagjs.src = "//s.btstatic.com/tag.js#site=1PR3l09"; s.parentNode.insertBefore(tagjs, s);
+}());
+
+
+
+/*********************** Linked tag code ************************/
+_linkedin_data_partner_id = "161817";
+(function(){var s = document.getElementsByTagName("script")[0];
+var b = document.createElement("script");
+b.type = "text/javascript";b.async = true;
+b.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
+s.parentNode.insertBefore(b, s);})();

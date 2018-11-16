@@ -56,7 +56,7 @@
   background-color:#FAD405;
 }
 </style>
-<script type="text/javascript" src="//www.klaviyo.com/media/js/public/klaviyo_subscribe.js"></script>
+{{ 'klaviyo_subscribe.js' | asset_url | script_tag }}
 <script type="text/javascript">
   KlaviyoSubscribe.attachToForms('#email_signup', {
     hide_form_on_success: true
