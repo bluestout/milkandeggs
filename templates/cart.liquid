@@ -330,7 +330,12 @@
 </form>
 
 {% else %}
-<p class="cart-empty-message">{{ 'cart.empty' | t }}</p>
+<div class="cart-empty-message">
+    <p>{{ 'cart.empty' | t }}</p>
+    <p class="btn-orderedbefore"><span>Ordered before? Re-order <a href="/account">here</a></span></p>
+</div>
+
+
 {% endif %}
 
 
