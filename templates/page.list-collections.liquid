@@ -6,6 +6,11 @@
   			{% include 'collection-list-item' with 'linklist' %}
   		{% endif %}
   	{% endfor %}
+		{% else %}
+			<div class="empty">
+				<i class="milkicon-cart empty-picto"></i>
+				<p>This collection is empty at the moment.</p>
+			</div>
   {% endif %}
   
 </div>

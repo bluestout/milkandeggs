@@ -11249,10 +11249,6 @@ td.cart-item-total {
   }
 }
 
-.collection-products.uniform-layout {
-
-}
-
 .collection-products.masonry-layout {
   @include opacity(0);
   @include transition(opacity 0.3s $ease-out-quad);
@@ -11260,6 +11256,19 @@ td.cart-item-total {
   &.processed {
     @include opacity(1);
   }
+}
+
+.empty {
+  text-align: center;
+  padding: 85px 20px;
+  color: rgba($body-color, .35);
+  width: 100%;
+}
+.empty-picto {
+  font-size: 2em;
+  display: block;
+  margin-bottom: 8px;
+  opacity: .35;
 }
 
 .product-list-item {
