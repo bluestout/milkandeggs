@@ -1,10 +1,20 @@
 {% if collections[settings.home-featured-products2].products.size > 0 %}
   <div class="home-module home-featured-products rows-of-{{ settings.home-featured-products-per-row2 }}">
     <div class="home-module-content">
+    
 
       {% if settings.home-featured-products-title2 != blank %}
-        <h4 class="section-title">{{ settings.home-featured-products-title2 }}</h4>
+        <h4 class="section-title">
+        <a href="{{collections[settings.home-featured-products2].url}}">
+          {{ settings.home-featured-products-title2 }}
+        </a>
+        </h4>
+        <a href="{{collections[settings.home-featured-products2].url}}" class="section-link">
+          See All
+          <i class="milkicon-arrow"></i>
+        </a>
       {% endif %}
+
 
       <div class="home-featured-products-list collection-products uniform-layout {{settings.collection-product-text-style2}}-style">
         {% for product in collections[settings.home-featured-products2].products limit: settings.home-featured-products-max2 %}

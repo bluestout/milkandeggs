@@ -3,7 +3,15 @@
     <div class="home-module-content">
 
       {% if settings.home-featured-products-title3 != blank %}
-        <h4 class="section-title">{{ settings.home-featured-products-title3 }}</h4>
+        <h4 class="section-title">
+          <a href="{{collections[settings.home-featured-products3].url}}">
+            {{ settings.home-featured-products-title3 }}
+          </a>
+        </h4>
+        <a href="{{collections[settings.home-featured-products3].url}}" class="section-link">
+          See All
+          <i class="milkicon-arrow"></i>
+        </a>
       {% endif %}
 
       <div class="home-featured-products-list collection-products uniform-layout {{settings.collection-product-text-style2}}-style">
