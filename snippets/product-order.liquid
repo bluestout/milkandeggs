@@ -5,9 +5,11 @@
 
   <div class="product-form-inner">
 
+    {{ product.vendor }}
+
     {% for collection in product.collections %}
       {% if collection.title == product.vendor %}
-        <a class="product-vendor vendor" href="{{ collection.url }}">{{ product.vendor }}</a>       
+        <a class="product-vendor vendor" href="{{ collection.url }}">{{ product.vendor }}</a>
       {% endif %}
     {% endfor %}
     
