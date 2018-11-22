@@ -10,7 +10,7 @@
   {% assign threshold = settings.collection-stock-level-overlay-threshold | times: 1 %}
   {% assign infinity = false %}
   {% for variant in item.variants %}
-  
+
 {% include 'bold-hidden-variants' with variant, bold_loop: 'loop' %}
     {% if variant.inventory_management == null %}
       {% assign infinity = true %}
@@ -43,13 +43,21 @@
   {% if settings.collection-product-text-style == 'overlay' and isSearch == false %}
   <a class="product-list-item-overlay-link" href="{{ item.url }}"></a>
   {% endif %}
-  
+
   {% assign secondaryImage = false %}
   {% if item.images.size > 1 and settings.collection-product-image-flip %}
     {% assign secondaryImage = true %}
   {% endif %}
-  
+
       <figure class="product-list-item-thumbnail">
+        {% if settings.product-highlight-tag %}
+          {% assign special_tag = settings.product-highlight-tag %}
+          {% if item.tags contains special_tag %}
+            <div class="special-tag-wrap">
+              <span>{{ special_tag}}</span>
+            </div>
+          {% endif %}
+        {% endif %}
       <a>
         {% assign mainImage = variant.featured_image | default: product.featured_image %}
     <div class="product-main-image">
@@ -63,7 +71,7 @@
             <i class="milkicon-plus"></i>
           </span>
         </div>
-        
+
       </a>
       <div class="sh-cart-buttons" data-line="">
           <span class="product-list-item-badge sh-cart-add" data-id="{{item.id}}" data-vid="{{item.variants[0].id}}">
@@ -71,7 +79,7 @@
           </span>
       </div>
       </figure>
-  
+
     {% if product.images.size > 1 %}
     <div class="product-thumbnails">
       {% for image in product.images %}
