@@ -137,9 +137,10 @@
         {% if product.description != blank or product.tags.size > 0 %}
             <div class="product-description rte" itemprop="description">
                 {% include 'product-tags' with 'product' %}
-                <div class="brief">
-                {{ product.description | strip_html | truncatewords: 40, " <a hrerf='#' class='product-detail-view-more'>Show all</a>" }}
-                </div><div class="detail">{{ product.description }}</div>
+                {% comment %} <div class="brief">
+                  {{ product.description | strip_html | truncatewords: 40, " <a hrerf='#' class='product-detail-view-more'>Show all</a>" }}
+                </div> {% endcomment %}
+                <div class="detail">{{ product.description }}</div>
             </div>
         {% endif %}
 

@@ -36,6 +36,9 @@
             <form class="header-search-form" action="/search" method="get">
                 <input type="hidden" name="type" value="product" />
                 <input class="header-search-input" name="q" type="text" placeholder="{{ 'general.search.submit' | t }}" />
+                <button type="submit" class="btn btn-submitsearch">
+                    <i class="milkicon-search"></i>
+                </button>
 
                 {% comment %}
                 <div style="display:none" class="header-search-toggle">
