@@ -39,37 +39,6 @@
                 <button type="submit" class="btn btn-submitsearch">
                     <i class="milkicon-search"></i>
                 </button>
-
-                {% comment %}
-                <div style="display:none" class="header-search-toggle">
-                <label class="lbl">Include Blog</label>
-                <input class='tgl tgl-flat' id='cb44' type='checkbox'>
-                <label class='tgl-btn' for='cb44'></label>
-                </div>
-                <script type="text/javascript">
-                $(document).ready(function(){
-
-                $(".header-search-input").keyup(function(){
-                var text = $(this).val();
-                if(text == ""){
-                $(".header-search-toggle").hide();
-                }else{
-                $(".header-search-toggle").show();
-
-                }
-                });
-
-                $("#cb44").change(function(){
-                if($(this).is(':checked')){
-                $("input[name='type']").val('product,article');
-                }else{
-                $("input[name='type']").val('product');
-                }
-                });
-
-                });
-                </script>
-                {% endcomment %}
             </form>
 
             <div class="header-tools">
